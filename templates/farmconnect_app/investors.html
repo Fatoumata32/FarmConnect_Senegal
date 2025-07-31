@@ -1,9 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Profil" %} - FarmConnect{% endblock %}
+
+{% block extra_css %}
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FarmConnect Senegal - Opportunité d'Investissement</title>
+    <title>{% trans "Opportunité d'Investissement" %} - FarmConnect Senegal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -98,7 +106,9 @@
 
         /* Hero Section */
         .hero {
-            background: linear-gradient(135deg, rgba(45,80,22,0.8) 0%, rgba(74,124,89,0.8) 100%), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="farm" patternUnits="userSpaceOnUse" width="100" height="100"><circle cx="50" cy="50" r="2" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100%" height="100%" fill="url(%23farm)"/></svg>');
+            background: linear-gradient(135deg, rgba(45,80,22,0.8) 0%, rgba(74,124,89,0.8) 100%), url('{% static "img/hero_background.jpg" %}');
+            background-size: cover;
+            background-position: center;
             color: var(--pure-white);
             padding: 6rem 0;
             position: relative;
@@ -544,67 +554,41 @@
 </head>
 <body>
     <!-- Navigation -->
-<nav>
-    <div class="container">
-        <div class="nav-container">
-            <a href="{% url 'farmconnect_app:home' %}" class="logo">
-                <i class="fas fa-seedling"></i> FarmConnect Senegal
-            </a>
-            <ul class="nav-links">
-                <!-- Accueil -->
-                <li>
-                    <a href="{% url 'farmconnect_app:home' %}">
-                       Accueil
-                    </a>
-                </li>
-                
-                <!-- Investisseurs -->
-                <li>
-                    <a href="{% url 'farmconnect_app:investors' %}">
-                       
-                       Investisseurs
-                    </a>
-                </li>
-                
-                <!-- Communauté -->
-                <li>
-                    <a href="{% url 'farmconnect_app:community' %}">
-                       
-                       Communauté
-                    </a>
-                </li>
-                
-                <!-- Outils (exemple avec namespace) -->
-                <li>
-                    <a href="{% url 'farmconnect_app:tools' %}" >
-                       
-                       Outils
-                    </a>
-                </li>
-            </ul>
+    <nav>
+        <div class="container">
+            <div class="nav-container">
+                <a href="{% url 'farmconnect_app:home' %}" class="logo">
+                    <i class="fas fa-seedling"></i> FarmConnect Senegal
+                </a>
+                <ul class="nav-links">
+                    <li><a href="{% url 'farmconnect_app:home' %}">{% trans "Accueil" %}</a></li>
+                    <li><a href="{% url 'farmconnect_app:investors' %}" class="active">{% trans "Investisseurs" %}</a></li>
+                    <li><a href="{% url 'farmconnect_app:community' %}" class="community-link">{% trans "Communauté" %}</a></li>
+                    <li><a href="{% url 'farmconnect_app:tools' %}">{% trans "Outils" %}</a></li>
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
             <div class="hero-content">
-                <h1><i class="fas fa-seedling"></i> Investissez dans la Révolution Agricole Sénégalaise</h1>
-                <p class="hero-subtitle">FarmConnect Senegal transforme l'agriculture en équipant plus de 5 000 agriculteurs avec des conseils météo, des techniques agricoles avancées et des outils accessibles via des paiements échelonnés. Rejoignez notre mission pour un avenir agricole durable.</p>
+                <h1><i class="fas fa-seedling"></i> {% trans "Investissez dans la Révolution Agricole Sénégalaise" %}</h1>
+                <p class="hero-subtitle">{% trans "FarmConnect Senegal transforme l'agriculture en équipant plus de 5 000 agriculteurs avec des conseils météo, des techniques agricoles avancées et des outils accessibles via des paiements échelonnés. Rejoignez notre mission pour un avenir agricole durable." %}</p>
                 
                 <div class="stats-hero">
                     <div class="stat-card">
                         <span class="stat-number">5K+</span>
-                        <div class="stat-label">Agriculteurs Connectés</div>
+                        <div class="stat-label">{% trans "Agriculteurs Connectés" %}</div>
                     </div>
                     <div class="stat-card">
                         <span class="stat-number">XOF 25M</span>
-                        <div class="stat-label">Transactions Facilitées</div>
+                        <div class="stat-label">{% trans "Transactions Facilitées" %}</div>
                     </div>
                     <div class="stat-card">
                         <span class="stat-number">30%</span>
-                        <div class="stat-label">Augmentation des Revenus</div>
+                        <div class="stat-label">{% trans "Augmentation des Revenus" %}</div>
                     </div>
                 </div>
             </div>
@@ -614,23 +598,23 @@
     <!-- Investment Opportunity -->
     <section id="opportunity" class="section">
         <div class="container">
-            <h2 class="section-title"><i class="fas fa-hand-holding-usd"></i> Une Opportunité d'Impact et de Profit</h2>
+            <h2 class="section-title"><i class="fas fa-hand-holding-usd"></i> {% trans "Une Opportunité d'Impact et de Profit" %}</h2>
             
             <div class="opportunity-grid">
                 <div class="opportunity-content">
-                    <h3>Pourquoi Investir dans FarmConnect Senegal ?</h3>
-                    <p>FarmConnect Senegal est une plateforme innovante qui fournit aux agriculteurs sénégalais des conseils personnalisés sur la météo, les cultures et les meilleures pratiques agricoles, tout en leur offrant un accès à des outils via des paiements échelonnés. Notre section "Outils" permet aux investisseurs et aux fournisseurs de commercialiser leurs produits agricoles directement aux agriculteurs.</p>
+                    <h3>{% trans "Pourquoi Investir dans FarmConnect Senegal ?" %}</h3>
+                    <p>{% trans "FarmConnect Senegal est une plateforme innovante qui fournit aux agriculteurs sénégalais des conseils personnalisés sur la météo, les cultures et les meilleures pratiques agricoles, tout en leur offrant un accès à des outils via des paiements échelonnés. Notre section 'Outils' permet aux investisseurs et aux fournisseurs de commercialiser leurs produits agricoles directement aux agriculteurs." %}</p>
                     
-                    <p>En soutenant FarmConnect, vous investissez dans la durabilité et la rentabilité de l'agriculture sénégalaise, tout en accédant à un marché en croissance rapide avec un potentiel de rendement élevé.</p>
+                    <p>{% trans "En soutenant FarmConnect, vous investissez dans la durabilité et la rentabilité de l'agriculture sénégalaise, tout en accédant à un marché en croissance rapide avec un potentiel de rendement élevé." %}</p>
                     
                     <div class="highlight-box">
-                        <h4>Impact et Rentabilité</h4>
-                        <p><strong>250% ROI sur 5 ans</strong> avec un marché adressable de <strong>XOF 327.5B</strong> au Sénégal</p>
+                        <h4>{% trans "Impact et Rentabilité" %}</h4>
+                        <p><strong>{% trans "250% ROI sur 5 ans" %}</strong> {% trans "avec un marché adressable de" %} <strong>XOF 327.5B</strong> {% trans "au Sénégal" %}</p>
                     </div>
                 </div>
                 
                 <div class="image-container" style="height: 400px;">
-                    <img src="img/FarmConnect_square.png" alt="Infographie Impact Investissement">
+                    <img src="{% static 'img/FarmConnect_square.png' %}" alt="{% trans 'Infographie Impact Investissement' %}">
                 </div>
             </div>
         </div>
@@ -639,41 +623,41 @@
     <!-- Market Analysis -->
     <section id="market" class="section">
         <div class="container">
-            <h2 class="section-title"><i class="fas fa-chart-line"></i> Potentiel du Marché</h2>
+            <h2 class="section-title"><i class="fas fa-chart-line"></i> {% trans "Potentiel du Marché" %}</h2>
             
             <div class="image-container" style="height: 500px;">
-                <img src="img/Marché AgTech en Expansion.png" alt="Analyse de Marché">
+                <img src="{% static 'img/maee.png' %}" alt="{% trans 'Analyse de Marché' %}">
             </div>
             
             <div class="market-insights">
                 <div class="insight-card">
                     <div class="insight-icon"><i class="fas fa-globe-africa"></i></div>
-                    <h4>Marché AgTech en Expansion</h4>
-                    <p>Le marché des technologies agricoles au Sénégal croît à 12% par an, avec une projection de XOF 785B d'ici 2027. FarmConnect vise à capturer 10% de ce marché.</p>
+                    <h4>{% trans "Marché AgTech en Expansion" %}</h4>
+                    <p>{% trans "Le marché des technologies agricoles au Sénégal croît à 12% par an, avec une projection de XOF 785B d'ici 2027. FarmConnect vise à capturer 10% de ce marché." %}</p>
                 </div>
                 
                 <div class="insight-card">
                     <div class="insight-icon"><i class="fas fa-users"></i></div>
-                    <h4>2M d'Agriculteurs à Atteindre</h4>
-                    <p>Avec 70% de la population sénégalaise dépendant de l'agriculture, FarmConnect cible un marché vaste et mal desservi.</p>
+                    <h4>{% trans "2M d'Agriculteurs à Atteindre" %}</h4>
+                    <p>{% trans "Avec 70% de la population sénégalaise dépendant de l'agriculture, FarmConnect cible un marché vaste et mal desservi." %}</p>
                 </div>
                 
                 <div class="insight-card">
                     <div class="insight-icon"><i class="fas fa-mobile-alt"></i></div>
-                    <h4>Solution Mobile-First</h4>
-                    <p>Avec 90% de pénétration mobile, notre application est conçue pour atteindre les agriculteurs là où ils sont.</p>
+                    <h4>{% trans "Solution Mobile-First" %}</h4>
+                    <p>{% trans "Avec 90% de pénétration mobile, notre application est conçue pour atteindre les agriculteurs là où ils sont." %}</p>
                 </div>
 
                 <div class="insight-card">
                     <div class="insight-icon"><i class="fas fa-shopping-cart"></i></div>
-                    <h4>Place de Marché Intégrée</h4>
-                    <p>Notre section "Outils" crée une plateforme où les investisseurs peuvent vendre directement aux agriculteurs, avec un marché estimé à XOF 50B d'ici 2027.</p>
+                    <h4>{% trans "Place de Marché Intégrée" %}</h4>
+                    <p>{% trans "Notre section 'Outils' crée une plateforme où les investisseurs peuvent vendre directement aux agriculteurs, avec un marché estimé à XOF 50B d'ici 2027." %}</p>
                 </div>
                 
                 <div class="insight-card">
                     <div class="insight-icon"><i class="fas fa-bolt"></i></div>
-                    <h4>Position de Leader</h4>
-                    <p>Avec 5K+ utilisateurs et des partenariats stratégiques, FarmConnect bénéficie d'une avance significative sur le marché.</p>
+                    <h4>{% trans "Position de Leader" %}</h4>
+                    <p>{% trans "Avec 5K+ utilisateurs et des partenariats stratégiques, FarmConnect bénéficie d'une avance significative sur le marché." %}</p>
                 </div>
             </div>
         </div>
@@ -682,66 +666,66 @@
     <!-- Financial Projections -->
     <section id="projections" class="projections-section">
         <div class="container">
-            <h2 class="section-title"><i class="fas fa-analytics"></i> Projections Financières</h2>
+            <h2 class="section-title"><i class="fas fa-analytics"></i> {% trans "Projections Financières" %}</h2>
             
             <div class="image-container" style="height: 400px; width: 700px; display: block; margin: 0 auto;">
-                <img src="img/scaling business.jpg" alt="Graphiques Financiers">
+                <img src="{% static 'img/scaling business.jpg' %}" alt="{% trans 'Graphiques Financiers' %}">
             </div>
 
             <div class="projections-grid">
                 <div class="projection-card">
                     <div class="projection-year">2025</div>
                     <div class="projection-value">XOF 981M</div>
-                    <div class="projection-metric">Chiffre d'Affaires</div>
+                    <div class="projection-metric">{% trans "Chiffre d'Affaires" %}</div>
                 </div>
                 
                 <div class="projection-card">
                     <div class="projection-year">2026</div>
                     <div class="projection-value">XOF 2.75B</div>
-                    <div class="projection-metric">Chiffre d'Affaires</div>
+                    <div class="projection-metric">{% trans "Chiffre d'Affaires" %}</div>
                 </div>
                 
                 <div class="projection-card">
                     <div class="projection-year">2027</div>
                     <div class="projection-value">XOF 5.89B</div>
-                    <div class="projection-metric">Chiffre d'Affaires</div>
+                    <div class="projection-metric">{% trans "Chiffre d'Affaires" %}</div>
                 </div>
                 
                 <div class="projection-card">
                     <div class="projection-year">2028</div>
                     <div class="projection-value">XOF 10.0B</div>
-                    <div class="projection-metric">Chiffre d'Affaires</div>
+                    <div class="projection-metric">{% trans "Chiffre d'Affaires" %}</div>
                 </div>
                 
                 <div class="projection-card">
                     <div class="projection-year">2029</div>
                     <div class="projection-value">XOF 16.2B</div>
-                    <div class="projection-metric">Chiffre d'Affaires</div>
+                    <div class="projection-metric">{% trans "Chiffre d'Affaires" %}</div>
                 </div>
                 
                 <div class="projection-card">
                     <div class="projection-year">2030</div>
                     <div class="projection-value">XOF 25.2B</div>
-                    <div class="projection-metric">Chiffre d'Affaires</div>
+                    <div class="projection-metric">{% trans "Chiffre d'Affaires" %}</div>
                 </div>
             </div>
 
             <div style="text-align: center; margin: 3rem 0;">
-                <h3 style="color: var(--primary-green); font-size: 2rem; margin-bottom: 1rem;">Indicateurs Clés</h3>
-                <p style="font-size: 1.3rem; margin-bottom: 2rem;">Besoin de financement : <strong>XOF 3.27B</strong> | Valorisation pré-money : <strong>XOF 9.81B</strong></p>
+                <h3 style="color: var(--primary-green); font-size: 2rem; margin-bottom: 1rem;">{% trans "Indicateurs Clés" %}</h3>
+                <p style="font-size: 1.3rem; margin-bottom: 2rem;">{% trans "Besoin de financement" %}: <strong>XOF 3.27B</strong> | {% trans "Valorisation pré-money" %}: <strong>XOF 9.81B</strong></p>
                 
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; max-width: 800px; margin: 0 auto;">
                     <div style="background: var(--pure-white); padding: 1.5rem; border-radius: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
                         <strong style="color: var(--accent-yellow); font-size: 1.5rem;">250%</strong><br>
-                        ROI sur 5 ans
+                        {% trans "ROI sur 5 ans" %}
                     </div>
                     <div style="background: var(--pure-white); padding: 1.5rem; border-radius: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
                         <strong style="color: var(--accent-yellow); font-size: 1.5rem;">20 mois</strong><br>
-                        Point d'équilibre
+                        {% trans "Point d'équilibre" %}
                     </div>
                     <div style="background: var(--pure-white); padding: 1.5rem; border-radius: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
                         <strong style="color: var(--accent-yellow); font-size: 1.5rem;">22%</strong><br>
-                        Marge EBITDA (2027)
+                        {% trans "Marge EBITDA (2027)" %}
                     </div>
                 </div>
             </div>
@@ -751,19 +735,19 @@
     <!-- Contact Section -->
     <section id="contact" class="contact-section">
         <div class="container">
-            <h2 class="section-title"><i class="fas fa-envelope"></i> Contactez-Nous</h2>
+            <h2 class="section-title"><i class="fas fa-envelope"></i> {% trans "Contactez-Nous" %}</h2>
             
             <div class="contact-grid">
                 <div class="contact-info">
-                    <h3>Rejoignez la Révolution Agricole</h3>
+                    <h3>{% trans "Rejoignez la Révolution Agricole" %}</h3>
                     
                     <div class="contact-item">
-                        <strong>Email</strong>
+                        <strong>{% trans "Email" %}</strong>
                         <span>investisseurs@farmconnect.sn</span>
                     </div>
                     
                     <div class="contact-item">
-                        <strong>Téléphone</strong>
+                        <strong>{% trans "Téléphone" %}</strong>
                         <span>+221 77 123 4567</span>
                     </div>
                     
@@ -773,7 +757,7 @@
                     </div>
                     
                     <div class="contact-item">
-                        <strong>Siège Social</strong>
+                        <strong>{% trans "Siège Social" %}</strong>
                         <span>VDN, Immeuble Keur Gorgui<br>Dakar, Sénégal</span>
                     </div>
                     
@@ -784,45 +768,44 @@
                 </div>
                 
                 <div class="team-section">
-                    <h3>Notre Équipe de Direction</h3>
+                    <h3>{% trans "Notre Équipe de Direction" %}</h3>
                     
                     <div class="team-member">
                         <div class="member-name">Fatoumata Ndiaye</div>
-                        <div class="member-title">CEO & Co-fondatrice</div>
+                        <div class="member-title">{% trans "CEO & Co-fondatrice" %}</div>
                         <div class="member-contact">
                             f.ndiaye@farmconnect.sn<br>
                             +221 77 171 23 53<br>
-                            15+ ans en AgTech
+                            {% trans "15+ ans en AgTech" %}
                         </div>
                     </div>
                     
                     <div class="team-member">
                         <div class="member-name">Amadou Diallo</div>
-                        <div class="member-title">CTO & Co-fondateur</div>
+                        <div class="member-title">{% trans "CTO & Co-fondateur" %}</div>
                         <div class="member-contact">
                             a.diallo@farmconnect.sn<br>
                             +221 77 171 23 54<br>
-                            Expert en Solutions Digitales
+                            {% trans "Expert en Solutions Digitales" %}
                         </div>
                     </div>
                     
                     <div class="team-member">
                         <div class="member-name">El Hadji Malick Seye</div>
-                        <div class="member-title">Directeur Financier</div>
+                        <div class="member-title">{% trans "Directeur Financier" %}</div>
                         <div class="member-contact">
                             m.seye@farmconnect.sn<br>
                             +221 77 171 23 55<br>
-                            Ex-BCG, MBA HEC Dakar
+                            {% trans "Ex-BCG, MBA HEC Dakar" %}
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="cta-buttons">
-                <a href="https://prezi.com/view/tWXg8q6ya1o32ktkkzYu/" target="_blank" rel="noopener" text-decoration="none"class="btn-primary">Obtenir le Pitch Deck</a>
-                <a href="https://calendar.app.google/EZePhACoBCMoJV7D9" class="btn-secondary" target="_blank" rel="noopener">Planifier une Rencontre</a>
+                <a href="https://prezi.com/view/tWXg8q6ya1o32ktkkzYu/" target="_blank" rel="noopener" class="btn-primary">{% trans "Obtenir le Pitch Deck" %}</a>
+                <a href="https://calendar.app.google/EZePhACoBCMoJV7D9" class="btn-secondary" target="_blank" rel="noopener">{% trans "Planifier une Rencontre" %}</a>
             </div>
-        
         </div>
     </section>
 
@@ -830,12 +813,12 @@
     <footer>
         <div class="container">
             <p style="font-size: 1.2rem; margin-bottom: 1rem;">
-                <strong>FarmConnect Senegal - Transformer l'Agriculture, Ensemble</strong>
+                <strong>FarmConnect Senegal - {% trans "Transformer l'Agriculture, Ensemble" %}</strong>
             </p>
-            <p>© 2025 FarmConnect Senegal. Tous droits réservés. | Investir dans un avenir agricole durable</p>
+            <p>© 2025 FarmConnect Senegal. {% trans "Tous droits réservés" %}. | {% trans "Investir dans un avenir agricole durable" %}</p>
             <p style="margin-top: 1rem;">
-                <a href="#" onclick="openCommunityPage()" style="color: var(--accent-yellow); text-decoration: none; font-weight: bold;">
-                    <i class="fas fa-users"></i> Rejoindre notre Communauté
+                <a href="{% url 'farmconnect_app:community' %}" style="color: var(--accent-yellow); text-decoration: none; font-weight: bold;">
+                    <i class="fas fa-users"></i> {% trans "Rejoindre notre Communauté" %}
                 </a>
             </p>
         </div>
@@ -843,9 +826,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function openCommunityPage() {
-            alert("Redirection vers la page Communauté...\n\nDécouvrez notre réseau d'agriculteurs et d'innovateurs.");
-        }
+        
 
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -911,3 +892,4 @@
     </script>
 </body>
 </html>
+{% endblock %}

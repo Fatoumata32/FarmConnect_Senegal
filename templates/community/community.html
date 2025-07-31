@@ -1,5 +1,10 @@
+{% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
+
+{% block title %}{% trans "Profil" %} - FarmConnect{% endblock %}
+
+{% block extra_css %}
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -43,7 +48,7 @@
         nav {
             background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%);
             padding: 1rem 0;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -72,7 +77,7 @@
         }
 
         .nav-links a {
-            color: rgba(255,255,255,0.9);
+            color: rgba(255, 255, 255, 0.9);
             text-decoration: none;
             padding: 0.5rem 1rem;
             border-radius: 25px;
@@ -80,7 +85,8 @@
             transition: all 0.3s ease;
         }
 
-        .nav-links a:hover, .nav-links a.active {
+        .nav-links a:hover,
+        .nav-links a.active {
             color: var(--accent-yellow);
             transform: translateY(-2px);
         }
@@ -91,7 +97,8 @@
             align-items: center;
         }
 
-        .btn-login, .btn-register {
+        .btn-login,
+        .btn-register {
             padding: 0.5rem 1.5rem;
             border: none;
             border-radius: 25px;
@@ -111,9 +118,10 @@
             color: var(--primary-green);
         }
 
-        .btn-login:hover, .btn-register:hover {
+        .btn-login:hover,
+        .btn-register:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             color: inherit;
         }
 
@@ -138,7 +146,7 @@
 
         /* Hero Section */
         .hero {
-            background: linear-gradient(135deg, rgba(45,80,22,0.8) 0%, rgba(74,124,89,0.8) 100%), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="farm" patternUnits="userSpaceOnUse" width="100" height="100"><circle cx="50" cy="50" r="2" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100%" height="100%" fill="url(%23farm)"/></svg>');
+            background: linear-gradient(135deg, rgba(45, 80, 22, 0.8) 0%, rgba(74, 124, 89, 0.8) 100%), url('{% static "img/hero_background.jpg" %}');
             background-size: cover;
             background-position: center;
             color: var(--pure-white);
@@ -155,13 +163,18 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(45deg, transparent 30%, rgba(244,208,63,0.1) 50%, transparent 70%);
+            background: linear-gradient(45deg, transparent 30%, rgba(244, 208, 63, 0.1) 50%, transparent 70%);
             animation: shimmer 3s infinite;
         }
 
         @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
         }
 
         .hero-content {
@@ -172,7 +185,7 @@
         .hero h1 {
             font-size: 3.5rem;
             margin-bottom: 1.5rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
             animation: fadeInUp 1s ease;
         }
 
@@ -194,20 +207,27 @@
             font-size: 1.1rem;
             font-weight: bold;
             transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(244,208,63,0.3);
+            box-shadow: 0 8px 20px rgba(244, 208, 63, 0.3);
             text-decoration: none;
             display: inline-block;
         }
 
         .cta-button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(244,208,63,0.4);
+            box-shadow: 0 12px 25px rgba(244, 208, 63, 0.4);
             color: var(--primary-green);
         }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Main Sections */
@@ -249,7 +269,7 @@
             background: var(--pure-white);
             padding: 2rem;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             text-align: center;
             transition: all 0.3s ease;
             position: relative;
@@ -268,7 +288,7 @@
 
         .feature-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
         }
 
         .feature-icon {
@@ -309,7 +329,7 @@
 
         .community-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
         }
 
         .community-card .icon {
@@ -346,7 +366,7 @@
 
         .workshop-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
         }
 
         .workshop-card .icon {
@@ -397,7 +417,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
             animation: rotate 20s linear infinite;
         }
 
@@ -409,8 +429,13 @@
         }
 
         @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .calendar-nav {
@@ -735,7 +760,8 @@
             flex-wrap: wrap;
         }
 
-        .btn-primary, .btn-secondary {
+        .btn-primary,
+        .btn-secondary {
             padding: 1rem 2rem;
             border: none;
             border-radius: 50px;
@@ -757,9 +783,10 @@
             border: 2px solid var(--primary-green);
         }
 
-        .btn-primary:hover, .btn-secondary:hover {
+        .btn-primary:hover,
+        .btn-secondary:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
 
         .btn-primary:hover {
@@ -791,7 +818,7 @@
         }
 
         .footer-section a {
-            color: rgba(255,255,255,0.8);
+            color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
             display: block;
             margin: 0.5rem 0;
@@ -804,7 +831,7 @@
         }
 
         .footer-bottom {
-            border-top: 1px solid rgba(255,255,255,0.2);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
             padding-top: 1.5rem;
             text-align: center;
         }
@@ -890,13 +917,13 @@
             padding: 1.5rem;
             border-radius: 15px;
             text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
         }
 
         .stat-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
         }
 
         .stat-number {
@@ -925,7 +952,9 @@
                 font-size: 1.1rem;
             }
 
-            .features-grid, .community-grid, .workshop-highlights {
+            .features-grid,
+            .community-grid,
+            .workshop-highlights {
                 grid-template-columns: 1fr;
             }
 
@@ -937,30 +966,30 @@
             .auth-links {
                 flex-direction: column;
             }
-            
+
             .calendar-container {
                 margin: 10px;
                 border-radius: 25px;
             }
-            
+
             .calendar-grid {
                 padding: 15px;
             }
-            
+
             .calendar-day {
                 height: 50px;
             }
-            
+
             .day-header {
                 width: 35px;
                 height: 35px;
                 font-size: 10px;
             }
-            
+
             .workshop-item {
                 padding: 15px;
             }
-            
+
             .workshop-date-circle {
                 width: 40px;
                 height: 40px;
@@ -969,7 +998,11 @@
         }
 
         /* Ripple Animation for Buttons */
-        .btn-primary, .btn-secondary, .cta-button, .nav-links a, .nav-btn {
+        .btn-primary,
+        .btn-secondary,
+        .cta-button,
+        .nav-links a,
+        .nav-btn {
             position: relative;
             overflow: hidden;
         }
@@ -982,16 +1015,17 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Messages -->
     {% if messages %}
-        <div class="messages">
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
         </div>
+        {% endfor %}
+    </div>
     {% endif %}
 
     <!-- Navigation -->
@@ -1006,28 +1040,28 @@
                     <li><a href="{% url 'farmconnect_app:community' %}" class="active">{% trans "Communauté" %}</a></li>
                     <li><a href="{% url 'farmconnect_app:about' %}">{% trans "À propos" %}</a></li>
                     {% if user.is_authenticated %}
-                        <li><a href="{% url 'farmconnect_app:dashboard' %}">{% trans "Tableau de bord" %}</a></li>
+                    <li><a href="{% url 'farmconnect_app:dashboard' %}">{% trans "Tableau de bord" %}</a></li>
                     {% endif %}
                 </ul>
-                
+
                 <!-- Auth Links -->
                 <div class="auth-links">
                     {% if user.is_authenticated %}
-                        <div class="user-menu">
-                            <span>{% trans "Bienvenue" %}, {{ user.get_full_name|default:user.username }}!</span>
-                            <div class="user-avatar">
-                                {{ user.first_name.0|default:user.username.0|upper }}
-                            </div>
-                            <a href="{% url 'farmconnect_app:profile' %}" class="nav-links" style="margin: 0;">
-                                <i class="fas fa-user"></i>
-                            </a>
-                            <a href="{% url 'logout' %}" class="nav-links" style="margin: 0;">
-                                <i class="fas fa-sign-out-alt"></i>
-                            </a>
+                    <div class="user-menu">
+                        <span>{% trans "Bienvenue" %}, {{ user.get_full_name|default:user.username }}!</span>
+                        <div class="user-avatar">
+                            {{ user.first_name.0|default:user.username.0|upper }}
                         </div>
+                        <a href="{% url 'farmconnect_app:profile' %}" class="nav-links" style="margin: 0;">
+                            <i class="fas fa-user"></i>
+                        </a>
+                        <a href="{% url 'logout' %}" class="nav-links" style="margin: 0;">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </a>
+                    </div>
                     {% else %}
-                        <a href="{% url 'login' %}" class="btn-login">{% trans "Connexion" %}</a>
-                        <a href="{% url 'farmconnect_app:register' %}" class="btn-register">{% trans "Inscription" %}</a>
+                    <a href="{% url 'login' %}" class="btn-login">{% trans "Connexion" %}</a>
+                    <a href="{% url 'farmconnect_app:register' %}" class="btn-register">{% trans "Inscription" %}</a>
                     {% endif %}
                 </div>
             </div>
@@ -1041,9 +1075,9 @@
                 <h1>{% trans "Cultivons Ensemble l'Avenir" %}</h1>
                 <p>{% trans "Rejoignez FarmConnect Senegal, la plateforme qui unit les agriculteurs sénégalais pour partager des connaissances, accéder à des outils modernes et booster la productivité agricole. Ensemble, transformons l'agriculture pour un avenir durable et prospère." %}</p>
                 {% if not user.is_authenticated %}
-                    <a href="{% url 'farmconnect_app:register' %}" class="cta-button">{% trans "Rejoindre Notre Communauté" %}</a>
+                <a href="{% url 'farmconnect_app:register' %}" class="cta-button">{% trans "Rejoindre Notre Communauté" %}</a>
                 {% else %}
-                    <a href="{% url 'farmconnect_app:dashboard' %}" class="cta-button">{% trans "Accéder à Mon Tableau de Bord" %}</a>
+                <a href="{% url 'farmconnect_app:dashboard' %}" class="cta-button">{% trans "Accéder à Mon Tableau de Bord" %}</a>
                 {% endif %}
             </div>
         </div>
@@ -1051,16 +1085,19 @@
 
     <!-- Hero Image -->
     <div class="container">
-        {% if community_hero_image %}
-            <img src="{{ community_hero_image.url }}" alt="{% trans 'Agriculteurs sénégalais travaillant ensemble dans les champs' %}" class="img-fluid" style="width: 100%; height: 500px; object-fit: cover; border-radius: 15px; margin: 2rem 0;">
-        {% else %}
-            <div class="image-placeholder" style="height: 500px;">
-                <div>
-                    📸 {% trans "Image: Agriculteurs sénégalais travaillant ensemble dans les champs" %}<br>
-                    {% trans "Photo montrant la collaboration communautaire dans l'agriculture sénégalaise" %}
-                </div>
+        <div class="row">
+            <div class="col-12">
+                <figure class="text-center">
+                    <img src="{% static 'img/together.jpg' %}"
+                         alt="{% trans 'Agriculteurs sénégalais travaillant ensemble dans les champs' %}"
+                         class="img-fluid rounded-3 my-4"
+                         style="max-width: 100%; height: auto; max-height: 500px; object-fit: cover;">
+                    <figcaption class="text-muted mt-2">
+                        {% trans "Agriculteurs collaborant dans les champs sénégalais" %}
+                    </figcaption>
+                </figure>
             </div>
-        {% endif %}
+        </div>
     </div>
 
     <!-- Stats Section -->
@@ -1109,6 +1146,7 @@
                     <p>{% trans "Restez informé des prix actuels des produits agricoles sur les marchés sénégalais. FarmConnect vous aide à identifier les meilleures opportunités de vente pour maximiser vos revenus." %}</p>
                 </div>
             </div>
+            
         </div>
     </section>
 
@@ -1119,25 +1157,6 @@
             <p style="text-align: center; max-width: 800px; margin: 0 auto 3rem; color: var(--text-dark);">
                 {% trans "Nos services sont conçus pour répondre aux besoins des agriculteurs sénégalais, en leur offrant des outils et des ressources pour travailler plus efficacement et rester connectés." %}
             </p>
-            
-            {% if community_image %}
-                <img src="{{ community_image.url }}" 
-                     alt="{% trans 'Interface de la plateforme FarmConnect' %}"
-                     style="width: 100%; max-width: 600px; height: auto;
-                            border: 4px solid #4CAF50;
-                            border-radius: 20px;
-                            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-                            display: block;
-                            margin: 20px auto;">
-            {% else %}
-                <div class="image-placeholder" style="height: 300px;">
-                    <div>
-                        📸 {% trans "Image: Interface de la plateforme FarmConnect" %}<br>
-                        {% trans "Capture d'écran montrant les différents services disponibles" %}
-                    </div>
-                </div>
-            {% endif %}
-
             <div class="community-grid">
                 <div class="community-card">
                     <i class="fas fa-comments icon"></i>
@@ -1162,18 +1181,9 @@
     <section id="workshops" class="section">
         <div class="container">
             <h2 class="section-title">{% trans "Ateliers et Formations" %}</h2>
-            
-            {% if workshop_image %}
-                <img src="{{ workshop_image.url }}" alt="{% trans 'Agriculteurs participant à un atelier de formation au Sénégal' %}" class="section-img">
-            {% else %}
-                <div class="image-placeholder section-img">
-                    <div>
-                        📸 {% trans "Image: Agriculteurs participant à un atelier de formation au Sénégal" %}<br>
-                        {% trans "Photo d'un atelier pratique avec des agriculteurs sénégalais" %}
-                    </div>
-                </div>
-            {% endif %}
-            
+            <img src="{% static 'img/women workshop.jpg' %}"
+                 alt="{% trans 'Agriculteurs participant à un atelier de formation au Sénégal' %}"
+                 class="section-img">
             <p style="text-align: center; max-width: 800px; margin: 0 auto 3rem; color: var(--text-dark);">
                 {% trans "Participez à nos ateliers pratiques pour acquérir des compétences modernes et durables. Nos formations sont conçues pour aider les agriculteurs sénégalais à innover et à prospérer." %}
             </p>
@@ -1194,7 +1204,7 @@
                     <p>{% trans "Développez vos compétences en gestion financière, marketing et planification pour maximiser vos profits et assurer la pérennité de votre ferme." %}</p>
                 </div>
             </div>
-            
+
             <!-- Calendar Section -->
             <div class="workshops-calendar">
                 <div class="calendar-container">
@@ -1202,11 +1212,13 @@
                         <h3><i class="fas fa-seedling"></i> {% trans "Calendrier des Ateliers" %}</h3>
                     </div>
                     <div class="calendar-nav">
-                        <button class="nav-btn" onclick="previousMonth()" id="prevBtn" aria-label="{% trans 'Mois précédent' %}">
+                        <button class="nav-btn" onclick="previousMonth()" id="prevBtn"
+                            aria-label="{% trans 'Mois précédent' %}">
                             <i class="fas fa-chevron-left"></i>
                         </button>
                         <div class="month-display" id="monthDisplay"></div>
-                        <button class="nav-btn" onclick="nextMonth()" id="nextBtn" aria-label="{% trans 'Mois suivant' %}">
+                        <button class="nav-btn" onclick="nextMonth()" id="nextBtn"
+                            aria-label="{% trans 'Mois suivant' %}">
                             <i class="fas fa-chevron-right"></i>
                         </button>
                     </div>
@@ -1218,7 +1230,8 @@
                             <div class="upcoming-title">
                                 <i class="fas fa-clock"></i>{% trans "Prochains Ateliers" %}
                             </div>
-                            <button class="toggle-btn" onclick="toggleWorkshops()" id="toggleBtn" aria-label="{% trans 'Afficher/Masquer les ateliers' %}">
+                            <button class="toggle-btn" onclick="toggleWorkshops()" id="toggleBtn"
+                                aria-label="{% trans 'Afficher/Masquer les ateliers' %}">
                                 <i class="fas fa-chevron-down"></i>
                             </button>
                         </div>
@@ -1236,32 +1249,35 @@
         <div class="container">
             <h2>{% trans "Prêt à Transformer Votre Agriculture ?" %}</h2>
             <p>{% trans "Rejoignez des milliers d'agriculteurs sénégalais qui utilisent FarmConnect pour améliorer leurs rendements, accéder à des marchés rentables et apprendre des techniques modernes. Inscrivez-vous dès aujourd'hui et faites partie de la révolution agricole au Sénégal." %}</p>
-            
+
             {% if testimonials %}
-                <div class="testimonials-grid" style="margin: 2rem 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
-                    {% for testimonial in testimonials %}
-                        <div class="testimonial-card" style="background: rgba(255,255,255,0.9); padding: 1.5rem; border-radius: 15px;">
-                            <p style="font-style: italic; margin-bottom: 1rem;">"{{ testimonial.content }}"</p>
-                            <strong>- {{ testimonial.author_name }}, {{ testimonial.location }}</strong>
-                        </div>
-                    {% endfor %}
+            <div class="testimonials-grid"
+                style="margin: 2rem 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                {% for testimonial in testimonials %}
+                <div class="testimonial-card"
+                    style="background: rgba(255,255,255,0.9); padding: 1.5rem; border-radius: 15px;">
+                    <p style="font-style: italic; margin-bottom: 1rem;">"{{ testimonial.content }}"</p>
+                    <strong>- {{ testimonial.author_name }}, {{ testimonial.location }}</strong>
                 </div>
+                {% endfor %}
+            </div>
             {% else %}
-                <div class="image-placeholder" style="height: 200px; background: rgba(255,255,255,0.9); color: var(--primary-green);">
-                    <div>
-                        📸 {% trans "Image: Témoignages d'agriculteurs sénégalais" %}<br>
-                        {% trans "Photos et citations d'agriculteurs ayant réussi avec FarmConnect" %}
-                    </div>
+            <div class="image-placeholder"
+                style="height: 200px; background: rgba(255,255,255,0.9); color: var(--primary-green);">
+                <div>
+                    📸 {% trans "Image: Témoignages d'agriculteurs sénégalais" %}<br>
+                    {% trans "Photos et citations d'agriculteurs ayant réussi avec FarmConnect" %}
                 </div>
+            </div>
             {% endif %}
-            
+
             <div class="cta-buttons">
                 {% if not user.is_authenticated %}
-                    <a href="{% url 'farmconnect_app:register' %}" class="btn-primary">{% trans "S'inscrire Maintenant" %}</a>
-                    <a href="{% url 'farmconnect_app:about' %}" class="btn-secondary">{% trans "Découvrir les Témoignages" %}</a>
+                <a href="{% url 'farmconnect_app:register' %}" class="btn-primary">{% trans "S'inscrire Maintenant" %}</a>
+                <a href="{% url 'farmconnect_app:about' %}" class="btn-secondary">{% trans "Découvrir les Témoignages" %}</a>
                 {% else %}
-                    <a href="{% url 'farmconnect_app:dashboard' %}" class="btn-primary">{% trans "Mon Tableau de Bord" %}</a>
-                    <a href="{% url 'farmconnect_app:profile' %}" class="btn-secondary">{% trans "Mon Profil" %}</a>
+                <a href="{% url 'farmconnect_app:dashboard' %}" class="btn-primary">{% trans "Mon Tableau de Bord" %}</a>
+                <a href="{% url 'farmconnect_app:profile' %}" class="btn-secondary">{% trans "Mon Profil" %}</a>
                 {% endif %}
             </div>
         </div>
@@ -1302,7 +1318,8 @@
                     <p>Support: <a href="mailto:support@farmconnect.sn">support@farmconnect.sn</a></p>
                     <p>{% trans "Adresse" %}: Dakar, Sénégal</p>
                     {% if 'farmconnect_app:investors' %}
-                        <a href="{% url 'farmconnect_app:investors' %}" style="color: var(--accent-yellow); font-weight: bold; margin-top: 1rem;">→ {% trans "Page Investisseurs" %}</a>
+                    <a href="{% url 'farmconnect_app:investors' %}"
+                        style="color: var(--accent-yellow); font-weight: bold; margin-top: 1rem;">→ {% trans "Page Investisseurs" %}</a>
                     {% endif %}
                 </div>
             </div>
@@ -1317,39 +1334,39 @@
         // Workshop data - can be dynamically loaded from Django context
         const workshops = [
             {% if upcoming_workshops %}
-                {% for workshop in upcoming_workshops %}
-                {
-                    date: new Date('{{ workshop.date|date:"Y-m-d" }}'),
-                    title: "{{ workshop.title|escapejs }}",
-                    location: "{{ workshop.location|escapejs }}"
-                }{% if not forloop.last %},{% endif %}
-                {% endfor %}
+            {% for workshop in upcoming_workshops %}
+            {
+                date: new Date('{{ workshop.date|date:"Y-m-d" }}'),
+                title: "{{ workshop.title|escapejs }}",
+                location: "{{ workshop.location|escapejs }}"
+            } {% if not forloop.last %}, {% endif %}
+            {% endfor %}
             {% else %}
-                {
-                    date: new Date(2025, 6, 15), // July 15
-                    title: "{% trans 'Agriculture Biologique'|escapejs %}",
-                    location: "Dakar"
-                },
-                {
-                    date: new Date(2025, 6, 22), // July 22
-                    title: "{% trans 'Techniques d\'Irrigation'|escapejs %}",
-                    location: "Thiès"
-                },
-                {
-                    date: new Date(2025, 7, 5), // August 5
-                    title: "{% trans 'Conservation des Sols'|escapejs %}",
-                    location: "Kaolack"
-                },
-                {
-                    date: new Date(2025, 7, 12), // August 12
-                    title: "{% trans 'Marketing Agricole'|escapejs %}",
-                    location: "Saint-Louis"
-                },
-                {
-                    date: new Date(2025, 7, 25), // August 25
-                    title: "{% trans 'Gestion de l\'Eau'|escapejs %}",
-                    location: "Tambacounda"
-                }
+            {
+                date: new Date(2025, 6, 15),
+                title: "{% trans 'Agriculture Biologique'|escapejs %}",
+                location: "Dakar"
+            },
+            {
+                date: new Date(2025, 6, 22),
+                title: "{% trans 'Techniques d\'Irrigation'|escapejs %}",
+                location: "Thiès"
+            },
+            {
+                date: new Date(2025, 7, 5),
+                title: "{% trans 'Conservation des Sols'|escapejs %}",
+                location: "Kaolack"
+            },
+            {
+                date: new Date(2025, 7, 12),
+                title: "{% trans 'Marketing Agricole'|escapejs %}",
+                location: "Saint-Louis"
+            },
+            {
+                date: new Date(2025, 7, 25),
+                title: "{% trans 'Gestion de l\'Eau'|escapejs %}",
+                location: "Tambacounda"
+            }
             {% endif %}
         ];
 
@@ -1379,15 +1396,15 @@
 
             // Generate calendar days
             const endDate = new Date(startDate);
-            endDate.setDate(endDate.getDate() + 41); // 6 weeks
+            endDate.setDate(endDate.getDate() + 41);
 
             for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
                 const dayElement = document.createElement('div');
                 dayElement.className = 'calendar-day';
-                
+
                 const isCurrentMonth = date.getMonth() === month;
                 const isToday = date.toDateString() === new Date().toDateString();
-                
+
                 if (!isCurrentMonth) {
                     dayElement.classList.add('other-month');
                 }
@@ -1401,7 +1418,7 @@
                 dayElement.appendChild(dayNumber);
 
                 // Check for workshops on this date
-                const dayWorkshops = workshops.filter(workshop => 
+                const dayWorkshops = workshops.filter(workshop =>
                     workshop.date.toDateString() === date.toDateString()
                 );
 
@@ -1419,7 +1436,7 @@
             }
 
             // Update month display
-            document.getElementById('monthDisplay').textContent = 
+            document.getElementById('monthDisplay').textContent =
                 `${monthNames[month]} ${year}`;
         }
 
@@ -1440,10 +1457,10 @@
             upcomingWorkshops.forEach(workshop => {
                 const workshopItem = document.createElement('div');
                 workshopItem.className = 'workshop-item';
-                
+
                 const day = workshop.date.getDate();
                 const month = workshop.date.toLocaleDateString('fr-FR', { month: 'short' });
-                
+
                 workshopItem.innerHTML = `
                     <div class="workshop-header">
                         <div class="workshop-date-circle">
@@ -1464,7 +1481,7 @@
             const workshopsList = document.getElementById('workshopsList');
             const toggleBtn = document.getElementById('toggleBtn');
             const icon = toggleBtn.querySelector('i');
-            
+
             if (workshopsList.classList.contains('collapsed')) {
                 workshopsList.classList.remove('collapsed');
                 workshopsList.classList.add('expanded');
@@ -1504,7 +1521,7 @@
         });
 
         // Sticky nav effect
-        window.addEventListener('scroll', function() {
+        window.addEventListener('scroll', function () {
             const nav = document.querySelector('nav');
             if (window.scrollY > 100) {
                 nav.style.background = 'linear-gradient(135deg, rgba(45,80,22,0.95) 0%, rgba(74,124,89,0.95) 100%)';
@@ -1539,7 +1556,7 @@
 
         // Ripple effect for buttons
         document.querySelectorAll('.btn-primary, .btn-secondary, .cta-button, .nav-links a, .nav-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
+            btn.addEventListener('click', function (e) {
                 const ripple = document.createElement('div');
                 ripple.style.position = 'absolute';
                 ripple.style.borderRadius = '50%';
@@ -1558,3 +1575,4 @@
     </script>
 </body>
 </html>
+{% endblock %}

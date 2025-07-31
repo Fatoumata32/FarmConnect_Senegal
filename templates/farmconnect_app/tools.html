@@ -7,6 +7,7 @@
 {% block extra_css %}
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,7 +40,7 @@
         /* Header Styles */
         .navbar {
             background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             padding: 1rem 0;
         }
 
@@ -53,7 +54,7 @@
         }
 
         .navbar-nav .nav-link {
-            color: rgba(255,255,255,0.9) !important;
+            color: rgba(255, 255, 255, 0.9) !important;
             font-weight: 500;
             margin: 0 10px;
             transition: all 0.3s ease;
@@ -73,7 +74,7 @@
         }
 
         .language-btn {
-            background: rgba(255,255,255,0.9);
+            background: rgba(255, 255, 255, 0.9);
             border: 2px solid var(--primary-green);
             color: var(--primary-green);
             padding: 8px 16px;
@@ -99,7 +100,7 @@
             border-radius: 20px;
             padding: 30px;
             margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
             border: none;
             position: relative;
@@ -118,7 +119,7 @@
 
         .feature-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
         }
 
         .feature-icon {
@@ -256,7 +257,7 @@
         }
 
         .footer-section ul li a {
-            color: rgba(255,255,255,0.8);
+            color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
             transition: color 0.3s ease;
         }
@@ -275,7 +276,7 @@
             display: inline-block;
             width: 40px;
             height: 40px;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -326,10 +327,11 @@
 
         .card-hover-effect:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
+
 <body>
     <!-- Language Selector -->
     <div class="language-selector">
@@ -350,18 +352,22 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'farmconnect_app:home' %}" data-translate="nav_home">Accueil</a>
+                        <a class="nav-link" href="{% url 'farmconnect_app:home' %}"
+                            data-translate="nav_home">Accueil</a>
                     </li>
-                  
+
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'farmconnect_app:community' %}" data-translate="nav_community">Communauté</a>
+                        <a class="nav-link" href="{% url 'farmconnect_app:community' %}"
+                            data-translate="nav_community">Communauté</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'farmconnect_app:investors' %}" data-translate="nav_investors">Investisseurs</a>
+                        <a class="nav-link" href="{% url 'farmconnect_app:investors' %}"
+                            data-translate="nav_investors">Investisseurs</a>
                     </li>
-                    
+
                     <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'farmconnect_app:tools' %}" data-translate="nav_tools">Outils</a>
+                        <a class="nav-link active" href="{% url 'farmconnect_app:tools' %}"
+                            data-translate="nav_tools">Outils</a>
                     </li>
                 </ul>
             </div>
@@ -374,32 +380,45 @@
             <section id="tools" class="section-padding">
                 <div class="text-center mb-5">
                     <h2 class="text-gradient" data-translate="tools_title">Outils Agricoles Innovants</h2>
-                    <p data-translate="tools_subtitle">Découvrez des outils modernes et abordables pour optimiser vos pratiques agricoles</p>
+                    <p data-translate="tools_subtitle">Découvrez des outils modernes et abordables pour optimiser vos
+                        pratiques agricoles</p>
                 </div>
 
                 <!-- Tool 1: Precision Agriculture Tractor -->
                 <div class="feature-card card-hover-effect">
                     <div class="tool-container">
                         <div class="tool-image">
-                            <img src="img/Tracteur de precision.jpg" alt="Tracteur de Précision">
+                            <img src="{% static 'img/Tracteur de precision.jpg' %}" alt="Tracteur de Précision">
                         </div>
                         <div class="tool-details">
-                            <h3 class="feature-title" data-translate="tool_tractor_title">Tracteur de Précision (John Deere 6R)</h3>
-                            <p data-translate="tool_tractor_desc">Le tracteur John Deere 6R avec package de précision intègre GPS RTK, collecte de données, pulvérisateur automatisé, désherbeur mécanique et caméra multispectrale pour une agriculture de précision.</p>
+                            <h3 class="feature-title" data-translate="tool_tractor_title">Tracteur de Précision (John
+                                Deere 6R)</h3>
+                            <p data-translate="tool_tractor_desc">Le tracteur John Deere 6R avec package de précision
+                                intègre GPS RTK, collecte de données, pulvérisateur automatisé, désherbeur mécanique et
+                                caméra multispectrale pour une agriculture de précision.</p>
                             <ul>
                                 <li><strong data-translate="price_label">Prix :</strong> 25 000 000 XOF</li>
                                 <li><strong data-translate="payment_plans_label">Plans de paiement :</strong>
                                     <ul>
                                         <li data-translate="payment_full">Paiement unique : 25 000 000 XOF</li>
-                                        <li data-translate="payment_tractor_3">3 tranches : 9 000 000 XOF initial + 2 x 8 500 000 XOF (sur 12 mois)</li>
-                                        <li data-translate="payment_tractor_4">4 tranches : 7 000 000 XOF initial + 3 x 6 500 000 XOF (sur 18 mois)</li>
+                                        <li data-translate="payment_tractor_3">3 tranches : 9 000 000 XOF initial + 2 x
+                                            8 500 000 XOF (sur 12 mois)</li>
+                                        <li data-translate="payment_tractor_4">4 tranches : 7 000 000 XOF initial + 3 x
+                                            6 500 000 XOF (sur 18 mois)</li>
                                     </ul>
                                 </li>
-                                <li><strong data-translate="contact_label">Contact :</strong> John Deere Sénégal - +221 77 987 6543, info@johndeere-senegal.com</li>
-                                <li><strong data-translate="advantages_label">Avantages :</strong> <span data-translate="tool_tractor_advantages">Rendements accrus, réduction des intrants, respectueux de l'environnement, agriculture basée sur les données.</span></li>
+                                <li><strong data-translate="contact_label">Contact :</strong> John Deere Sénégal - +221
+                                    77 987 6543, info@johndeere-senegal.com</li>
+                                <li><strong data-translate="advantages_label">Avantages :</strong> <span
+                                        data-translate="tool_tractor_advantages">Rendements accrus, réduction des
+                                        intrants, respectueux de l'environnement, agriculture basée sur les
+                                        données.</span></li>
                             </ul>
                             <div class="video-placeholder">
-                               <iframe width="800" height="200" src="https://www.youtube.com/embed/B90XA_Crgxk" title="Vidéo de démonstration du tracteur"  frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"  allowfullscreen></iframe>
+                                <iframe width="800" height="200" src="https://www.youtube.com/embed/B90XA_Crgxk"
+                                    title="Vidéo de démonstration du tracteur" frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowfullscreen></iframe>
                             </div>
                         </div>
                     </div>
@@ -409,25 +428,36 @@
                 <div class="feature-card card-hover-effect">
                     <div class="tool-container">
                         <div class="tool-image">
-                            <img src="img/Arrosage drone.jpg" alt="Drone pour Arrosage">
+                            <img src="{% static 'img/Arrosage drone.jpg' %}" alt="Drone pour Arrosage">
                         </div>
                         <div class="tool-details">
-                            <h3 class="feature-title" data-translate="tool_drone_title">Arrosage par Drone (XAG P150)</h3>
-                            <p data-translate="tool_drone_desc">Les drones agricoles XAG P150 permettent une pulvérisation précise d'eau, d'engrais ou de pesticides, réduisant les coûts et augmentant les rendements.</p>
+                            <h3 class="feature-title" data-translate="tool_drone_title">Arrosage par Drone (XAG P150)
+                            </h3>
+                            <p data-translate="tool_drone_desc">Les drones agricoles XAG P150 permettent une
+                                pulvérisation précise d'eau, d'engrais ou de pesticides, réduisant les coûts et
+                                augmentant les rendements.</p>
                             <ul>
                                 <li><strong data-translate="price_label">Prix :</strong> 15 000 000 XOF</li>
                                 <li><strong data-translate="payment_plans_label">Plans de paiement :</strong>
                                     <ul>
                                         <li data-translate="payment_full">Paiement unique : 15 000 000 XOF</li>
-                                        <li data-translate="payment_drone_3">3 tranches : 5 500 000 XOF initial + 2 x 5 250 000 XOF (sur 6 mois)</li>
-                                        <li data-translate="payment_drone_4">4 tranches : 4 500 000 XOF initial + 3 x 3 750 000 XOF (sur 12 mois)</li>
+                                        <li data-translate="payment_drone_3">3 tranches : 5 500 000 XOF initial + 2 x 5
+                                            250 000 XOF (sur 6 mois)</li>
+                                        <li data-translate="payment_drone_4">4 tranches : 4 500 000 XOF initial + 3 x 3
+                                            750 000 XOF (sur 12 mois)</li>
                                     </ul>
                                 </li>
-                                <li><strong data-translate="contact_label">Contact :</strong> XAG Sénégal - +221 77 123 4567, info@xag-senegal.com</li>
-                                <li><strong data-translate="advantages_label">Avantages :</strong> <span data-translate="tool_drone_advantages">Précision, réduction des coûts chimiques, efficacité sur grandes surfaces.</span></li>
+                                <li><strong data-translate="contact_label">Contact :</strong> XAG Sénégal - +221 77 123
+                                    4567, info@xag-senegal.com</li>
+                                <li><strong data-translate="advantages_label">Avantages :</strong> <span
+                                        data-translate="tool_drone_advantages">Précision, réduction des coûts chimiques,
+                                        efficacité sur grandes surfaces.</span></li>
                             </ul>
                             <div class="video-placeholder">
-                                <iframe width="800" height="200" src="https://www.youtube.com/embed/e0OTuW421eM" title="Vidéo de démonstration du tracteur" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                <iframe width="800" height="200" src="https://www.youtube.com/embed/e0OTuW421eM"
+                                    title="Vidéo de démonstration du tracteur" frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowfullscreen></iframe>
                             </div>
                         </div>
                     </div>
@@ -437,25 +467,37 @@
                 <div class="feature-card card-hover-effect">
                     <div class="tool-container">
                         <div class="tool-image">
-                            <img src="img/Solar irrigation.jpg" alt="Pompe Solaire pour Irrigation">
+                            <img src="{% static 'img/Solar irrigation.jpg' %}" alt="Pompe Solaire pour Irrigation">
                         </div>
                         <div class="tool-details">
-                            <h3 class="feature-title" data-translate="tool_solar_title">Irrigation Solaire (Bonergie SPIS)</h3>
-                            <p data-translate="tool_solar_desc">Les systèmes d'irrigation solaire Bonergie utilisent l'énergie solaire pour alimenter des pompes à eau, offrant une irrigation durable toute l'année.</p>
+                            <h3 class="feature-title" data-translate="tool_solar_title">Irrigation Solaire (Bonergie
+                                SPIS)</h3>
+                            <p data-translate="tool_solar_desc">Les systèmes d'irrigation solaire Bonergie utilisent
+                                l'énergie solaire pour alimenter des pompes à eau, offrant une irrigation durable toute
+                                l'année.</p>
                             <ul>
                                 <li><strong data-translate="price_label">Prix :</strong> 2 500 000 XOF</li>
                                 <li><strong data-translate="payment_plans_label">Plans de paiement :</strong>
                                     <ul>
                                         <li data-translate="payment_full">Paiement unique : 2 500 000 XOF</li>
-                                        <li data-translate="payment_solar_2">2 tranches : 1 500 000 XOF initial + 1 250 000 XOF (sur 6 mois)</li>
-                                        <li data-translate="payment_solar_3">3 tranches : 1 000 000 XOF initial + 2 x 850 000 XOF (sur 12 mois)</li>
+                                        <li data-translate="payment_solar_2">2 tranches : 1 500 000 XOF initial + 1 250
+                                            000 XOF (sur 6 mois)</li>
+                                        <li data-translate="payment_solar_3">3 tranches : 1 000 000 XOF initial + 2 x
+                                            850 000 XOF (sur 12 mois)</li>
                                     </ul>
                                 </li>
-                                <li><strong data-translate="contact_label">Contact :</strong> Bonergie Irrigation Sénégal - +221 78 987 6543, contact@bonergie-senegal.com</li>
-                                <li><strong data-translate="advantages_label">Avantages :</strong> <span data-translate="tool_solar_advantages">Réduction des coûts énergétiques, irrigation fiable, respectueux de l'environnement.</span></li>
+                                <li><strong data-translate="contact_label">Contact :</strong> Bonergie Irrigation
+                                    Sénégal - +221 78 987 6543, contact@bonergie-senegal.com</li>
+                                <li><strong data-translate="advantages_label">Avantages :</strong> <span
+                                        data-translate="tool_solar_advantages">Réduction des coûts énergétiques,
+                                        irrigation fiable, respectueux de l'environnement.</span></li>
                             </ul>
                             <div class="video-placeholder">
-                                <iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fwatch%2F%3Fv%3D806851624088809&show_text=false&width=640" width="800" height="200" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                                <iframe
+                                    src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fwatch%2F%3Fv%3D806851624088809&show_text=false&width=640"
+                                    width="800" height="200" style="border:none;overflow:hidden" scrolling="no"
+                                    frameborder="0" allowfullscreen="true"
+                                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
 
                             </div>
                         </div>
@@ -466,23 +508,34 @@
                 <div class="feature-card card-hover-effect">
                     <div class="tool-container">
                         <div class="tool-image">
-                            <img src="IMG/SKW400 Kit professionnel de gestion du sol.jpg" alt="Kit de Test de Sol Portable">
+                            <img src="{% static 'img/SKW400 Kit professionnel de gestion du sol.jpg' %}"
+                                alt="Kit de Test de Sol Portable">
                         </div>
                         <div class="tool-details">
-                            <h3 class="feature-title" data-translate="tool_soil_title">Kit de Test de Sol Portable (Palintest SKW 500)</h3>
-                            <p data-translate="tool_soil_desc">Le SoilCare Pro permet aux agriculteurs d'analyser le pH et les nutriments du sol directement sur le terrain, optimisant les décisions de fertilisation.</p>
+                            <h3 class="feature-title" data-translate="tool_soil_title">Kit de Test de Sol Portable
+                                (Palintest SKW 500)</h3>
+                            <p data-translate="tool_soil_desc">Le SoilCare Pro permet aux agriculteurs d'analyser le pH
+                                et les nutriments du sol directement sur le terrain, optimisant les décisions de
+                                fertilisation.</p>
                             <ul>
                                 <li><strong data-translate="price_label">Prix :</strong> 150 000 XOF</li>
                                 <li><strong data-translate="payment_plans_label">Plans de paiement :</strong>
                                     <ul>
                                         <li data-translate="payment_full">Paiement unique : 150 000 XOF</li>
-                                        <li data-translate="payment_soil_2">2 tranches : 80 000 XOF initial + 80 000 XOF (sur 3 mois)</li>
+                                        <li data-translate="payment_soil_2">2 tranches : 80 000 XOF initial + 80 000 XOF
+                                            (sur 3 mois)</li>
                                     </ul>
                                 </li>
-                                <li><strong data-translate="contact_label">Contact :</strong> AgriTech Sénégal - +221 76 456 7890, sales@agritech-senegal.com</li>
-                                <li><strong data-translate="advantages_label">Avantages :</strong> <span data-translate="tool_soil_advantages">Analyse rapide, amélioration des rendements, réduction des coûts d'engrais.</span></li>
+                                <li><strong data-translate="contact_label">Contact :</strong> AgriTech Sénégal - +221 76
+                                    456 7890, sales@agritech-senegal.com</li>
+                                <li><strong data-translate="advantages_label">Avantages :</strong> <span
+                                        data-translate="tool_soil_advantages">Analyse rapide, amélioration des
+                                        rendements, réduction des coûts d'engrais.</span></li>
                             </ul>
-                            <iframe width="800" height="200" src="https://www.youtube.com/embed/VXL1m5u9TnU" title="Vidéo de démonstration du tracteur" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            <iframe width="800" height="200" src="https://www.youtube.com/embed/VXL1m5u9TnU"
+                                title="Vidéo de démonstration du tracteur" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen></iframe>
                         </div>
                     </div>
                 </div>
@@ -491,85 +544,125 @@
                 <div class="feature-card card-hover-effect">
                     <div class="tool-container">
                         <div class="tool-image">
-                            <img src="img/Système d'Irrigation Goutte-à-Goutte (Netafim DripKit).jpg" alt="Système d'Irrigation Goutte-à-Goutte">
+                            <img src="{% static 'img/Netafim_DripKit.jpg' %}" alt="Système d'Irrigation Goutte-à-Goutte">
                         </div>
                         <div class="tool-details">
-                            <h3 class="feature-title" data-translate="tool_drip_title">Système d'Irrigation Goutte-à-Goutte (Netafim DripKit)</h3>
-                            <p data-translate="tool_drip_desc">Le Netafim DripKit fournit de l'eau directement aux racines des plantes, maximisant l'efficacité de l'eau pour les petites exploitations.</p>
+                            <h3 class="feature-title" data-translate="tool_drip_title">Système d'Irrigation
+                                Goutte-à-Goutte (Netafim DripKit)</h3>
+                            <p data-translate="tool_drip_desc">Le Netafim DripKit fournit de l'eau directement aux
+                                racines des plantes, maximisant l'efficacité de l'eau pour les petites exploitations.
+                            </p>
                             <ul>
                                 <li><strong data-translate="price_label">Prix :</strong> 800 000 XOF</li>
                                 <li><strong data-translate="payment_plans_label">Plans de paiement :</strong>
                                     <ul>
                                         <li data-translate="payment_full">Paiement unique : 800 000 XOF</li>
-                                        <li data-translate="payment_drip_2">2 tranches : 450 000 XOF initial + 400 000 XOF (sur 6 mois)</li>
-                                        <li data-translate="payment_drip_3">3 tranches : 300 000 XOF initial + 2 x 275 000 XOF (sur 9 mois)</li>
+                                        <li data-translate="payment_drip_2">2 tranches : 450 000 XOF initial + 400 000
+                                            XOF (sur 6 mois)</li>
+                                        <li data-translate="payment_drip_3">3 tranches : 300 000 XOF initial + 2 x 275
+                                            000 XOF (sur 9 mois)</li>
                                     </ul>
                                 </li>
-                                <li><strong data-translate="contact_label">Contact :</strong> Netafim Sénégal - +221 79 123 9876, info@netafim-senegal.com</li>
-                                <li><strong data-translate="advantages_label">Avantages :</strong> <span data-translate="tool_drip_advantages">Économie d'eau, installation facile, adapté aux petites surfaces.</span></li>
+                                <li><strong data-translate="contact_label">Contact :</strong> Netafim Sénégal - +221 79
+                                    123 9876, info@netafim-senegal.com</li>
+                                <li><strong data-translate="advantages_label">Avantages :</strong> <span
+                                        data-translate="tool_drip_advantages">Économie d'eau, installation facile,
+                                        adapté aux petites surfaces.</span></li>
                             </ul>
-                           <iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fwatch%2F%3Fv%3D3750914461803784&show_text=false&width=640" width="800" height="200" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                            <iframe
+                                src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fwatch%2F%3Fv%3D3750914461803784&show_text=false&width=640"
+                                width="800" height="200" style="border:none;overflow:hidden" scrolling="no"
+                                frameborder="0" allowfullscreen="true"
+                                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
 
                         </div>
                     </div>
                 </div>
 
                 <!-- Tool Set: Full Farming Tool Kit -->
-<div class="feature-card card-hover-effect">
-  <div class="tool-container">
-    <div class="tool-image">
-      <img src="img/farmTools.jpg" alt="Ensemble Outils Agricoles">
-    </div>
+                <div class="feature-card card-hover-effect">
+                    <div class="tool-container">
+                        <div class="tool-image">
+                            <img src="{% static 'img/farmTools.jpg' %}" alt="Ensemble Outils Agricoles">
+                        </div>
 
-    <div class="tool-details">
-      <h3 class="feature-title">Ensemble d'Outils Agricoles Complet (FarmTools Standard)</h3>
-      <p>Ce kit contient 15 outils essentiels pour les activités agricoles de base : préparation du sol, arrosage, désherbage, récolte et transport. Idéal pour les petits exploitants, les jardins communautaires et les coopératives agricoles.</p>
+                        <div class="tool-details">
+                            <h3 class="feature-title">Ensemble d'Outils Agricoles Complet (FarmTools Standard)</h3>
+                            <p>Ce kit contient 15 outils essentiels pour les activités agricoles de base : préparation
+                                du sol, arrosage, désherbage, récolte et transport. Idéal pour les petits exploitants,
+                                les jardins communautaires et les coopératives agricoles.</p>
 
-      <ul>
-        <li><strong>Prix :</strong> 95 000 XOF pour le set complet</li>
-        <li><strong>Contact :</strong> FarmTools Sénégal - +221 77 234 5678, sales@farmtools-senegal.com</li>
-        <li><strong>Avantages :</strong> Kit économique, prêt à l’emploi, outils durables et adaptés aux réalités agricoles locales.</li>
-      </ul>
+                            <ul>
+                                <li><strong>Prix :</strong> 95 000 XOF pour le set complet</li>
+                                <li><strong>Contact :</strong> FarmTools Sénégal - +221 77 234 5678,
+                                    sales@farmtools-senegal.com</li>
+                                <li><strong>Avantages :</strong> Kit économique, prêt à l’emploi, outils durables et
+                                    adaptés aux réalités agricoles locales.</li>
+                            </ul>
 
-      <!-- Sliding Tool Gallery -->
-      <div class="tool-slider" style="overflow-x: auto; white-space: nowrap; padding-top: 20px;">
-        <img src="img/wheelbarrow.jpg" alt="Wheelbarrow" style="width: 300px; margin-right: 10px; display: inline-block;">
-        <img src="img/watering_can-removebg-preview.png" alt="Watering Can" style="width: 300px; margin-right: 10px; display: inline-block;">
-        <img src="img/rake.jpg" alt="Rake" style="width: 300px; margin-right: 10px; display: inline-block;">
-        <img src="img/shovel.jpg" alt="Digging Shovel" style="width: 300px; margin-right: 10px; display: inline-block;">
-        <img src="img/Hoe.jpg" alt="Hoe Head" style="width: 300px; margin-right: 10px; display: inline-block;">
-        <img src="img/sickle.jpg" alt="Sickle" style="width: 300px; margin-right: 10px; display: inline-block;">
-        <img src="img/pick mattock.jpg" alt="Pick Mattock" style="width: 300px; margin-right: 10px; display: inline-block;">
-        <img src="img/panga.jpg" alt="Panga" style="width: 300px; margin-right: 10px; display: inline-block;">
-        <img src="img/head pan.jpg" alt="Head Pan" style="width: 300px; margin-right: 10px; display: inline-block;">
-        <img src="img/Slasher.jpg" alt="Slasher" style="width: 300px; margin-right: 10px; display: inline-block;">
-        <img src="img/malodas.jpg" alt="Malodas" style="width: 300px; margin-right: 10px; display: inline-block;">
-        <img src="img/fork hoe.jpg" alt="Iron Fork Hoe" style="width: 300px; margin-right: 10px; display: inline-block;">
-        <img src="img/hammer.jpg" alt="Hammers" style="width: 300px; margin-right: 10px; display: inline-block;">
-        <img src="img/spade fork.jpg" alt="Spade Fork" style="width: 300px; margin-right: 10px; display: inline-block;">
-        <img src="img/spade.jpg" alt="Spade" style="width: 300px; margin-right: 10px; display: inline-block;">
-      </div>
+                            <!-- Sliding Tool Gallery -->
+                            <div class="tool-slider" style="overflow-x: auto; white-space: nowrap; padding-top: 20px;">
+                                <img src="{% static 'img/wheelbarrow.jpg' %}" alt="Wheelbarrow"
+                                    style="width: 300px; margin-right: 10px; display: inline-block;">
+                                <img src="{% static 'img/watering_can-removebg-preview.png' %}" alt="Watering Can"
+                                    style="width: 300px; margin-right: 10px; display: inline-block;">
+                                <img src="{% static 'img/rake.jpg' %}" alt="Rake"
+                                    style="width: 300px; margin-right: 10px; display: inline-block;">
+                                <img src="{% static 'img/shovel.jpg' %}" alt="Digging Shovel"
+                                    style="width: 300px; margin-right: 10px; display: inline-block;">
+                                <img src="{% static 'img/Hoe.jpg' %}" alt="Hoe Head"
+                                    style="width: 300px; margin-right: 10px; display: inline-block;">
+                                <img src="{% static 'img/sickle.jpg' %}" alt="Sickle"
+                                    style="width: 300px; margin-right: 10px; display: inline-block;">
+                                <img src="{% static 'img/pick mattock.jpg' %}" alt="Pick Mattock"
+                                    style="width: 300px; margin-right: 10px; display: inline-block;">
+                                <img src="{% static 'img/panga.jpg' %}" alt="Panga"
+                                    style="width: 300px; margin-right: 10px; display: inline-block;">
+                                <img src="{% static 'img/head pan.jpg' %}" alt="Head Pan"
+                                    style="width: 300px; margin-right: 10px; display: inline-block;">
+                                <img src="{% static 'img/Slasher.jpg' %}" alt="Slasher"
+                                    style="width: 300px; margin-right: 10px; display: inline-block;">
+                                <img src="{% static 'img/malodas.jpg' %}" alt="Malodas"
+                                    style="width: 300px; margin-right: 10px; display: inline-block;">
+                                <img src="{% static 'img/fork hoe.jpg' %}" alt="Iron Fork Hoe"
+                                    style="width: 300px; margin-right: 10px; display: inline-block;">
+                                <img src="{% static 'img/hammer.jpg' %}" alt="Hammers"
+                                    style="width: 300px; margin-right: 10px; display: inline-block;">
+                                <img src="{% static 'img/spade fork.jpg' %}" alt="Spade Fork"
+                                    style="width: 300px; margin-right: 10px; display: inline-block;">
+                                <img src="{% static 'img/spade.jpg' %}" alt="Spade"
+                                    style="width: 300px; margin-right: 10px; display: inline-block;">
+                            </div>
 
-    </div>
-  </div>
-</div>
+                        </div>
+                    </div>
+                </div>
 
 
                 <!-- Tool 9: Organic Fertilizer -->
                 <div class="feature-card card-hover-effect">
                     <div class="tool-container">
                         <div class="tool-image">
-                            <img src="img/BioGrow.jpg" alt="Engrais Organique">
+                            <img src="{% static 'img/BioGrow.jpg' %}" alt="Engrais Organique">
                         </div>
                         <div class="tool-details">
-                            <h3 class="feature-title" data-translate="tool_fertilizer_title">Engrais Organique (BioGrow)</h3>
-                            <p data-translate="tool_fertilizer_desc">Un engrais organique à base de compost pour enrichir le sol et améliorer les rendements.</p>
+                            <h3 class="feature-title" data-translate="tool_fertilizer_title">Engrais Organique (BioGrow)
+                            </h3>
+                            <p data-translate="tool_fertilizer_desc">Un engrais organique à base de compost pour
+                                enrichir le sol et améliorer les rendements.</p>
                             <ul>
-                                <li><strong data-translate="price_label">Prix :</strong> 5 000 XOF (par sac de 25 kg)</li>
-                                <li><strong data-translate="contact_label">Contact :</strong> BioGrow Sénégal - +221 76 567 8901, contact@biogrow-senegal.com</li>
-                                <li><strong data-translate="advantages_label">Avantages :</strong> <span data-translate="tool_fertilizer_advantages">Écologique, améliore la fertilité du sol, abordable.</span></li>
+                                <li><strong data-translate="price_label">Prix :</strong> 5 000 XOF (par sac de 25 kg)
+                                </li>
+                                <li><strong data-translate="contact_label">Contact :</strong> BioGrow Sénégal - +221 76
+                                    567 8901, contact@biogrow-senegal.com</li>
+                                <li><strong data-translate="advantages_label">Avantages :</strong> <span
+                                        data-translate="tool_fertilizer_advantages">Écologique, améliore la fertilité du
+                                        sol, abordable.</span></li>
                             </ul>
-                           <iframe width="800" height="200" src="https://www.youtube.com/embed/iVq3Li4R2DY" title="Vidéo de démonstration du tracteur" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            <iframe width="800" height="200" src="https://www.youtube.com/embed/iVq3Li4R2DY"
+                                title="Vidéo de démonstration du tracteur" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen></iframe>
                         </div>
                     </div>
                 </div>
@@ -584,16 +677,16 @@
                         <form>
                             <label for="name" data-translate="form_name">Nom :</label>
                             <input type="text" id="name" name="name" required>
-                            
+
                             <label for="email" data-translate="form_email">Email :</label>
                             <input type="email" id="email" name="email" required>
-                            
+
                             <label for="phone" data-translate="form_phone">Téléphone :</label>
                             <input type="tel" id="phone" name="phone">
-                            
+
                             <label for="message" data-translate="form_message">Message :</label>
                             <textarea id="message" name="message" rows="5" required></textarea>
-                            
+
                             <button type="submit" data-translate="form_submit">Envoyer</button>
                         </form>
                     </div>
@@ -608,7 +701,8 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <h5 data-translate="footer_about">À Propos</h5>
-                    <p data-translate="footer_description">FarmConnect Senegal connecte les petits agriculteurs aux technologies modernes pour une agriculture durable et prospère.</p>
+                    <p data-translate="footer_description">FarmConnect Senegal connecte les petits agriculteurs aux
+                        technologies modernes pour une agriculture durable et prospère.</p>
                     <div class="social-links">
                         <a href="#" class="social-link" aria-label="Facebook">
                             <i class="fab fa-facebook-f"></i>
@@ -883,7 +977,7 @@
 
         // Add ripple effect to buttons
         document.querySelectorAll('.language-btn, .contact-form button').forEach(btn => {
-            btn.addEventListener('click', function(e) {
+            btn.addEventListener('click', function (e) {
                 const ripple = document.createElement('div');
                 ripple.style.position = 'absolute';
                 ripple.style.borderRadius = '50%';
@@ -893,9 +987,9 @@
                 ripple.style.left = (e.clientX - e.target.offsetLeft) + 'px';
                 ripple.style.top = (e.clientY - e.target.offsetTop) + 'px';
                 ripple.style.width = ripple.style.height = '20px';
-                
+
                 this.appendChild(ripple);
-                
+
                 setTimeout(() => {
                     ripple.remove();
                 }, 600);
@@ -924,5 +1018,6 @@
         });
     </script>
 </body>
+
 </html>
 {% endblock %}
