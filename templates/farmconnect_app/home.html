@@ -159,30 +159,179 @@
         }
 
         /* Weather Section */
-        .weather-card {
-            background: linear-gradient(135deg, var(--sky-blue) 0%, #edf0b8 100%);
-            color: white;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        .weather-day-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
         }
 
-        .weather-main {
-            font-size: 3rem;
-            font-weight: bold;
+        .weather-day-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, var(--sky-blue) 0%, #f4d03f 100%);
         }
 
-        .weather-details {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
+        .weather-day-card.today {
+            border: 2px solid var(--sky-blue);
+            transform: scale(1.05);
         }
 
-        .weather-item {
+        .weather-day-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .weather-day-card.today:hover {
+            transform: scale(1.05) translateY(-10px);
+        }
+
+        .weather-day-header {
             text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .weather-day-header h3 {
+            font-size: 1.3rem;
+            color: var(--primary-green);
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .weather-date {
+            color: #999;
+            font-size: 0.95rem;
+        }
+
+        .weather-icon-main {
+            text-align: center;
+            font-size: 4rem;
+            margin: 20px 0;
+            color: var(--sky-blue);
+        }
+
+        .weather-icon-main .fa-sun {
+            color: #f4d03f;
+            text-shadow: 0 0 20px rgba(244, 208, 63, 0.5);
+        }
+
+        .weather-icon-main .fa-cloud-sun {
+            background: linear-gradient(135deg, #87ceeb 0%, #f4d03f 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .weather-icon-main .fa-cloud-rain {
+            color: #6c757d;
+        }
+
+        .weather-temp-main {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .temp-high {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--text-dark);
+        }
+
+        .temp-low {
+            font-size: 1.8rem;
+            color: #999;
+            margin-left: 10px;
+        }
+
+        .weather-condition {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .weather-day-details {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px 0;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+
+        .detail-item {
+            text-align: center;
+        }
+
+        .detail-item i {
+            font-size: 1.2rem;
+            color: var(--light-green);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .detail-item span {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .weather-advice {
+            margin-top: 20px;
             padding: 15px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
+            background: #f0f8f0;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .weather-advice i {
+            color: var(--accent-yellow);
+            font-size: 1.3rem;
+        }
+
+        .weather-advice p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--primary-green);
+            font-weight: 500;
+        }
+
+        .weather-alert {
+            background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%);
+            border-left: 4px solid var(--light-green);
+            padding: 25px;
+            border-radius: 10px;
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .weather-alert i {
+            font-size: 2rem;
+            color: var(--light-green);
+            flex-shrink: 0;
+        }
+
+        .alert-content h4 {
+            color: var(--primary-green);
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .alert-content p {
+            margin: 0;
+            color: #666;
+            line-height: 1.6;
         }
 
         /* Tips Section */
@@ -438,6 +587,37 @@
                 font-size: 2rem;
             }
 
+            .weather-day-card {
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+
+            .weather-day-card.today {
+                transform: scale(1);
+            }
+
+            .weather-icon-main {
+                font-size: 3rem;
+            }
+
+            .temp-high {
+                font-size: 2rem;
+            }
+
+            .temp-low {
+                font-size: 1.5rem;
+            }
+
+            .weather-advice {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .weather-alert {
+                flex-direction: column;
+                text-align: center;
+            }
+
             .sms-simple-container {
                 padding: 30px 20px;
             }
@@ -519,37 +699,130 @@
         <div class="container">
             <!-- Weather Section -->
             <section id="weather" class="section-padding">
-                <div class="row">
-                    <div class="col-lg-8 mx-auto">
-                        <div class="feature-card weather-card">
-                            <div class="text-center">
-                                <i class="fas fa-cloud-sun feature-icon"></i>
-                                <h2 class="feature-title">Prévisions Météorologiques</h2>
-                                <div class="weather-main">
-                                    <span id="temperature">28°C</span>
-                                    <small id="weather-condition">Ensoleillé</small>
+                <div class="container">
+                    <div class="text-center mb-5">
+                        <h2 class="text-gradient">Prévisions Météorologiques</h2>
+                        <p>Planifiez vos activités agricoles avec des prévisions précises</p>
+                    </div>
+                    
+                    <div class="row">
+                        <!-- Today's Weather -->
+                        <div class="col-lg-4 mb-4">
+                            <div class="weather-day-card today">
+                                <div class="weather-day-header">
+                                    <h3>Aujourd'hui</h3>
+                                    <span class="weather-date" id="date-today">Jeudi 31</span>
                                 </div>
-                                <div class="weather-details">
-                                    <div class="weather-item">
+                                <div class="weather-icon-main">
+                                    <i class="fas fa-sun"></i>
+                                </div>
+                                <div class="weather-temp-main">
+                                    <span class="temp-high">32°</span>
+                                    <span class="temp-low">24°</span>
+                                </div>
+                                <div class="weather-condition">Ensoleillé</div>
+                                <div class="weather-day-details">
+                                    <div class="detail-item">
                                         <i class="fas fa-tint"></i>
-                                        <div><span>Humidité</span></div>
-                                        <div id="humidity">65%</div>
+                                        <span>65%</span>
                                     </div>
-                                    <div class="weather-item">
+                                    <div class="detail-item">
                                         <i class="fas fa-wind"></i>
-                                        <div><span>Vent</span></div>
-                                        <div id="wind-speed">12 km/h</div>
+                                        <span>12 km/h</span>
                                     </div>
-                                    <div class="weather-item">
+                                    <div class="detail-item">
                                         <i class="fas fa-umbrella"></i>
-                                        <div><span>Pluie</span></div>
-                                        <div id="rain-chance">20%</div>
+                                        <span>20%</span>
                                     </div>
-                                    <div class="weather-item">
-                                        <i class="fas fa-eye"></i>
-                                        <div><span>Visibilité</span></div>
-                                        <div id="visibility">10 km</div>
+                                </div>
+                                <div class="weather-advice">
+                                    <i class="fas fa-lightbulb"></i>
+                                    <p>Journée idéale pour les travaux aux champs</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Tomorrow's Weather -->
+                        <div class="col-lg-4 mb-4">
+                            <div class="weather-day-card">
+                                <div class="weather-day-header">
+                                    <h3>Demain</h3>
+                                    <span class="weather-date" id="date-tomorrow">Vendredi 1</span>
+                                </div>
+                                <div class="weather-icon-main">
+                                    <i class="fas fa-cloud-sun"></i>
+                                </div>
+                                <div class="weather-temp-main">
+                                    <span class="temp-high">30°</span>
+                                    <span class="temp-low">23°</span>
+                                </div>
+                                <div class="weather-condition">Partiellement nuageux</div>
+                                <div class="weather-day-details">
+                                    <div class="detail-item">
+                                        <i class="fas fa-tint"></i>
+                                        <span>70%</span>
                                     </div>
+                                    <div class="detail-item">
+                                        <i class="fas fa-wind"></i>
+                                        <span>15 km/h</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <i class="fas fa-umbrella"></i>
+                                        <span>35%</span>
+                                    </div>
+                                </div>
+                                <div class="weather-advice">
+                                    <i class="fas fa-lightbulb"></i>
+                                    <p>Prévoyez l'arrosage en fin de journée</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Day After Tomorrow's Weather -->
+                        <div class="col-lg-4 mb-4">
+                            <div class="weather-day-card">
+                                <div class="weather-day-header">
+                                    <h3>Après-demain</h3>
+                                    <span class="weather-date" id="date-after">Samedi 2</span>
+                                </div>
+                                <div class="weather-icon-main">
+                                    <i class="fas fa-cloud-rain"></i>
+                                </div>
+                                <div class="weather-temp-main">
+                                    <span class="temp-high">28°</span>
+                                    <span class="temp-low">22°</span>
+                                </div>
+                                <div class="weather-condition">Pluie légère</div>
+                                <div class="weather-day-details">
+                                    <div class="detail-item">
+                                        <i class="fas fa-tint"></i>
+                                        <span>85%</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <i class="fas fa-wind"></i>
+                                        <span>20 km/h</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <i class="fas fa-umbrella"></i>
+                                        <span>75%</span>
+                                    </div>
+                                </div>
+                                <div class="weather-advice">
+                                    <i class="fas fa-lightbulb"></i>
+                                    <p>Évitez les semis, pluie prévue</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Agricultural Alert -->
+                    <div class="row mt-4">
+                        <div class="col-lg-10 mx-auto">
+                            <div class="weather-alert">
+                                <i class="fas fa-info-circle"></i>
+                                <div class="alert-content">
+                                    <h4>Bulletin Agricole</h4>
+                                    <p>Conditions favorables pour la plantation cette semaine. Les précipitations prévues samedi fourniront une irrigation naturelle.</p>
                                 </div>
                             </div>
                         </div>
@@ -703,7 +976,8 @@
         </div>
     </main>
 
-      <section class="cta-section">
+    <!-- Call to Action -->
+     <section class="cta-section">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 mx-auto text-center">
@@ -716,11 +990,30 @@
         </div>
     </section>
 
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <!-- Custom JavaScript -->
     <script>
+        // Update dates dynamically
+        function updateWeatherDates() {
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(today.getDate() + 1);
+            const afterTomorrow = new Date(today);
+            afterTomorrow.setDate(today.getDate() + 2);
+            
+            const options = { weekday: 'long', day: 'numeric' };
+            
+            document.getElementById('date-today').textContent = today.toLocaleDateString('fr-FR', options);
+            document.getElementById('date-tomorrow').textContent = tomorrow.toLocaleDateString('fr-FR', options);
+            document.getElementById('date-after').textContent = afterTomorrow.toLocaleDateString('fr-FR', options);
+        }
+        
+        // Call on page load
+        updateWeatherDates();
+
         // Crop tips functionality
         document.querySelectorAll('.crop-btn').forEach(btn => {
             btn.addEventListener('click', function() {
