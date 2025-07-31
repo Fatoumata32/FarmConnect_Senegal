@@ -12,7 +12,7 @@ class User(AbstractUser):
 
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='farmer')
     phone_regex = RegexValidator(regex=r'\+?221\d{9}$', message="Format: '+221XXXXXXXXX'")
-    phone_number = models.CharField(validators=[phone_regex], max_length=15, unique=True)
+    phone_number = models.CharField(validators=[phone_regex], max_length=15, unique=False, blank=True, null=True, help_text="Numéro de téléphone au format +221XXXXXXXXX")
     region = models.CharField(max_length=100, blank=True)
     village = models.CharField(max_length=100, blank=True)
     farm_size = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, help_text="Taille en hectares")

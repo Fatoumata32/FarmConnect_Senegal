@@ -65,3 +65,23 @@ INFO 2025-07-31 09:26:56,807 views 29492 22648 Authentication successful for use
 INFO 2025-07-31 09:26:56,807 views 29492 22648 User is active, logging in
 INFO 2025-07-31 09:26:56,835 views 29492 22648 Remember me disabled - session expires on browser close
 INFO 2025-07-31 09:26:56,836 views 29492 22648 Redirecting authenticated user to: /fr/dashboard/
+INFO 2025-07-31 20:04:03,041 views 16352 2064 Login view called with method: GET
+INFO 2025-07-31 20:04:03,042 views 16352 2064 Rendering login template
+INFO 2025-07-31 20:04:05,271 views 16352 2064 Login view called with method: POST
+INFO 2025-07-31 20:04:05,271 views 16352 2064 Processing POST request for login
+INFO 2025-07-31 20:04:05,272 views 16352 2064 Username: MAL, Password length: 6
+INFO 2025-07-31 20:04:05,272 views 16352 2064 Next URL: /fr/profile/
+INFO 2025-07-31 20:04:05,272 views 16352 2064 Attempting authentication for user: MAL
+WARNING 2025-07-31 20:04:05,696 views 16352 2064 Authentication failed for username: MAL
+INFO 2025-07-31 20:04:05,696 views 16352 2064 Rendering login template
+INFO 2025-07-31 20:05:05,587 views 16352 26852 Login view called with method: GET
+INFO 2025-07-31 20:05:05,587 views 16352 26852 Rendering login template
+INFO 2025-07-31 20:05:24,760 views 16352 26852 Login view called with method: POST
+INFO 2025-07-31 20:05:24,761 views 16352 26852 Processing POST request for login
+INFO 2025-07-31 20:05:24,761 views 16352 26852 Username: malick, Password length: 9
+INFO 2025-07-31 20:05:24,761 views 16352 26852 Next URL: /fr/dashboard/
+INFO 2025-07-31 20:05:24,761 views 16352 26852 Attempting authentication for user: malick
+INFO 2025-07-31 20:05:25,217 views 16352 26852 Authentication successful for user: malick
+INFO 2025-07-31 20:05:25,217 views 16352 26852 User is active, logging in
+INFO 2025-07-31 20:05:25,224 views 16352 26852 Remember me disabled - session expires on browser close
+INFO 2025-07-31 20:05:25,224 views 16352 26852 Redirecting authenticated user to: /fr/dashboard/
