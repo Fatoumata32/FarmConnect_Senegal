@@ -667,7 +667,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#home">Accueil</a>
+                        <a class="nav-link" href="home.html">Accueil</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#tips">Conseils</a>
@@ -676,7 +676,13 @@
                         <a class="nav-link" href="#sms">SMS Alerts</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#impact">Impact</a>
+                        <a class="nav-link" href="{% url 'farmconnect_app:community' %}">Communauté</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'farmconnect_app:investors' %}">Investisseurs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'farmconnect_app:tools' %}">Outils</a>
                     </li>
                 </ul>
             </div>

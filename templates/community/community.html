@@ -1,8 +1,7 @@
-{% extends 'base.html' %}
+
 {% load static %}
 {% load i18n %}
 
-{% block title %}{% trans "Profil" %} - FarmConnect{% endblock %}
 
 {% block extra_css %}
 
@@ -1038,6 +1037,8 @@
                 <ul class="nav-links">
                     <li><a href="{% url 'farmconnect_app:home' %}">{% trans "Accueil" %}</a></li>
                     <li><a href="{% url 'farmconnect_app:community' %}" class="active">{% trans "Communauté" %}</a></li>
+                    <li><a href="{% url 'farmconnect_app:investors' %}">{% trans "Investisseurs" %}</a></li>
+                    <li><a href="{% url 'farmconnect_app:tools' %}">{% trans "Outils" %}</a></li>
                     <li><a href="{% url 'farmconnect_app:about' %}">{% trans "À propos" %}</a></li>
                     {% if user.is_authenticated %}
                     <li><a href="{% url 'farmconnect_app:dashboard' %}">{% trans "Tableau de bord" %}</a></li>
@@ -1060,8 +1061,7 @@
                         </a>
                     </div>
                     {% else %}
-                    <a href="{% url 'login' %}" class="btn-login">{% trans "Connexion" %}</a>
-                    <a href="{% url 'farmconnect_app:register' %}" class="btn-register">{% trans "Inscription" %}</a>
+                   
                     {% endif %}
                 </div>
             </div>
@@ -1262,13 +1262,7 @@
                 {% endfor %}
             </div>
             {% else %}
-            <div class="image-placeholder"
-                style="height: 200px; background: rgba(255,255,255,0.9); color: var(--primary-green);">
-                <div>
-                    📸 {% trans "Image: Témoignages d'agriculteurs sénégalais" %}<br>
-                    {% trans "Photos et citations d'agriculteurs ayant réussi avec FarmConnect" %}
-                </div>
-            </div>
+            
             {% endif %}
 
             <div class="cta-buttons">

@@ -85,3 +85,9 @@ INFO 2025-07-31 20:05:25,217 views 16352 26852 Authentication successful for use
 INFO 2025-07-31 20:05:25,217 views 16352 26852 User is active, logging in
 INFO 2025-07-31 20:05:25,224 views 16352 26852 Remember me disabled - session expires on browser close
 INFO 2025-07-31 20:05:25,224 views 16352 26852 Redirecting authenticated user to: /fr/dashboard/
+INFO 2025-08-01 12:24:13,597 views 18008 30448 Login view called with method: GET
+INFO 2025-08-01 12:24:13,600 views 18008 30448 Rendering login template
+INFO 2025-08-01 12:28:01,575 views 18008 36228 Login view called with method: GET
+INFO 2025-08-01 12:28:01,576 views 18008 36228 Rendering login template
+INFO 2025-08-01 12:28:25,491 views 18008 36228 Login view called with method: GET
+INFO 2025-08-01 12:28:25,492 views 18008 36228 Rendering login template
