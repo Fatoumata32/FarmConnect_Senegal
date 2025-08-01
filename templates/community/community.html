@@ -1,4 +1,3 @@
-{% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
 
@@ -1091,7 +1090,7 @@
                     <img src="{% static 'img/together.jpg' %}"
                          alt="{% trans 'Agriculteurs sénégalais travaillant ensemble dans les champs' %}"
                          class="img-fluid rounded-3 my-4"
-                         style="max-width: 100%; height: auto; max-height: 500px; object-fit: cover;">
+                         style="max-width: 200%; height: auto; max-height: 500px; object-fit: cover;">
                     <figcaption class="text-muted mt-2">
                         {% trans "Agriculteurs collaborant dans les champs sénégalais" %}
                     </figcaption>
@@ -1250,26 +1249,7 @@
             <h2>{% trans "Prêt à Transformer Votre Agriculture ?" %}</h2>
             <p>{% trans "Rejoignez des milliers d'agriculteurs sénégalais qui utilisent FarmConnect pour améliorer leurs rendements, accéder à des marchés rentables et apprendre des techniques modernes. Inscrivez-vous dès aujourd'hui et faites partie de la révolution agricole au Sénégal." %}</p>
 
-            {% if testimonials %}
-            <div class="testimonials-grid"
-                style="margin: 2rem 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
-                {% for testimonial in testimonials %}
-                <div class="testimonial-card"
-                    style="background: rgba(255,255,255,0.9); padding: 1.5rem; border-radius: 15px;">
-                    <p style="font-style: italic; margin-bottom: 1rem;">"{{ testimonial.content }}"</p>
-                    <strong>- {{ testimonial.author_name }}, {{ testimonial.location }}</strong>
-                </div>
-                {% endfor %}
-            </div>
-            {% else %}
-            <div class="image-placeholder"
-                style="height: 200px; background: rgba(255,255,255,0.9); color: var(--primary-green);">
-                <div>
-                    📸 {% trans "Image: Témoignages d'agriculteurs sénégalais" %}<br>
-                    {% trans "Photos et citations d'agriculteurs ayant réussi avec FarmConnect" %}
-                </div>
-            </div>
-            {% endif %}
+         
 
             <div class="cta-buttons">
                 {% if not user.is_authenticated %}

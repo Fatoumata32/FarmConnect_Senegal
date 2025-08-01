@@ -442,3 +442,44 @@ def investors_view(request):
 
 def tools_view(request):
     return render(request, 'farmconnect_app/tools.html')
+
+
+# farmconnect_app/views.py
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.conf import settings
+from twilio.rest import Client
+from twilio.base.exceptions import TwilioRestException
+
+def send_test_sms_simple(request):
+    """Vue simple pour envoyer un SMS de test"""
+    if request.method == 'POST':
+        try:
+            # Initialiser Twilio
+            client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+            
+            # Envoyer le message
+            message = client.messages.create(
+                body="Test FarmConnect 🌾 - Message envoyé avec succès!",
+                from_=settings.TWILIO_PHONE_NUMBER,
+                to="+221785423833"  # Votre numéro
+            )
+            
+            # Message de succès
+            messages.success(request, f'✅ SMS envoyé avec succès! ID: {message.sid}')
+            print(f"SMS envoyé: {message.sid}")  # Pour debug
+            
+        except TwilioRestException as e:
+            messages.error(request, f'❌ Erreur Twilio: {e.msg}')
+            print(f"Erreur Twilio: {e}")  # Pour debug
+            
+        except Exception as e:
+            messages.error(request, f'❌ Erreur: {str(e)}')
+            print(f"Erreur: {e}")  # Pour debug
+        
+        # Rediriger vers la même page
+        return redirect('farmconnect_app:home')
+    
+    # GET request - afficher le template
+    return render(request, 'farmconnect_app/home.html')

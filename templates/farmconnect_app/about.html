@@ -169,7 +169,7 @@
                     <a href="{% url 'farmconnect_app:about' %}">{% trans "À propos" %}</a>
                     {% if user.is_authenticated %}
                         <a href="{% url 'farmconnect_app:dashboard' %}">{% trans "Tableau de bord" %}</a>
-                        <a href="{% url 'logout' %}">{% trans "Déconnexion" %}</a>
+                        <a href="{% url 'farmconnect_app:logout' %}">{% trans "Déconnexion" %}</a>
                     {% else %}
                         <a href="{% url 'login' %}">{% trans "Connexion" %}</a>
                         <a href="{% url 'farmconnect_app:register' %}">{% trans "Inscription" %}</a>

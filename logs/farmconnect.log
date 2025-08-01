@@ -85,3 +85,27 @@ INFO 2025-07-31 20:05:25,217 views 16352 26852 Authentication successful for use
 INFO 2025-07-31 20:05:25,217 views 16352 26852 User is active, logging in
 INFO 2025-07-31 20:05:25,224 views 16352 26852 Remember me disabled - session expires on browser close
 INFO 2025-07-31 20:05:25,224 views 16352 26852 Redirecting authenticated user to: /fr/dashboard/
+INFO 2025-08-01 22:55:21,602 views 31692 17308 Login view called with method: GET
+INFO 2025-08-01 22:55:21,604 views 31692 17308 User already authenticated, redirecting to dashboard
+INFO 2025-08-01 22:55:40,404 views 31692 10220 Login view called with method: GET
+INFO 2025-08-01 22:55:40,405 views 31692 10220 Rendering login template
+INFO 2025-08-01 22:55:53,246 views 31692 10220 Login view called with method: POST
+INFO 2025-08-01 22:55:53,247 views 31692 10220 Processing POST request for login
+INFO 2025-08-01 22:55:53,247 views 31692 10220 Username: pass, Password length: 6
+INFO 2025-08-01 22:55:53,247 views 31692 10220 Next URL: /fr/dashboard/
+INFO 2025-08-01 22:55:53,248 views 31692 10220 Attempting authentication for user: pass
+INFO 2025-08-01 22:55:53,680 views 31692 10220 Authentication successful for user: pass
+INFO 2025-08-01 22:55:53,681 views 31692 10220 User is active, logging in
+INFO 2025-08-01 22:55:53,688 views 31692 10220 Remember me disabled - session expires on browser close
+INFO 2025-08-01 22:55:53,688 views 31692 10220 Redirecting authenticated user to: /fr/dashboard/
+INFO 2025-08-01 23:03:05,668 views 31692 29396 Login view called with method: GET
+INFO 2025-08-01 23:03:05,669 views 31692 29396 Rendering login template
+INFO 2025-08-01 23:03:22,530 views 31692 29396 Login view called with method: POST
+INFO 2025-08-01 23:03:22,531 views 31692 29396 Processing POST request for login
+INFO 2025-08-01 23:03:22,531 views 31692 29396 Username: pass, Password length: 6
+INFO 2025-08-01 23:03:22,531 views 31692 29396 Next URL: /fr/dashboard/
+INFO 2025-08-01 23:03:22,531 views 31692 29396 Attempting authentication for user: pass
+INFO 2025-08-01 23:03:23,014 views 31692 29396 Authentication successful for user: pass
+INFO 2025-08-01 23:03:23,015 views 31692 29396 User is active, logging in
+INFO 2025-08-01 23:03:23,021 views 31692 29396 Remember me disabled - session expires on browser close
+INFO 2025-08-01 23:03:23,021 views 31692 29396 Redirecting authenticated user to: /fr/dashboard/

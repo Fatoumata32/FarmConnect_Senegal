@@ -161,6 +161,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 OPENWEATHER_API_KEY = config('OPENWEATHER_API_KEY', default='')
 SMS_API_KEY = config('SMS_API_KEY', default='')
 
+TWILIO_ACCOUNT_SID = 'ACe9b42463cf86896ef60634895fb172ee'
+TWILIO_AUTH_TOKEN = '5370691bca89a0b98584b358d05a53cb'
+TWILIO_PHONE_NUMBER = '+19202892775'
+
 # ==================================
 # CRISPY FORMS
 # ==================================
