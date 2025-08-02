@@ -6,8 +6,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-changez-moi-en-production')
 DEBUG = config('DEBUG', default=True, cast=bool)
+import os
+from dotenv import load_dotenv
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.farmconnect.sn']
+load_dotenv()
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.getenv('SECRET_KEY')
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
+
+# Pour PythonAnywhere
+ALLOWED_HOSTS = ['malick99.pythonanywhere.com', 'localhost', '127.0.0.1']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -161,19 +172,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 OPENWEATHER_API_KEY = config('OPENWEATHER_API_KEY', default='')
 SMS_API_KEY = config('SMS_API_KEY', default='')
 
-import os
-from dotenv import load_dotenv
+TWILIO_ACCOUNT_SID = 'ACe9b42463cf86896ef60634895fb172ee'
+TWILIO_AUTH_TOKEN = '5370691bca89a0b98584b358d05a53cb'
+TWILIO_PHONE_NUMBER = '+19202892775'
 
-# Charger les variables d'environnement
-load_dotenv()
-
-# Remplacer les secrets directs par :
-TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
-TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
-TWILIO_PHONE_NUMBER = os.getenv('TWILIO_PHONE_NUMBER')
-
-SECRET_KEY = os.getenv('SECRET_KEY', 'fallback-secret-key')
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
 # ==================================
 # CRISPY FORMS
 # ==================================
