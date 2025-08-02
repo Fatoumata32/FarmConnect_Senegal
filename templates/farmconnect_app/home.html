@@ -1,0 +1,3303 @@
+{% load static %}
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil - FarmConnect Senegal</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- FontAwesome CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-green: #2d5016;
+            --light-green: #4a7c59;
+            --accent-yellow: #f4d03f;
+            --earth-brown: #8b4513;
+            --sky-blue: #87ceeb;
+            --text-dark: #2c3e50;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white !important;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 500;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: var(--accent-yellow) !important;
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, rgba(45, 80, 22, 0.8) 0%, rgba(74, 124, 89, 0.8) 100%);
+            padding: 100px 0;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            margin-top: 76px;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .btn-hero {
+            background: linear-gradient(135deg, var(--accent-yellow) 0%, #f7dc6f 100%);
+            color: var(--primary-green);
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(244, 208, 63, 0.3);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-hero:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(244, 208, 63, 0.4);
+            color: var(--primary-green);
+        }
+
+        /* Main Content Cards */
+        .main-content {
+            padding: 80px 0;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--light-green);
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-green);
+            margin-bottom: 15px;
+        }
+
+        /* Weather Section */
+        .weather-day-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .weather-day-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, var(--sky-blue) 0%, #f4d03f 100%);
+        }
+
+        .weather-day-card.today {
+            border: 2px solid var(--sky-blue);
+            transform: scale(1.05);
+        }
+
+        .weather-day-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .weather-day-card.today:hover {
+            transform: scale(1.05) translateY(-10px);
+        }
+
+        .weather-day-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .weather-day-header h3 {
+            font-size: 1.3rem;
+            color: var(--primary-green);
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .weather-date {
+            color: #999;
+            font-size: 0.95rem;
+        }
+
+        .weather-icon-main {
+            text-align: center;
+            font-size: 4rem;
+            margin: 20px 0;
+            color: var(--sky-blue);
+        }
+
+        .weather-icon-main .fa-sun {
+            color: #f4d03f;
+            text-shadow: 0 0 20px rgba(244, 208, 63, 0.5);
+        }
+
+        .weather-icon-main .fa-cloud-sun {
+            background: linear-gradient(135deg, #87ceeb 0%, #f4d03f 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .weather-icon-main .fa-cloud-rain {
+            color: #6c757d;
+        }
+
+        .weather-temp-main {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .temp-high {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--text-dark);
+        }
+
+        .temp-low {
+            font-size: 1.8rem;
+            color: #999;
+            margin-left: 10px;
+        }
+
+        .weather-condition {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .weather-day-details {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px 0;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+
+        .detail-item {
+            text-align: center;
+        }
+
+        .detail-item i {
+            font-size: 1.2rem;
+            color: var(--light-green);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .detail-item span {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .weather-advice {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f8f0;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .weather-advice i {
+            color: var(--accent-yellow);
+            font-size: 1.3rem;
+        }
+
+        .weather-advice p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--primary-green);
+            font-weight: 500;
+        }
+
+        .weather-alert {
+            background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%);
+            border-left: 4px solid var(--light-green);
+            padding: 25px;
+            border-radius: 10px;
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .weather-alert i {
+            font-size: 2rem;
+            color: var(--light-green);
+            flex-shrink: 0;
+        }
+
+        .alert-content h4 {
+            color: var(--primary-green);
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .alert-content p {
+            margin: 0;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Tips Section */
+        .crop-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .crop-btn {
+            background: var(--light-green);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .crop-btn.active,
+        .crop-btn:hover {
+            background: var(--primary-green);
+            transform: scale(1.05);
+        }
+
+        .tip-item {
+            background: #f8f9fa;
+            border-left: 4px solid var(--light-green);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .tip-item:hover {
+            background: #e9ecef;
+            transform: translateX(10px);
+        }
+
+        /* SMS Subscription Section */
+        .sms-section {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            padding: 80px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sms-simple-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .sms-simple-header {
+            background: #497350;
+            color: white;
+            padding: 20px;
+            border-radius: 15px 15px 0 0;
+            margin: -50px -50px 30px -50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .sms-simple-header i {
+            font-size: 1.5rem;
+        }
+
+        .sms-simple-header h2 {
+            margin: 0;
+            font-size: 1.3rem;
+        }
+
+        .sms-simple-title {
+            color: #497350;
+            font-size: 2.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .sms-simple-description {
+            color: #666;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .sms-simple-form {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .sms-input-group {
+            display: flex;
+            gap: 0;
+            background: #f5f5f5;
+            border-radius: 50px;
+            padding: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .sms-phone-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 15px 25px;
+            font-size: 1.1rem;
+            outline: none;
+            color: #333;
+        }
+
+        .sms-phone-input::placeholder {
+            color: #999;
+        }
+
+        .sms-submit-btn {
+            background: #F2D949;
+            color: #2d5016;
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .sms-submit-btn:hover {
+            background: #e6c835;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(242, 217, 73, 0.4);
+        }
+
+        .sms-submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .sms-submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Success Message for Simple Form */
+        .sms-simple-container .success-message {
+            margin-bottom: 20px;
+        }
+
+        /* Error Message */
+        .error-message {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        /* Stats Section */
+        .stat-card {
+            background: linear-gradient(135deg, #2d5016 0%, #4a7c59 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .cta-section .lead {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        /* Utility Classes */
+        .text-gradient {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-padding {
+            padding: 60px 0;
+        }
+
+        /* Success Message */
+        .success-message {
+            display: none;
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .feature-card {
+                padding: 20px;
+            }
+
+            .weather-main {
+                font-size: 2rem;
+            }
+
+            .weather-day-card {
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+
+            .weather-day-card.today {
+                transform: scale(1);
+            }
+
+            .weather-icon-main {
+                font-size: 3rem;
+            }
+
+            .temp-high {
+                font-size: 2rem;
+            }
+
+            .temp-low {
+                font-size: 1.5rem;
+            }
+
+            .weather-advice {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .weather-alert {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .sms-simple-container {
+                padding: 30px 20px;
+            }
+
+            .sms-simple-header {
+                margin: -30px -20px 25px -20px;
+                padding: 15px;
+                font-size: 1.1rem;
+            }
+
+            .sms-simple-title {
+                font-size: 1.8rem;
+            }
+
+            .sms-simple-description {
+                font-size: 1rem;
+            }
+
+            .sms-input-group {
+                flex-direction: column;
+                border-radius: 15px;
+            }
+
+            .sms-phone-input {
+                border-radius: 10px;
+                text-align: center;
+            }
+
+            .sms-submit-btn {
+                width: 100%;
+                border-radius: 10px;
+            }
+        }
+
+
+               /* Section Conseils */
+        .tips-section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #f0f8f0 0%, #e8f5e8 100%);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .section-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* Configuration Panel */
+        .config-panel {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+
+        .config-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .config-header i {
+            font-size: 2rem;
+            color: var(--light-green);
+        }
+
+        .config-header h3 {
+            margin: 0;
+            color: var(--primary-green);
+            font-size: 1.5rem;
+        }
+
+        /* Crop Selector */
+        .crop-selector {
+            margin-bottom: 30px;
+        }
+
+        .crop-label {
+            font-weight: 600;
+            color: var(--primary-green);
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .crop-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .crop-btn {
+            background: white;
+            color: var(--primary-green);
+            border: 2px solid var(--light-green);
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .crop-btn i {
+            font-size: 1.2rem;
+            opacity: 0.7;
+        }
+
+        .crop-btn:hover {
+            background: var(--light-green);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 124, 89, 0.3);
+        }
+
+        .crop-btn.active {
+            background: var(--primary-green);
+            color: white;
+            border-color: var(--primary-green);
+            transform: scale(1.05);
+        }
+
+        /* Soil Type Selector */
+        .soil-selector {
+            margin-bottom: 30px;
+        }
+
+        .soil-label {
+            font-weight: 600;
+            color: var(--primary-green);
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .soil-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .soil-card {
+            background: var(--bg-light);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .soil-card:hover {
+            border-color: var(--light-green);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .soil-card.active {
+            background: var(--primary-green);
+            color: white;
+            border-color: var(--primary-green);
+        }
+
+        .soil-card i {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: block;
+            color: var(--earth-brown);
+        }
+
+        .soil-card.active i {
+            color: var(--accent-yellow);
+        }
+
+        .soil-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .soil-desc {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        /* Location Info */
+        .location-info {
+            background: #e8f5e8;
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .location-display {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .location-display i {
+            color: var(--light-green);
+            font-size: 1.3rem;
+        }
+
+        .location-text {
+            font-weight: 500;
+            color: var(--primary-green);
+        }
+
+        .change-location-btn {
+            background: var(--light-green);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .change-location-btn:hover {
+            background: var(--primary-green);
+            transform: translateY(-2px);
+        }
+
+        /* Tips Display */
+        .tips-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .tips-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .tips-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .tips-title i {
+            font-size: 2rem;
+            color: var(--accent-yellow);
+        }
+
+        .tips-title h3 {
+            margin: 0;
+            color: var(--primary-green);
+        }
+
+        .weather-context {
+            background: linear-gradient(135deg, #87ceeb20 0%, #f4d03f20 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .weather-icon {
+            font-size: 3rem;
+            color: var(--sky-blue);
+        }
+
+        .weather-info {
+            flex: 1;
+        }
+
+        .weather-temp {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .weather-desc {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        /* Individual Tips */
+        .tip-category {
+            margin-bottom: 35px;
+        }
+
+        .tip-category-header {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 15px 15px 0 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+        }
+
+        .tip-category-header i {
+            font-size: 1.3rem;
+        }
+
+        .tip-items {
+            background: #f8f9fa;
+            border-radius: 0 0 15px 15px;
+            padding: 25px;
+        }
+
+        .tip-item {
+            background: white;
+            border-left: 4px solid var(--accent-yellow);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tip-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-yellow) 0%, transparent 100%);
+            opacity: 0.1;
+            transition: width 0.3s ease;
+        }
+
+        .tip-item:hover::before {
+            width: 100%;
+        }
+
+        .tip-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .tip-priority {
+            display: inline-block;
+            background: var(--accent-yellow);
+            color: var(--primary-green);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .tip-content h5 {
+            color: var(--primary-green);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .tip-content p {
+            margin-bottom: 0;
+            color: #666;
+        }
+
+        /* AI Indicator */
+        .ai-indicator {
+            background: linear-gradient(135deg, #4a7c59 0%, #2d5016 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(45, 80, 22, 0.3);
+        }
+
+        .ai-indicator i {
+            font-size: 1.2rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* Loading State */
+        .loading-tips {
+            text-align: center;
+            padding: 60px;
+        }
+
+        .loading-tips i {
+            font-size: 3rem;
+            color: var(--light-green);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            margin-top: 20px;
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .config-panel, .tips-container {
+                padding: 25px;
+            }
+
+            .soil-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .crop-buttons {
+                justify-content: flex-start;
+            }
+
+            .location-info {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .weather-context {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .tip-item:hover {
+                transform: translateX(5px);
+            }
+        }
+
+         /* Section Conseils */
+        .tips-section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #f0f8f0 0%, #e8f5e8 100%);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .section-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* Configuration Panel */
+        .config-panel {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+
+        .config-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .config-header i {
+            font-size: 2rem;
+            color: var(--light-green);
+        }
+
+        .config-header h3 {
+            margin: 0;
+            color: var(--primary-green);
+            font-size: 1.5rem;
+        }
+
+        /* Crop Selector */
+        .crop-selector {
+            margin-bottom: 30px;
+        }
+
+        .crop-label {
+            font-weight: 600;
+            color: var(--primary-green);
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .crop-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .crop-btn {
+            background: white;
+            color: var(--primary-green);
+            border: 2px solid var(--light-green);
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .crop-btn i {
+            font-size: 1.2rem;
+            opacity: 0.7;
+        }
+
+        .crop-btn:hover {
+            background: var(--light-green);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 124, 89, 0.3);
+        }
+
+        .crop-btn.active {
+            background: var(--primary-green);
+            color: white;
+            border-color: var(--primary-green);
+            transform: scale(1.05);
+        }
+
+        /* Soil Type Selector */
+        .soil-selector {
+            margin-bottom: 30px;
+        }
+
+        .soil-label {
+            font-weight: 600;
+            color: var(--primary-green);
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .soil-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .soil-card {
+            background: var(--bg-light);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .soil-card:hover {
+            border-color: var(--light-green);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .soil-card.active {
+            background: var(--primary-green);
+            color: white;
+            border-color: var(--primary-green);
+        }
+
+        .soil-card i {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: block;
+            color: var(--earth-brown);
+        }
+
+        .soil-card.active i {
+            color: var(--accent-yellow);
+        }
+
+        .soil-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .soil-desc {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        /* Location Info */
+        .location-info {
+            background: #e8f5e8;
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .location-display {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .location-display i {
+            color: var(--light-green);
+            font-size: 1.3rem;
+        }
+
+        .location-text {
+            font-weight: 500;
+            color: var(--primary-green);
+        }
+
+        .change-location-btn {
+            background: var(--light-green);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .change-location-btn:hover {
+            background: var(--primary-green);
+            transform: translateY(-2px);
+        }
+
+        /* Tips Display */
+        .tips-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .tips-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .tips-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .tips-title i {
+            font-size: 2rem;
+            color: var(--accent-yellow);
+        }
+
+        .tips-title h3 {
+            margin: 0;
+            color: var(--primary-green);
+        }
+
+        .weather-context {
+            background: linear-gradient(135deg, #87ceeb20 0%, #f4d03f20 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .weather-icon {
+            font-size: 3rem;
+            color: var(--sky-blue);
+        }
+
+        .weather-info {
+            flex: 1;
+        }
+
+        .weather-temp {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .weather-desc {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        /* Individual Tips */
+        .tip-category {
+            margin-bottom: 35px;
+        }
+
+        .tip-category-header {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 15px 15px 0 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+        }
+
+        .tip-category-header i {
+            font-size: 1.3rem;
+        }
+
+        .tip-items {
+            background: #f8f9fa;
+            border-radius: 0 0 15px 15px;
+            padding: 25px;
+        }
+
+        .tip-item {
+            background: white;
+            border-left: 4px solid var(--accent-yellow);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tip-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-yellow) 0%, transparent 100%);
+            opacity: 0.1;
+            transition: width 0.3s ease;
+        }
+
+        .tip-item:hover::before {
+            width: 100%;
+        }
+
+        .tip-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .tip-priority {
+            display: inline-block;
+            background: var(--accent-yellow);
+            color: var(--primary-green);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .tip-content h5 {
+            color: var(--primary-green);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .tip-content p {
+            margin-bottom: 0;
+            color: #666;
+        }
+
+        /* AI Indicator */
+        .ai-indicator {
+            background: linear-gradient(135deg, #4a7c59 0%, #2d5016 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(45, 80, 22, 0.3);
+        }
+
+        .ai-indicator i {
+            font-size: 1.2rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* Loading State */
+        .loading-tips {
+            text-align: center;
+            padding: 60px;
+        }
+
+        .loading-tips i {
+            font-size: 3rem;
+            color: var(--light-green);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            margin-top: 20px;
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* Location Modal Styles */
+        .region-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .region-card {
+            background: #f8f9fa;
+            border: 2px solid transparent;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .region-card:hover {
+            border-color: var(--light-green);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .region-card.selected {
+            background: var(--primary-green);
+            color: white;
+            border-color: var(--primary-green);
+        }
+
+        .region-card i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
+            color: var(--light-green);
+        }
+
+        .region-card.selected i {
+            color: var(--accent-yellow);
+        }
+
+        .region-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .region-zones {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .department-selector {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .gps-option button {
+            padding: 15px;
+            font-weight: 500;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .config-panel, .tips-container {
+                padding: 25px;
+            }
+
+            .soil-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .crop-buttons {
+                justify-content: flex-start;
+            }
+
+            .location-info {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .weather-context {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .tip-item:hover {
+                transform: translateX(5px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+ <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="farmconnect.html">
+                <i class="fas fa-seedling"></i>
+                <span data-translate="app_title">FarmConnect Senegal</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'farmconnect_app:home' %}"
+                            data-translate="nav_home">Accueil</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'farmconnect_app:community' %}"
+                            data-translate="nav_community">Communauté</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'farmconnect_app:investors' %}"
+                            data-translate="nav_investors">Investisseurs</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'farmconnect_app:tools' %}"
+                            data-translate="nav_tools">Outils</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Connectez-vous à l'Agriculture Moderne</h1>
+                <p class="hero-subtitle">Votre guide intelligent pour une agriculture prospère au Sénégal</p>
+                <a href="#weather" class="btn-hero">Commencer Maintenant</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Weather Section -->
+            <section id="weather" class="section-padding">
+                <div class="container">
+                    <div class="text-center mb-5">
+                        <h2 class="text-gradient">Prévisions Météorologiques</h2>
+                        <p>Planifiez vos activités agricoles avec des prévisions précises</p>
+                    </div>
+
+                    <div class="row">
+                        <!-- Today's Weather -->
+                        <div class="col-lg-4 mb-4">
+                            <div class="weather-day-card today">
+                                <div class="weather-day-header">
+                                    <h3>Aujourd'hui</h3>
+                                    <span class="weather-date" id="date-today">Jeudi 31</span>
+                                </div>
+                                <div class="weather-icon-main">
+                                    <i class="fas fa-sun"></i>
+                                </div>
+                                <div class="weather-temp-main">
+                                    <span class="temp-high">32°</span>
+                                    <span class="temp-low">24°</span>
+                                </div>
+                                <div class="weather-condition">Ensoleillé</div>
+                                <div class="weather-day-details">
+                                    <div class="detail-item">
+                                        <i class="fas fa-tint"></i>
+                                        <span>65%</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <i class="fas fa-wind"></i>
+                                        <span>12 km/h</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <i class="fas fa-umbrella"></i>
+                                        <span>20%</span>
+                                    </div>
+                                </div>
+                                <div class="weather-advice">
+                                    <i class="fas fa-lightbulb"></i>
+                                    <p>Journée idéale pour les travaux aux champs</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tomorrow's Weather -->
+                        <div class="col-lg-4 mb-4">
+                            <div class="weather-day-card">
+                                <div class="weather-day-header">
+                                    <h3>Demain</h3>
+                                    <span class="weather-date" id="date-tomorrow">Vendredi 1</span>
+                                </div>
+                                <div class="weather-icon-main">
+                                    <i class="fas fa-cloud-sun"></i>
+                                </div>
+                                <div class="weather-temp-main">
+                                    <span class="temp-high">30°</span>
+                                    <span class="temp-low">23°</span>
+                                </div>
+                                <div class="weather-condition">Partiellement nuageux</div>
+                                <div class="weather-day-details">
+                                    <div class="detail-item">
+                                        <i class="fas fa-tint"></i>
+                                        <span>70%</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <i class="fas fa-wind"></i>
+                                        <span>15 km/h</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <i class="fas fa-umbrella"></i>
+                                        <span>35%</span>
+                                    </div>
+                                </div>
+                                <div class="weather-advice">
+                                    <i class="fas fa-lightbulb"></i>
+                                    <p>Prévoyez l'arrosage en fin de journée</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Day After Tomorrow's Weather -->
+                        <div class="col-lg-4 mb-4">
+                            <div class="weather-day-card">
+                                <div class="weather-day-header">
+                                    <h3>Après-demain</h3>
+                                    <span class="weather-date" id="date-after">Samedi 2</span>
+                                </div>
+                                <div class="weather-icon-main">
+                                    <i class="fas fa-cloud-rain"></i>
+                                </div>
+                                <div class="weather-temp-main">
+                                    <span class="temp-high">28°</span>
+                                    <span class="temp-low">22°</span>
+                                </div>
+                                <div class="weather-condition">
+                                    Pluie légère
+                                </div>
+                                <div class="weather-day-details">
+                                    <div class="detail-item">
+                                        <i class="fas fa-tint"></i>
+                                        <span>85%</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <i class="fas fa-wind"></i>
+                                        <span>20 km/h</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <i class="fas fa-umbrella"></i>
+                                        <span>75%</span>
+                                    </div>
+                                </div>
+                                <div class="weather-advice">
+                                    <i class="fas fa-lightbulb"></i>
+                                    <p>Évitez les semis, pluie prévue</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Agricultural Alert -->
+                    <div class="row mt-4">
+                        <div class="col-lg-10 mx-auto">
+                            <div class="weather-alert">
+                                <i class="fas fa-info-circle"></i>
+                                <div class="alert-content">
+                                    <h4>Bulletin Agricole</h4>
+                                    <p>Conditions favorables pour la plantation cette semaine. Les précipitations
+                                        prévues samedi fourniront une irrigation naturelle.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+          <!-- Tips Section -->
+    <section id="tips" class="tips-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Conseils Agricoles Intelligents</h2>
+                <p class="section-subtitle">Des recommandations personnalisées basées sur votre culture, votre sol et les conditions météo actuelles</p>
+            </div>
+
+            <!-- Configuration Panel -->
+            <div class="config-panel">
+                <div class="config-header">
+                    <i class="fas fa-cog"></i>
+                    <h3>Configuration de vos conseils</h3>
+                </div>
+
+                <!-- Crop Selection -->
+                <div class="crop-selector">
+                    <label class="crop-label">1. Sélectionnez votre culture :</label>
+                    <div class="crop-buttons">
+                        <button class="crop-btn active" data-crop="millet">
+                            <i class="fas fa-wheat-awn"></i>
+                            <span>Mil</span>
+                        </button>
+                        <button class="crop-btn" data-crop="corn">
+                            <i class="fas fa-corn"></i>
+                            <span>Maïs</span>
+                        </button>
+                        <button class="crop-btn" data-crop="rice">
+                            <i class="fas fa-seedling"></i>
+                            <span>Riz</span>
+                        </button>
+                        <button class="crop-btn" data-crop="peanut">
+                            <i class="fas fa-circle"></i>
+                            <span>Arachide</span>
+                        </button>
+                        <button class="crop-btn" data-crop="tomato">
+                            <i class="fas fa-apple-alt"></i>
+                            <span>Tomate</span>
+                        </button>
+                        <button class="crop-btn" data-crop="onion">
+                            <i class="fas fa-ring"></i>
+                            <span>Oignon</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Soil Type Selection -->
+                <div class="soil-selector">
+                    <label class="soil-label">2. Type de sol de votre parcelle :</label>
+                    <div class="soil-grid">
+                        <div class="soil-card" data-soil="sandy">
+                            <i class="fas fa-umbrella-beach"></i>
+                            <div class="soil-name">Sol Sableux</div>
+                            <div class="soil-desc">Léger, bien drainé</div>
+                        </div>
+                        <div class="soil-card active" data-soil="clay">
+                            <i class="fas fa-mountain"></i>
+                            <div class="soil-name">Sol Argileux</div>
+                            <div class="soil-desc">Lourd, retient l'eau</div>
+                        </div>
+                        <div class="soil-card" data-soil="loamy">
+                            <i class="fas fa-leaf"></i>
+                            <div class="soil-name">Sol Limoneux</div>
+                            <div class="soil-desc">Équilibré, fertile</div>
+                        </div>
+                        <div class="soil-card" data-soil="laterite">
+                            <i class="fas fa-layer-group"></i>
+                            <div class="soil-name">Sol Latéritique</div>
+                            <div class="soil-desc">Riche en fer</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Location Info -->
+                <div class="location-info">
+                    <div class="location-display">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span class="location-text" id="current-location">Dakar, Sénégal</span>
+                    </div>
+                    <button class="change-location-btn" data-bs-toggle="modal" data-bs-target="#locationModal">
+                        <i class="fas fa-edit"></i> Changer
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tips Display -->
+            <div class="tips-container" id="tips-display">
+                <div class="tips-header">
+                    <div class="tips-title">
+                        <i class="fas fa-lightbulb"></i>
+                        <h3>Vos conseils personnalisés</h3>
+                    </div>
+                    <div class="ai-indicator">
+                        <i class="fas fa-robot"></i>
+                        <span>Généré par IA</span>
+                    </div>
+                </div>
+
+                <!-- Weather Context -->
+                <div class="weather-context">
+                    <div class="weather-icon">
+                        <i class="fas fa-sun"></i>
+                    </div>
+                    <div class="weather-info">
+                        <div class="weather-temp">32°C</div>
+                        <div class="weather-desc">Conditions actuelles : Ensoleillé, Humidité 65%</div>
+                    </div>
+                </div>
+
+                <!-- Tips Categories -->
+                <div id="tips-content">
+                    <!-- Preparation Tips -->
+                    <div class="tip-category">
+                        <div class="tip-category-header">
+                            <i class="fas fa-tools"></i>
+                            <span>Préparation du Sol</span>
+                        </div>
+                        <div class="tip-items">
+                            <div class="tip-item">
+                                <span class="tip-priority">Priorité haute</span>
+                                <div class="tip-content">
+                                    <h5>Drainage pour sol argileux</h5>
+                                    <p>Votre sol argileux retient beaucoup d'eau. Créez des sillons de drainage espacés de 3-4 mètres pour éviter l'engorgement, surtout important pour le mil qui préfère les sols bien drainés.</p>
+                                </div>
+                            </div>
+                            <div class="tip-item">
+                                <div class="tip-content">
+                                    <h5>Amendement organique</h5>
+                                    <p>Incorporez 3-4 tonnes/ha de fumier bien décomposé pour améliorer la structure de votre sol argileux. Cela augmentera la porosité et facilitera l'enracinement du mil.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Planting Tips -->
+                    <div class="tip-category">
+                        <div class="tip-category-header">
+                            <i class="fas fa-seedling"></i>
+                            <span>Semis et Plantation</span>
+                        </div>
+                        <div class="tip-items">
+                            <div class="tip-item">
+                                <span class="tip-priority">Action immédiate</span>
+                                <div class="tip-content">
+                                    <h5>Moment optimal pour le semis</h5>
+                                    <p>Avec la température actuelle de 32°C et l'humidité à 65%, les conditions sont idéales pour semer. Profitez de ces conditions avant l'arrivée des pluies prévues ce weekend.</p>
+                                </div>
+                            </div>
+                            <div class="tip-item">
+                                <div class="tip-content">
+                                    <h5>Densité de semis adaptée</h5>
+                                    <p>Pour votre sol argileux, réduisez légèrement la densité : 25 000 plants/ha au lieu de 30 000. Espacez les poquets de 80 cm entre lignes et 40 cm sur la ligne.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Maintenance Tips -->
+                    <div class="tip-category">
+                        <div class="tip-category-header">
+                            <i class="fas fa-hand-holding-water"></i>
+                            <span>Entretien et Irrigation</span>
+                        </div>
+                        <div class="tip-items">
+                            <div class="tip-item">
+                                <div class="tip-content">
+                                    <h5>Gestion de l'eau</h5>
+                                    <p>Votre sol argileux retient bien l'eau. Arrosez moins fréquemment mais plus profondément : 30-40 mm tous les 7-10 jours suffisent en l'absence de pluie.</p>
+                                </div>
+                            </div>
+                            <div class="tip-item">
+                                <div class="tip-content">
+                                    <h5>Désherbage précoce</h5>
+                                    <p>Effectuez le premier sarclage 15-20 jours après la levée. Le sol argileux favorise les adventices, un désherbage précoce est crucial pour la réussite de votre culture.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location Selection Modal -->
+    <div class="modal fade" id="locationModal" tabindex="-1" aria-labelledby="locationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" style="background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%); color: white;">
+                    <h5 class="modal-title" id="locationModalLabel">
+                        <i class="fas fa-map-marked-alt"></i> Sélectionnez votre région
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Region Selection -->
+                    <div class="region-selector mb-4">
+                        <h6 class="mb-3">Choisissez votre région :</h6>
+                        <div class="region-grid">
+                            <div class="region-card" data-region="dakar">
+                                <i class="fas fa-city"></i>
+                                <div class="region-name">Dakar</div>
+                                <div class="region-zones">Cap-Vert</div>
+                            </div>
+                            <div class="region-card" data-region="thies">
+                                <i class="fas fa-industry"></i>
+                                <div class="region-name">Thiès</div>
+                                <div class="region-zones">Bassin arachidier</div>
+                            </div>
+                            <div class="region-card" data-region="saint-louis">
+                                <i class="fas fa-water"></i>
+                                <div class="region-name">Saint-Louis</div>
+                                <div class="region-zones">Vallée du fleuve</div>
+                            </div>
+                            <div class="region-card" data-region="louga">
+                                <i class="fas fa-horse"></i>
+                                <div class="region-name">Louga</div>
+                                <div class="region-zones">Zone sylvo-pastorale</div>
+                            </div>
+                            <div class="region-card" data-region="diourbel">
+                                <i class="fas fa-mosque"></i>
+                                <div class="region-name">Diourbel</div>
+                                <div class="region-zones">Centre</div>
+                            </div>
+                            <div class="region-card" data-region="fatick">
+                                <i class="fas fa-fish"></i>
+                                <div class="region-name">Fatick</div>
+                                <div class="region-zones">Sine-Saloum</div>
+                            </div>
+                            <div class="region-card" data-region="kaolack">
+                                <i class="fas fa-warehouse"></i>
+                                <div class="region-name">Kaolack</div>
+                                <div class="region-zones">Bassin arachidier</div>
+                            </div>
+                            <div class="region-card" data-region="kaffrine">
+                                <i class="fas fa-seedling"></i>
+                                <div class="region-name">Kaffrine</div>
+                                <div class="region-zones">Centre-Est</div>
+                            </div>
+                            <div class="region-card" data-region="ziguinchor">
+                                <i class="fas fa-tree"></i>
+                                <div class="region-name">Ziguinchor</div>
+                                <div class="region-zones">Casamance</div>
+                            </div>
+                            <div class="region-card" data-region="sedhiou">
+                                <i class="fas fa-leaf"></i>
+                                <div class="region-name">Sédhiou</div>
+                                <div class="region-zones">Moyenne Casamance</div>
+                            </div>
+                            <div class="region-card" data-region="kolda">
+                                <i class="fas fa-tractor"></i>
+                                <div class="region-name">Kolda</div>
+                                <div class="region-zones">Haute Casamance</div>
+                            </div>
+                            <div class="region-card" data-region="tambacounda">
+                                <i class="fas fa-mountain"></i>
+                                <div class="region-name">Tambacounda</div>
+                                <div class="region-zones">Sénégal Oriental</div>
+                            </div>
+                            <div class="region-card" data-region="kedougou">
+                                <i class="fas fa-gem"></i>
+                                <div class="region-name">Kédougou</div>
+                                <div class="region-zones">Sud-Est</div>
+                            </div>
+                            <div class="region-card" data-region="matam">
+                                <i class="fas fa-sun"></i>
+                                <div class="region-name">Matam</div>
+                                <div class="region-zones">Vallée du fleuve</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Department Selection (dynamically populated) -->
+                    <div class="department-selector" id="department-selector" style="display: none;">
+                        <h6 class="mb-3">Département :</h6>
+                        <select class="form-select" id="department-select">
+                            <option value="">Sélectionnez un département</option>
+                        </select>
+                    </div>
+
+                    <!-- GPS Option -->
+                    <div class="gps-option mt-4">
+                        <button class="btn btn-outline-success w-100" id="use-gps-btn">
+                            <i class="fas fa-location-crosshairs"></i> Utiliser ma position GPS
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-success" id="confirm-location-btn" disabled>
+                        <i class="fas fa-check"></i> Confirmer la localisation
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+            <!-- Stats Section -->
+            <section class="section-padding">
+                <div class="container">
+                    <div class="row text-center">
+                        <div class="col-md-3 mb-4">
+                            <div class="stat-card">
+                                <span class="stat-number">1000+</span>
+                                <p class="stat-label">Agriculteurs Connectés</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <div class="stat-card">
+                                <span class="stat-number">50+</span>
+                                <p class="stat-label">Cultures Supportées</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <div class="stat-card">
+                                <span class="stat-number">14</span>
+                                <p class="stat-label">Régions Couvertes</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <div class="stat-card">
+                                <span class="stat-number">24/7</span>
+                                <p class="stat-label">Support Disponible</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SMS Subscription Section -->
+            <section id="sms" class="sms-section">
+                <div class="container">
+                    <div class="sms-simple-container">
+                        <div class="sms-simple-header">
+                            <i class="fas fa-comment-sms"></i>
+                            <h2>Abonnement SMS</h2>
+                        </div>
+
+                        <h3 class="sms-simple-title">Restez Informé avec FarmConnect</h3>
+
+                        <p class="sms-simple-description">
+                            Recevez des conseils agricoles personnalisés, des alertes météo, et des invitations à nos
+                            ateliers directement sur votre téléphone.
+                        </p>
+
+                        <div class="success-message" id="success-message">
+                            <i class="fas fa-check-circle"></i> Inscription réussie! Vous recevrez bientôt votre premier
+                            SMS.
+                        </div>
+
+                        <div class="sms-simple-form">
+                            <div class="sms-input-group">
+                                <input type="tel" class="sms-phone-input" id="phone-simple"
+                                    placeholder="Entrez votre numéro de téléphone"
+                                    pattern="[0-9]{2} [0-9]{3} [0-9]{2} [0-9]{2}" required>
+                                <form method="POST" action="{% url 'farmconnect_app:send_test_sms_simple' %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-send btn-hero">
+                                        <i class="fas fa-paper-plane"></i> Envoyer un SMS de Test
+                                    </button>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Impact Section -->
+            <section id="impact" class="section-padding">
+                <div class="container">
+                    <div class="text-center mb-5">
+                        <h2 class="text-gradient">Impact Attendu</h2>
+                        <p>Les résultats que nous espérons atteindre avec FarmConnect</p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3 mb-4">
+                            <div class="stat-card">
+                                <span class="stat-number">+23%</span>
+                                <span class="stat-label">Amélioration du Rendement</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <div class="stat-card">
+                                <span class="stat-number">-45%</span>
+                                <span class="stat-label">Réduction des Pertes</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <div class="stat-card">
+                                <span class="stat-number">89%</span>
+                                <span class="stat-label">Adoption de Nouvelles Pratiques</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <div class="stat-card">
+                                <span class="stat-number">5000+</span>
+                                <span class="stat-label">Agriculteurs Connectés</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Call to Action -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2>Prêt à Transformer Votre Agriculture ?</h2>
+                    <p class="lead">Rejoignez des milliers d'agriculteurs sénégalais qui utilisent FarmConnect pour
+                        améliorer leurs rendements</p>
+                    <a href="{% url 'farmconnect_app:register' %}" class="btn btn-hero btn-lg me-3">S'inscrire
+                        Gratuitement</a>
+                    <a href="#" class="btn btn-outline-light btn-lg">En Savoir Plus</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script>
+        // Configuration API WeatherAPI
+        const WEATHER_API_KEY = 'd19e9907a2774c179e5111116250108';
+        const WEATHER_API_URL = 'https://api.weatherapi.com/v1/forecast.json';
+
+        // Villes du Sénégal avec coordonnées
+        const SENEGAL_CITIES = {
+            'Dakar': { lat: 14.6937, lon: -17.4441 },
+            'Thies': { lat: 14.7886, lon: -16.9260 },
+            'Saint-Louis': { lat: 16.0326, lon: -16.4818 },
+            'Kaolack': { lat: 14.1652, lon: -16.0757 },
+            'Ziguinchor': { lat: 12.5834, lon: -16.2720 }
+        };
+
+        // Fonction pour récupérer les données météo
+        async function fetchWeatherData(city = 'Dakar') {
+            try {
+                const coords = SENEGAL_CITIES[city] || SENEGAL_CITIES['Dakar'];
+                const url = `${WEATHER_API_URL}?key=${WEATHER_API_KEY}&q=${coords.lat},${coords.lon}&days=3&lang=fr`;
+
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error('Erreur lors de la récupération des données météo');
+                }
+
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Erreur API météo:', error);
+                return null;
+            }
+        }
+
+        // Mapper les codes météo aux icônes FontAwesome
+        function getWeatherIcon(code, isDay) {
+            // Codes WeatherAPI : https://www.weatherapi.com/docs/weather_conditions.json
+            if (code === 1000) return 'fa-sun'; // Ensoleillé
+            if ([1003, 1006, 1009].includes(code)) return 'fa-cloud-sun'; // Nuageux
+            if ([1063, 1180, 1183, 1186, 1189, 1192, 1195].includes(code)) return 'fa-cloud-rain'; // Pluie
+            if ([1087, 1273, 1276, 1279, 1282].includes(code)) return 'fa-bolt'; // Orage
+            if ([1030, 1135, 1147].includes(code)) return 'fa-smog'; // Brouillard
+            return 'fa-cloud'; // Par défaut
+        }
+
+        // Obtenir les conseils agricoles basés sur la météo
+        function getAgriculturalAdvice(forecast) {
+            const maxTemp = forecast.day.maxtemp_c;
+            const rainChance = forecast.day.daily_chance_of_rain;
+            const rainfall = forecast.day.totalprecip_mm;
+
+            if (rainChance > 70 || rainfall > 10) {
+                return "Évitez les semis, pluie importante prévue";
+            } else if (rainChance > 40) {
+                return "Conditions favorables pour la plantation";
+            } else if (maxTemp > 35) {
+                return "Forte chaleur, assurez l'irrigation";
+            } else if (forecast.day.maxwind_kph > 25) {
+                return "Vents forts, protégez les jeunes plants";
+            } else {
+                return "Journée idéale pour les travaux aux champs";
+            }
+        }
+
+        // Mettre à jour l'interface avec les données météo
+        async function updateWeatherUI() {
+            const weatherData = await fetchWeatherData('Dakar');
+
+            if (!weatherData) {
+                console.error('Impossible de charger les données météo');
+                return;
+            }
+
+            // Mettre à jour les 3 jours de prévisions
+            weatherData.forecast.forecastday.forEach((day, index) => {
+                updateWeatherCard(index, day);
+            });
+
+            // Mettre à jour le bulletin agricole
+            updateAgriculturalBulletin(weatherData.forecast.forecastday);
+        }
+
+        // Mettre à jour une carte météo individuelle
+        function updateWeatherCard(dayIndex, forecastDay) {
+            const cards = document.querySelectorAll('.weather-day-card');
+            const card = cards[dayIndex];
+            if (!card) return;
+
+            // Mettre à jour la date
+            const dateElement = card.querySelector('.weather-date');
+            if (dateElement) {
+                const date = new Date(forecastDay.date);
+                const options = { weekday: 'long', day: 'numeric', month: 'long' };
+                dateElement.textContent = date.toLocaleDateString('fr-FR', options);
+            }
+
+            // Mettre à jour l'icône
+            const iconElement = card.querySelector('.weather-icon-main i');
+            if (iconElement) {
+                const iconClass = getWeatherIcon(forecastDay.day.condition.code, true);
+                iconElement.className = `fas ${iconClass}`;
+            }
+
+            // Mettre à jour les températures
+            const tempHigh = card.querySelector('.temp-high');
+            const tempLow = card.querySelector('.temp-low');
+            if (tempHigh) tempHigh.textContent = `${Math.round(forecastDay.day.maxtemp_c)}°`;
+            if (tempLow) tempLow.textContent = `${Math.round(forecastDay.day.mintemp_c)}°`;
+
+            // Mettre à jour la condition
+            const conditionElement = card.querySelector('.weather-condition');
+            if (conditionElement) {
+                conditionElement.textContent = forecastDay.day.condition.text;
+            }
+
+            // Mettre à jour les détails
+            const details = card.querySelectorAll('.detail-item span:last-child');
+            if (details[0]) details[0].textContent = `${forecastDay.day.avghumidity}%`;
+            if (details[1]) details[1].textContent = `${Math.round(forecastDay.day.maxwind_kph)} km/h`;
+            if (details[2]) details[2].textContent = `${forecastDay.day.daily_chance_of_rain}%`;
+
+            // Mettre à jour le conseil
+            const adviceElement = card.querySelector('.weather-advice p');
+            if (adviceElement) {
+                adviceElement.textContent = getAgriculturalAdvice(forecastDay);
+            }
+        }
+
+        // Mettre à jour le bulletin agricole
+        function updateAgriculturalBulletin(forecastDays) {
+            const bulletinElement = document.querySelector('.alert-content p');
+            if (!bulletinElement) return;
+
+            // Analyser les conditions sur 3 jours
+            const totalRainChance = forecastDays.reduce((sum, day) => sum + day.day.daily_chance_of_rain, 0) / 3;
+            const totalRainfall = forecastDays.reduce((sum, day) => sum + day.day.totalprecip_mm, 0);
+            const avgTemp = forecastDays.reduce((sum, day) => sum + day.day.maxtemp_c, 0) / 3;
+
+            let bulletin = "";
+
+            if (totalRainChance > 60 || totalRainfall > 30) {
+                bulletin = "Période pluvieuse prévue. Excellent moment pour préparer les sols et planifier les semis après les pluies.";
+            } else if (totalRainChance > 30) {
+                bulletin = "Conditions favorables pour la plantation cette semaine. Les précipitations modérées fourniront une irrigation naturelle.";
+            } else if (avgTemp > 35) {
+                bulletin = "Températures élevées prévues. Assurez-vous que vos cultures sont bien irriguées et envisagez un paillage pour conserver l'humidité.";
+            } else {
+                bulletin = "Conditions météorologiques stables. Période idéale pour tous les travaux agricoles et l'entretien des cultures.";
+            }
+
+            bulletinElement.textContent = bulletin;
+        }
+
+        // ===== FONCTION SMS SÉCURISÉE (utilise l'API Django) =====
+        async function subscribeToSMS() {
+            const phoneInput = document.getElementById('phone-simple');
+            const phoneNumber = phoneInput.value.replace(/\s/g, '');
+            const successMessage = document.getElementById('success-message');
+            const submitButton = document.querySelector('.sms-submit-btn');
+
+            // Validation
+            if (!phoneNumber.match(/^\d{9}$/)) {
+                showError('Veuillez entrer un numéro de téléphone valide (9 chiffres).');
+                return;
+            }
+
+            // Désactiver le bouton pendant l'envoi
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi en cours...';
+
+            try {
+                // Obtenir le token CSRF Django
+                const csrftoken = getCookie('csrftoken');
+
+                // Appeler l'API Django pour envoyer le SMS
+                const response = await fetch('/api/subscribe-sms/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken
+                    },
+                    body: JSON.stringify({
+                        phoneNumber: phoneNumber
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    // Succès - Afficher le message
+                    successMessage.classList.add('show');
+                    phoneInput.value = '';
+
+                    // Faire défiler jusqu'au message de succès
+                    successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                    // Cacher le message après 7 secondes
+                    setTimeout(() => {
+                        successMessage.classList.remove('show');
+                    }, 7000);
+                } else {
+                    // Erreur - Afficher le message d'erreur
+                    showError(data.message || 'Une erreur s\'est produite. Veuillez réessayer.');
+                }
+
+            } catch (error) {
+                console.error('Erreur:', error);
+                showError('Erreur de connexion au serveur. Veuillez réessayer.');
+            } finally {
+                // Réactiver le bouton
+                submitButton.disabled = false;
+                submitButton.innerHTML = 'S\'inscrire';
+            }
+        }
+
+        // Fonction pour obtenir le cookie CSRF de Django
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Fonction pour afficher les erreurs
+        function showError(message) {
+            // Créer l'élément d'erreur
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.innerHTML = `
+                <i class="fas fa-exclamation-circle" style="margin-right: 10px;"></i>
+                ${message}
+            `;
+
+            // Insérer avant le formulaire
+            const form = document.querySelector('.sms-simple-form');
+            const container = form.parentNode;
+
+            // Supprimer l'ancienne erreur s'il y en a une
+            const oldError = container.querySelector('.error-message');
+            if (oldError) {
+                oldError.remove();
+            }
+
+            container.insertBefore(errorDiv, form);
+
+            // Auto-fermer après 5 secondes
+            setTimeout(() => {
+                errorDiv.remove();
+            }, 5000);
+        }
+
+        // Charger les données météo au chargement de la page
+        document.addEventListener('DOMContentLoaded', function () {
+            // Charger les données météo réelles
+            updateWeatherUI();
+
+            // Actualiser toutes les heures
+            setInterval(updateWeatherUI, 3600000); // 1 heure
+
+            // Ajouter la gestion de la touche Entrée pour le formulaire SMS
+            const phoneInput = document.getElementById('phone-simple');
+            if (phoneInput) {
+                phoneInput.addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        subscribeToSMS();
+                    }
+                });
+            }
+        });
+
+        // Crop tips functionality
+        document.querySelectorAll('.crop-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.crop-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                const crop = this.dataset.crop;
+                const tipsData = {
+                    millet: [
+                        { title: "Préparation du Sol", content: "Labourez le sol à une profondeur de 15-20 cm et incorporez du fumier bien décomposé." },
+                        { title: "Période de Semis", content: "Semez au début de la saison des pluies, généralement entre juin et juillet." }
+                    ],
+                    corn: [
+                        { title: "Sélection des Variétés", content: "Choisissez des variétés adaptées au climat local comme l'EVDT 97 ou Obatanpa." },
+                        { title: "Fertilisation", content: "Appliquez de l'engrais NPK (15-15-15) à raison de 200kg/ha au moment du semis." }
+                    ],
+                    rice: [
+                        { title: "Préparation de la Pépinière", content: "Préparez des pépinières dans un terrain plat avec un bon drainage." },
+                        { title: "Repiquage", content: "Repiquez les plants âgés de 20-25 jours avec 2-3 plants par poquet." }
+                    ],
+                    peanut: [
+                        { title: "Préparation du Sol", content: "Sol meuble et bien drainé. Évitez les sols lourds et argileux." },
+                        { title: "Semis", content: "Semez à 5-7 cm de profondeur avec un espacement de 30-40 cm entre les lignes." }
+                    ],
+                    tomato: [
+                        { title: "Pépinière", content: "Préparez la pépinière 4 semaines avant la transplantation." },
+                        { title: "Arrosage", content: "Arrosez régulièrement mais évitez l'excès d'eau qui favorise les maladies." }
+                    ]
+                };
+
+                const tips = tipsData[crop] || tipsData.millet;
+                let html = '';
+                tips.forEach(tip => {
+                    html += `
+                        <div class="tip-item">
+                            <h5 style="color: var(--primary-green); margin-bottom: 10px;">
+                                <i class="fas fa-leaf" style="margin-right: 10px;"></i>
+                                ${tip.title}
+                            </h5>
+                            <p>${tip.content}</p>
+                        </div>
+                    `;
+                });
+                document.getElementById('tips-content').innerHTML = html;
+            });
+        });
+
+        // Phone number formatting for simple form
+        document.getElementById('phone-simple').addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\s/g, '');
+            let formattedValue = '';
+
+            // Remove non-numeric characters
+            value = value.replace(/\D/g, '');
+
+            // Limit to 9 digits
+            value = value.substring(0, 9);
+
+            // Format as XX XXX XX XX
+            for (let i = 0; i < value.length; i++) {
+                if (i === 2 || i === 5 || i === 7) {
+                    formattedValue += ' ';
+                }
+                formattedValue += value[i];
+            }
+
+            e.target.value = formattedValue;
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+            // Configuration data
+        let selectedCrop = 'millet';
+        let selectedSoil = 'clay';
+        let selectedRegion = 'dakar';
+        let selectedDepartment = '';
+        let currentLocation = {
+            region: 'Dakar',
+            department: '',
+            coordinates: null
+        };
+        let currentWeather = {
+            temp: 32,
+            humidity: 65,
+            condition: 'sunny',
+            forecast: 'rain_weekend'
+        };
+
+        // Régions et départements du Sénégal
+        const senegalRegions = {
+            'dakar': {
+                name: 'Dakar',
+                departments: ['Dakar', 'Pikine', 'Guédiawaye', 'Rufisque'],
+                climate: 'coastal',
+                mainCrops: ['maraichage', 'millet'],
+                avgTemp: 26,
+                avgRainfall: 500
+            },
+            'thies': {
+                name: 'Thiès',
+                departments: ['Thiès', 'Mbour', 'Tivaouane'],
+                climate: 'sudano-sahelian',
+                mainCrops: ['arachide', 'millet', 'manioc'],
+                avgTemp: 28,
+                avgRainfall: 600
+            },
+            'saint-louis': {
+                name: 'Saint-Louis',
+                departments: ['Saint-Louis', 'Dagana', 'Podor'],
+                climate: 'sahelian',
+                mainCrops: ['riz', 'tomate', 'oignon'],
+                avgTemp: 27,
+                avgRainfall: 300
+            },
+            'louga': {
+                name: 'Louga',
+                departments: ['Louga', 'Kébémer', 'Linguère'],
+                climate: 'sahelian',
+                mainCrops: ['millet', 'arachide', 'niébé'],
+                avgTemp: 29,
+                avgRainfall: 400
+            },
+            'diourbel': {
+                name: 'Diourbel',
+                departments: ['Diourbel', 'Bambey', 'Mbacké'],
+                climate: 'sudano-sahelian',
+                mainCrops: ['arachide', 'millet', 'niébé'],
+                avgTemp: 29,
+                avgRainfall: 500
+            },
+            'fatick': {
+                name: 'Fatick',
+                departments: ['Fatick', 'Foundiougne', 'Gossas'],
+                climate: 'sudano-sahelian',
+                mainCrops: ['arachide', 'millet', 'mais'],
+                avgTemp: 28,
+                avgRainfall: 600
+            },
+            'kaolack': {
+                name: 'Kaolack',
+                departments: ['Kaolack', 'Nioro du Rip', 'Guinguinéo'],
+                climate: 'sudano-sahelian',
+                mainCrops: ['arachide', 'millet', 'mais'],
+                avgTemp: 29,
+                avgRainfall: 700
+            },
+            'kaffrine': {
+                name: 'Kaffrine',
+                departments: ['Kaffrine', 'Birkelane', 'Koungheul', 'Malem-Hodar'],
+                climate: 'sudano-sahelian',
+                mainCrops: ['arachide', 'millet', 'mais'],
+                avgTemp: 29,
+                avgRainfall: 700
+            },
+            'ziguinchor': {
+                name: 'Ziguinchor',
+                departments: ['Ziguinchor', 'Bignona', 'Oussouye'],
+                climate: 'sudano-guinean',
+                mainCrops: ['riz', 'mais', 'manioc', 'fruits'],
+                avgTemp: 27,
+                avgRainfall: 1200
+            },
+            'sedhiou': {
+                name: 'Sédhiou',
+                departments: ['Sédhiou', 'Bounkiling', 'Goudomp'],
+                climate: 'sudano-guinean',
+                mainCrops: ['riz', 'mais', 'arachide'],
+                avgTemp: 28,
+                avgRainfall: 1000
+            },
+            'kolda': {
+                name: 'Kolda',
+                departments: ['Kolda', 'Médina Yoro Foulah', 'Vélingara'],
+                climate: 'sudano-guinean',
+                mainCrops: ['mais', 'riz', 'arachide', 'coton'],
+                avgTemp: 28,
+                avgRainfall: 1100
+            },
+            'tambacounda': {
+                name: 'Tambacounda',
+                departments: ['Tambacounda', 'Bakel', 'Koumpentoum', 'Goudiry'],
+                climate: 'sudano-sahelian',
+                mainCrops: ['coton', 'mais', 'millet'],
+                avgTemp: 30,
+                avgRainfall: 800
+            },
+            'kedougou': {
+                name: 'Kédougou',
+                departments: ['Kédougou', 'Saraya', 'Salémata'],
+                climate: 'sudano-guinean',
+                mainCrops: ['mais', 'fonio', 'manioc'],
+                avgTemp: 28,
+                avgRainfall: 1300
+            },
+            'matam': {
+                name: 'Matam',
+                departments: ['Matam', 'Kanel', 'Ranérou'],
+                climate: 'sahelian',
+                mainCrops: ['riz', 'sorgho', 'mais'],
+                avgTemp: 30,
+                avgRainfall: 400
+            }
+        };
+
+        // Conseils adaptés par zone climatique
+        const climateBasedAdjustments = {
+            'coastal': {
+                preparation: 'Zone côtière : attention à la salinité des sols. Drainage essentiel.',
+                irrigation: 'Humidité élevée, réduire l\'arrosage de 20%.',
+                timing: 'Semis possible toute l\'année pour le maraîchage.'
+            },
+            'sahelian': {
+                preparation: 'Zone sahélienne : conservation de l\'eau cruciale. Paillage recommandé.',
+                irrigation: 'Irrigation goutte-à-goutte fortement conseillée.',
+                timing: 'Semis dès les premières pluies (juin-juillet).'
+            },
+            'sudano-sahelian': {
+                preparation: 'Zone soudano-sahélienne : amendement organique important.',
+                irrigation: 'Arrosage modéré, surveiller la pluviométrie.',
+                timing: 'Période optimale : mi-juin à juillet.'
+            },
+            'sudano-guinean': {
+                preparation: 'Zone soudano-guinéenne : gestion des sols riches mais fragiles.',
+                irrigation: 'Pluies abondantes, drainage prioritaire.',
+                timing: 'Deux saisons possibles : juin et septembre.'
+            }
+        };
+
+        // Update location display
+        function updateLocationDisplay() {
+            const locationText = document.getElementById('current-location');
+            if (currentLocation.department) {
+                locationText.textContent = `${currentLocation.department}, ${currentLocation.region}`;
+            } else {
+                locationText.textContent = `${currentLocation.region}, Sénégal`;
+            }
+        }
+
+        // Region selection handler
+        function handleRegionSelection(regionCard) {
+            // Remove previous selection
+            document.querySelectorAll('.region-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Add selection
+            regionCard.classList.add('selected');
+            selectedRegion = regionCard.dataset.region;
+            
+            // Show department selector
+            const deptSelector = document.getElementById('department-selector');
+            const deptSelect = document.getElementById('department-select');
+            deptSelector.style.display = 'block';
+            
+            // Populate departments
+            const region = senegalRegions[selectedRegion];
+            deptSelect.innerHTML = '<option value="">Sélectionnez un département</option>';
+            region.departments.forEach(dept => {
+                deptSelect.innerHTML += `<option value="${dept}">${dept}</option>`;
+            });
+            
+            // Enable confirm button
+            document.getElementById('confirm-location-btn').disabled = false;
+        }
+
+        // Get location-based tips adjustments
+        function getLocationBasedTips() {
+            const region = senegalRegions[selectedRegion];
+            const climate = region.climate;
+            const adjustments = climateBasedAdjustments[climate];
+            
+            return {
+                climate: climate,
+                mainCrops: region.mainCrops,
+                avgTemp: region.avgTemp,
+                avgRainfall: region.avgRainfall,
+                adjustments: adjustments
+            };
+        }
+
+        // Tips database (in production, this would come from an API)
+        const tipsDatabase = {
+            millet: {
+                sandy: {
+                    preparation: [
+                        {
+                            priority: 'high',
+                            title: 'Enrichissement du sol sableux',
+                            content: 'Les sols sableux sont pauvres en nutriments. Ajoutez 5-6 tonnes/ha de compost ou fumier pour améliorer la rétention d\'eau et la fertilité.'
+                        },
+                        {
+                            title: 'Labour profond',
+                            content: 'Labourez à 20-25 cm pour permettre un bon développement racinaire du mil dans ce sol léger.'
+                        }
+                    ],
+                    planting: [
+                        {
+                            priority: 'immediate',
+                            title: 'Semis en conditions sèches',
+                            content: 'Le sol sableux sèche rapidement. Semez tôt le matin ou en fin d\'après-midi pour profiter de l\'humidité résiduelle.'
+                        },
+                        {
+                            title: 'Densité accrue',
+                            content: 'Augmentez la densité à 35 000 plants/ha pour compenser les pertes potentielles dues au drainage rapide.'
+                        }
+                    ],
+                    maintenance: [
+                        {
+                            title: 'Irrigation fréquente',
+                            content: 'Le sol sableux nécessite des arrosages fréquents mais légers : 20-25 mm tous les 3-4 jours.'
+                        },
+                        {
+                            title: 'Fertilisation fractionnée',
+                            content: 'Divisez l\'apport d\'engrais en 3 applications pour éviter le lessivage dans ce sol drainant.'
+                        }
+                    ]
+                },
+                clay: {
+                    preparation: [
+                        {
+                            priority: 'high',
+                            title: 'Drainage pour sol argileux',
+                            content: 'Votre sol argileux retient beaucoup d\'eau. Créez des sillons de drainage espacés de 3-4 mètres pour éviter l\'engorgement.'
+                        },
+                        {
+                            title: 'Amendement organique',
+                            content: 'Incorporez 3-4 tonnes/ha de fumier bien décomposé pour améliorer la structure de votre sol argileux.'
+                        }
+                    ],
+                    planting: [
+                        {
+                            priority: 'immediate',
+                            title: 'Moment optimal pour le semis',
+                            content: 'Avec la température actuelle et l\'humidité favorable, semez maintenant avant les pluies prévues.'
+                        },
+                        {
+                            title: 'Densité de semis adaptée',
+                            content: 'Pour votre sol argileux, réduisez la densité : 25 000 plants/ha avec espacement de 80x40 cm.'
+                        }
+                    ],
+                    maintenance: [
+                        {
+                            title: 'Gestion de l\'eau',
+                            content: 'Votre sol retient bien l\'eau. Arrosez moins fréquemment : 30-40 mm tous les 7-10 jours.'
+                        },
+                        {
+                            title: 'Désherbage précoce',
+                            content: 'Premier sarclage 15-20 jours après levée. Le sol argileux favorise les adventices.'
+                        }
+                    ]
+                },
+                loamy: {
+                    preparation: [
+                        {
+                            priority: 'high',
+                            title: 'Préparation optimale',
+                            content: 'Votre sol limoneux est idéal pour le mil. Un labour à 15-20 cm suffit avec incorporation de 2-3 tonnes/ha de compost.'
+                        }
+                    ],
+                    planting: [
+                        {
+                            title: 'Conditions parfaites',
+                            content: 'Le sol limoneux offre un équilibre parfait. Densité standard de 30 000 plants/ha recommandée.'
+                        }
+                    ],
+                    maintenance: [
+                        {
+                            title: 'Entretien simplifié',
+                            content: 'Sol équilibré nécessitant peu d\'interventions. Maintenir l\'humidité et désherber régulièrement.'
+                        }
+                    ]
+                },
+                laterite: {
+                    preparation: [
+                        {
+                            priority: 'high',
+                            title: 'Correction du pH',
+                            content: 'Les sols latéritiques sont acides. Appliquez 500-1000 kg/ha de chaux agricole 2-3 semaines avant le semis.'
+                        },
+                        {
+                            title: 'Enrichissement intensif',
+                            content: 'Sol pauvre nécessitant 6-8 tonnes/ha de matière organique pour améliorer la fertilité.'
+                        }
+                    ],
+                    planting: [
+                        {
+                            title: 'Variétés résistantes',
+                            content: 'Choisissez des variétés de mil tolérantes à l\'acidité comme Souna 3 ou ICMV-IS 89305.'
+                        }
+                    ],
+                    maintenance: [
+                        {
+                            priority: 'high',
+                            title: 'Fertilisation renforcée',
+                            content: 'Augmentez les doses d\'engrais de 30% pour compenser la faible fertilité du sol latéritique.'
+                        }
+                    ]
+                }
+            },
+            corn: {
+                sandy: {
+                    preparation: [
+                        {
+                            priority: 'high',
+                            title: 'Matière organique essentielle',
+                            content: 'Le maïs demande plus de nutriments. Incorporez 7-8 tonnes/ha de fumier dans votre sol sableux.'
+                        }
+                    ],
+                    planting: [
+                        {
+                            title: 'Semis profond',
+                            content: 'Semez à 4-5 cm de profondeur pour assurer une bonne germination dans le sol sableux drainant.'
+                        }
+                    ],
+                    maintenance: [
+                        {
+                            priority: 'high',
+                            title: 'Irrigation critique',
+                            content: 'Le maïs en sol sableux nécessite 40-50 mm d\'eau par semaine, surtout à la floraison.'
+                        }
+                    ]
+                }
+                // ... autres combinaisons
+            }
+            // ... autres cultures
+        };
+
+        // Weather-based adjustments
+        function getWeatherAdjustments() {
+            const adjustments = [];
+            
+            if (currentWeather.temp > 35) {
+                adjustments.push({
+                    priority: 'immediate',
+                    title: 'Protection contre la chaleur',
+                    content: 'Température élevée détectée. Paillez vos cultures et irriguez tôt le matin ou tard le soir pour réduire l\'évaporation.'
+                });
+            }
+            
+            if (currentWeather.forecast === 'rain_weekend') {
+                adjustments.push({
+                    priority: 'immediate',
+                    title: 'Pluies prévues',
+                    content: 'Des pluies sont attendues ce weekend. Profitez pour semer maintenant ou préparez vos parcelles pour les semis post-pluie.'
+                });
+            }
+            
+            if (currentWeather.humidity < 40) {
+                adjustments.push({
+                    title: 'Air sec',
+                    content: 'L\'humidité est faible. Augmentez la fréquence d\'arrosage et surveillez les signes de stress hydrique.'
+                });
+            }
+            
+            return adjustments;
+        }
+
+        // Generate personalized tips with location awareness
+        function generateTips() {
+            const tipsContent = document.getElementById('tips-content');
+            const tips = tipsDatabase[selectedCrop]?.[selectedSoil];
+            const locationInfo = getLocationBasedTips();
+            
+            if (!tips) {
+                tipsContent.innerHTML = '<p class="text-center">Conseils en cours de chargement...</p>';
+                return;
+            }
+
+            let html = '';
+
+            // Add location-specific header
+            html += `
+                <div class="location-context mb-4">
+                    <div class="alert alert-info">
+                        <i class="fas fa-map-marker-alt me-2"></i>
+                        <strong>${currentLocation.region}</strong> - Zone ${locationInfo.climate === 'coastal' ? 'côtière' : 
+                        locationInfo.climate === 'sahelian' ? 'sahélienne' : 
+                        locationInfo.climate === 'sudano-sahelian' ? 'soudano-sahélienne' : 'soudano-guinéenne'}
+                        <br>
+                        <small>Pluviométrie moyenne : ${locationInfo.avgRainfall}mm/an | Température moyenne : ${locationInfo.avgTemp}°C</small>
+                    </div>
+                </div>
+            `;
+
+            // Check if selected crop is recommended for this region
+            if (!locationInfo.mainCrops.includes(selectedCrop)) {
+                html += `
+                    <div class="alert alert-warning mb-4">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Note :</strong> Le ${selectedCrop === 'millet' ? 'mil' : selectedCrop} n'est pas une culture principale de votre région. 
+                        Les cultures recommandées sont : ${locationInfo.mainCrops.join(', ')}.
+                    </div>
+                `;
+            }
+
+            // Preparation tips with location adjustments
+            if (tips.preparation) {
+                html += `
+                    <div class="tip-category">
+                        <div class="tip-category-header">
+                            <i class="fas fa-tools"></i>
+                            <span>Préparation du Sol</span>
+                        </div>
+                        <div class="tip-items">
+                `;
+                
+                // Add location-specific preparation tip
+                html += `
+                    <div class="tip-item">
+                        <span class="tip-priority">Spécifique à votre région</span>
+                        <div class="tip-content">
+                            <h5>Adaptation régionale</h5>
+                            <p>${locationInfo.adjustments.preparation}</p>
+                        </div>
+                    </div>
+                `;
+                
+                tips.preparation.forEach(tip => {
+                    html += `
+                        <div class="tip-item">
+                            ${tip.priority ? `<span class="tip-priority">Priorité ${tip.priority === 'high' ? 'haute' : tip.priority === 'immediate' ? 'immédiate' : ''}</span>` : ''}
+                            <div class="tip-content">
+                                <h5>${tip.title}</h5>
+                                <p>${tip.content}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += '</div></div>';
+            }
+
+            // Planting tips with weather and location adjustments
+            if (tips.planting) {
+                html += `
+                    <div class="tip-category">
+                        <div class="tip-category-header">
+                            <i class="fas fa-seedling"></i>
+                            <span>Semis et Plantation</span>
+                        </div>
+                        <div class="tip-items">
+                `;
+                
+                // Add timing based on location
+                html += `
+                    <div class="tip-item">
+                        <span class="tip-priority">Calendrier régional</span>
+                        <div class="tip-content">
+                            <h5>Période optimale pour ${currentLocation.region}</h5>
+                            <p>${locationInfo.adjustments.timing}</p>
+                        </div>
+                    </div>
+                `;
+                
+                // Add weather-based tips
+                const weatherTips = getWeatherAdjustments();
+                weatherTips.forEach(tip => {
+                    if (tip.priority === 'immediate') {
+                        html += `
+                            <div class="tip-item">
+                                <span class="tip-priority">Action immédiate</span>
+                                <div class="tip-content">
+                                    <h5>${tip.title}</h5>
+                                    <p>${tip.content}</p>
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+                
+                tips.planting.forEach(tip => {
+                    html += `
+                        <div class="tip-item">
+                            ${tip.priority && tip.priority !== 'immediate' ? `<span class="tip-priority">${tip.priority}</span>` : ''}
+                            <div class="tip-content">
+                                <h5>${tip.title}</h5>
+                                <p>${tip.content}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += '</div></div>';
+            }
+
+            // Maintenance tips with location-specific irrigation
+            if (tips.maintenance) {
+                html += `
+                    <div class="tip-category">
+                        <div class="tip-category-header">
+                            <i class="fas fa-hand-holding-water"></i>
+                            <span>Entretien et Irrigation</span>
+                        </div>
+                        <div class="tip-items">
+                `;
+                
+                // Add location-specific irrigation advice
+                html += `
+                    <div class="tip-item">
+                        <span class="tip-priority">Irrigation adaptée</span>
+                        <div class="tip-content">
+                            <h5>Gestion de l'eau pour votre zone</h5>
+                            <p>${locationInfo.adjustments.irrigation}</p>
+                        </div>
+                    </div>
+                `;
+                
+                tips.maintenance.forEach(tip => {
+                    html += `
+                        <div class="tip-item">
+                            ${tip.priority ? `<span class="tip-priority">Priorité ${tip.priority}</span>` : ''}
+                            <div class="tip-content">
+                                <h5>${tip.title}</h5>
+                                <p>${tip.content}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += '</div></div>';
+            }
+
+            tipsContent.innerHTML = html;
+        }
+
+        // Show loading state
+        function showLoading() {
+            const tipsContent = document.getElementById('tips-content');
+            tipsContent.innerHTML = `
+                <div class="loading-tips">
+                    <i class="fas fa-spinner"></i>
+                    <div class="loading-text">Génération de conseils personnalisés en cours...</div>
+                </div>
+            `;
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Crop selection
+            document.querySelectorAll('.crop-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.crop-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedCrop = this.dataset.crop;
+                    
+                    showLoading();
+                    setTimeout(generateTips, 800); // Simulate API call
+                });
+            });
+
+            // Soil selection
+            document.querySelectorAll('.soil-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    document.querySelectorAll('.soil-card').forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedSoil = this.dataset.soil;
+                    
+                    showLoading();
+                    setTimeout(generateTips, 800); // Simulate API call
+                });
+            });
+
+            // Change location button
+            document.querySelector('.change-location-btn').addEventListener('click', function() {
+                // Modal will be opened by Bootstrap data attributes
+            });
+
+            // Region selection in modal
+            document.querySelectorAll('.region-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    handleRegionSelection(this);
+                });
+            });
+
+            // Department selection
+            document.getElementById('department-select').addEventListener('change', function() {
+                selectedDepartment = this.value;
+            });
+
+            // Confirm location button
+            document.getElementById('confirm-location-btn').addEventListener('click', function() {
+                const region = senegalRegions[selectedRegion];
+                currentLocation.region = region.name;
+                currentLocation.department = selectedDepartment;
+                
+                updateLocationDisplay();
+                
+                // Close modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('locationModal'));
+                modal.hide();
+                
+                // Regenerate tips with new location
+                showLoading();
+                setTimeout(generateTips, 800);
+            });
+
+            // GPS button
+            document.getElementById('use-gps-btn').addEventListener('click', function() {
+                if (navigator.geolocation) {
+                    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Localisation en cours...';
+                    
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            const lat = position.coords.latitude;
+                            const lon = position.coords.longitude;
+                            
+                            // Find nearest region based on coordinates
+                            const nearestRegion = findNearestRegion(lat, lon);
+                            if (nearestRegion) {
+                                const regionCard = document.querySelector(`[data-region="${nearestRegion}"]`);
+                                handleRegionSelection(regionCard);
+                            }
+                            
+                            this.innerHTML = '<i class="fas fa-location-crosshairs"></i> Position trouvée!';
+                            setTimeout(() => {
+                                this.innerHTML = '<i class="fas fa-location-crosshairs"></i> Utiliser ma position GPS';
+                            }, 2000);
+                        },
+                        (error) => {
+                            alert('Impossible d\'obtenir votre position. Veuillez sélectionner manuellement.');
+                            this.innerHTML = '<i class="fas fa-location-crosshairs"></i> Utiliser ma position GPS';
+                        }
+                    );
+                } else {
+                    alert('La géolocalisation n\'est pas supportée par votre navigateur.');
+                }
+            });
+
+            // Initial tips generation
+            generateTips();
+        });
+
+        // Find nearest region based on GPS coordinates
+        function findNearestRegion(lat, lon) {
+            // Approximate coordinates for each region's capital
+            const regionCoords = {
+                'dakar': { lat: 14.6937, lon: -17.4441 },
+                'thies': { lat: 14.7886, lon: -16.9260 },
+                'saint-louis': { lat: 16.0326, lon: -16.4818 },
+                'louga': { lat: 15.6173, lon: -16.2276 },
+                'diourbel': { lat: 14.6547, lon: -16.2314 },
+                'fatick': { lat: 14.3344, lon: -16.4111 },
+                'kaolack': { lat: 14.1652, lon: -16.0757 },
+                'kaffrine': { lat: 14.1059, lon: -15.5508 },
+                'ziguinchor': { lat: 12.5834, lon: -16.2720 },
+                'sedhiou': { lat: 12.7081, lon: -15.5569 },
+                'kolda': { lat: 12.8939, lon: -14.9502 },
+                'tambacounda': { lat: 13.7709, lon: -13.6673 },
+                'kedougou': { lat: 12.5605, lon: -12.1747 },
+                'matam': { lat: 15.6555, lon: -13.2554 }
+            };
+
+            let nearestRegion = null;
+            let minDistance = Infinity;
+
+            for (const [region, coords] of Object.entries(regionCoords)) {
+                const distance = Math.sqrt(
+                    Math.pow(lat - coords.lat, 2) + 
+                    Math.pow(lon - coords.lon, 2)
+                );
+                
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    nearestRegion = region;
+                }
+            }
+
+            return nearestRegion;
+        }
+
+        // Simulate real-time weather updates (in production, use actual weather API)
+        function updateWeatherDisplay() {
+            // This would fetch from a weather API
+            const weatherIcon = document.querySelector('.weather-icon i');
+            const weatherTemp = document.querySelector('.weather-temp');
+            const weatherDesc = document.querySelector('.weather-desc');
+            
+            // Update based on current conditions
+            if (currentWeather.condition === 'sunny') {
+                weatherIcon.className = 'fas fa-sun';
+                weatherIcon.style.color = '#f4d03f';
+            } else if (currentWeather.condition === 'cloudy') {
+                weatherIcon.className = 'fas fa-cloud';
+                weatherIcon.style.color = '#87ceeb';
+            }
+            
+            weatherTemp.textContent = `${currentWeather.temp}°C`;
+            weatherDesc.textContent = `Conditions actuelles : ${currentWeather.condition === 'sunny' ? 'Ensoleillé' : 'Nuageux'}, Humidité ${currentWeather.humidity}%`;
+        }
+
+        // Update weather display on load
+        updateWeatherDisplay();
+    </script>
+</body>
+
+</html>
