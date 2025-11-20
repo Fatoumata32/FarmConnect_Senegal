@@ -18,13 +18,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
+    'django_filters',
     'crispy_forms',
     'crispy_bootstrap5',
     'farmconnect_app',
     'weather',
     'crops',
     'community',
-    'chat',
+    'advice',
     'marketplace',
 ]
 
@@ -98,7 +99,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
         'OPTIONS': {
-            'min_length': 6,
+            'min_length': 8,
         }
     },
     {
@@ -158,7 +159,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # CONFIGURATION APIS EXTERNES
 # ==================================
 
+# API Keys - Load from environment variables for security
 OPENWEATHER_API_KEY = config('OPENWEATHER_API_KEY', default='')
+WEATHERAPI_KEY = config('WEATHERAPI_KEY', default='')  # Pour WeatherAPI.com
 SMS_API_KEY = config('SMS_API_KEY', default='')
 
 # ==================================
@@ -199,18 +202,14 @@ CELERY_TIMEZONE = TIME_ZONE
 # EMAIL (pour la réinitialisation de mot de passe)
 # ==================================
 
-# Configuration pour le développement
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-# Configuration pour la production (exemple avec Gmail)
-# Décommentez et configurez pour la production
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
-# EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
-# DEFAULT_FROM_EMAIL = 'FarmConnect <noreply@farmconnect.sn>'
+# Configuration SMTP pour les emails
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'f.ndiaye@alustudent.com'
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
+DEFAULT_FROM_EMAIL = 'FarmConnect Senegal <f.ndiaye@alustudent.com>'
 
 # ==================================
 # SÉCURITÉ ET CORS
@@ -225,6 +224,12 @@ CSRF_COOKIE_NAME = 'farmconnect_csrftoken'
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
+
+# Referrer Policy - Don't leak referrer info to third parties
+SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
+
+# Cross-Origin Opener Policy
+SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin'
 
 # CORS Headers
 CORS_ALLOWED_ORIGINS = [
@@ -313,9 +318,6 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
         'LOCATION': 'redis://127.0.0.1:6379/1',
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-        },
         'KEY_PREFIX': 'farmconnect',
         'TIMEOUT': 300,  # 5 minutes
         'VERSION': 1,

@@ -2,1579 +2,606 @@
 {% load static %}
 {% load i18n %}
 
-{% block title %}{% trans "Profil" %} - FarmConnect{% endblock %}
+{% block title %}{% trans "Communauté" %} - FarmConnect Senegal{% endblock %}
 
 {% block extra_css %}
+<style>
+    /* Hero Section */
+    .hero {
+        background: linear-gradient(135deg, rgba(45, 80, 22, 0.8) 0%, rgba(74, 124, 89, 0.8) 100%), url('{% static "img/hero_background.jpg" %}');
+        background-size: cover;
+        background-position: center;
+        color: var(--pure-white);
+        padding: 5rem 0;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        margin: 0;
+    }
 
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% trans "Communauté" %} - FarmConnect Senegal</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary-green: #2d5016;
-            --light-green: #4a7c59;
-            --accent-yellow: #f4d03f;
-            --earth-brown: #8b4513;
-            --sky-blue: #87ceeb;
-            --text-dark: #2c3e50;
-            --pure-white: #ffffff;
+    .hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, transparent 30%, rgba(244, 208, 63, 0.1) 50%, transparent 70%);
+        animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+        0% {
+            transform: translateX(-100%);
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        100% {
+            transform: translateX(100%);
         }
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--text-dark);
-            background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%);
+    .hero-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero h1 {
+        font-size: 3.5rem;
+        margin-bottom: 1.5rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        animation: fadeInUp 1s ease;
+    }
+
+    .hero p {
+        font-size: 1.3rem;
+        margin-bottom: 2.5rem;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+        color: var(--pure-white);
+    }
+
+    .cta-button {
+        background: linear-gradient(135deg, var(--accent-yellow) 0%, #f7dc6f 100%);
+        color: var(--primary-green);
+        padding: 1.2rem 3rem;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 20px rgba(244, 208, 63, 0.3);
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .cta-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 25px rgba(244, 208, 63, 0.4);
+        color: var(--primary-green);
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(50px);
         }
-
-        .container {
-            width: 100%;
-            margin: 0 auto;
-            padding: 0 20px;
+        to {
+            opacity: 1;
+            transform: translateY(0);
         }
+    }
 
-        /* Navigation */
-        nav {
-            background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%);
-            padding: 1rem 0;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
+    /* Main Sections */
+    .section {
+        padding: 5rem 0;
+        margin: 0;
+    }
 
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    .section:nth-child(even) {
+        background: var(--pure-white);
+    }
 
-        .logo {
-            color: var(--pure-white);
-            font-size: 1.8rem;
-            font-weight: bold;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+    .section-title {
+        text-align: center;
+        font-size: 3rem;
+        color: var(--primary-green);
+        margin-bottom: 3rem;
+        position: relative;
+    }
 
-        .nav-links {
-            display: flex;
-            gap: 1.5rem;
-            list-style: none;
-        }
+    .section-title::after {
+        content: '';
+        display: block;
+        width: 100px;
+        height: 4px;
+        background: var(--accent-yellow);
+        margin: 1.5rem auto;
+        border-radius: 2px;
+    }
 
-        .nav-links a {
-            color: rgba(255, 255, 255, 0.9);
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
+    /* Features Grid */
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+    }
 
-        .nav-links a:hover,
-        .nav-links a.active {
-            color: var(--accent-yellow);
-            transform: translateY(-2px);
-        }
+    .feature-card {
+        background: var(--pure-white);
+        padding: 2rem;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
 
-        .auth-links {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
+    .feature-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%);
+    }
 
-        .btn-login,
-        .btn-register {
-            padding: 0.5rem 1.5rem;
-            border: none;
-            border-radius: 25px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
+    .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
 
-        .btn-login {
-            background: transparent;
-            color: var(--pure-white);
-            border: 2px solid var(--pure-white);
-        }
+    .feature-icon {
+        font-size: 3rem;
+        color: var(--light-green);
+        margin-bottom: 1.5rem;
+        display: block;
+    }
 
-        .btn-register {
-            background: var(--accent-yellow);
-            color: var(--primary-green);
-        }
+    .feature-card h3 {
+        color: var(--primary-green);
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        font-weight: bold;
+    }
 
-        .btn-login:hover,
-        .btn-register:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            color: inherit;
-        }
+    .feature-card p {
+        color: var(--text-dark);
+        line-height: 1.8;
+    }
 
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            color: var(--pure-white);
-        }
+    /* Community Grid */
+    .community-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        margin: 3rem 0;
+    }
 
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--accent-yellow);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary-green);
-            font-weight: bold;
-        }
+    .community-card {
+        background: var(--pure-white);
+        border: 2px solid var(--light-green);
+        border-radius: 15px;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
 
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, rgba(45, 80, 22, 0.8) 0%, rgba(74, 124, 89, 0.8) 100%), url('{% static "img/hero_background.jpg" %}');
-            background-size: cover;
-            background-position: center;
-            color: var(--pure-white);
-            padding: 5rem 0;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
+    .community-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    }
 
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, transparent 30%, rgba(244, 208, 63, 0.1) 50%, transparent 70%);
-            animation: shimmer 3s infinite;
-        }
+    .community-card .icon {
+        font-size: 3rem;
+        color: var(--light-green);
+        margin-bottom: 1rem;
+        display: block;
+    }
 
-        @keyframes shimmer {
-            0% {
-                transform: translateX(-100%);
-            }
+    .community-card h3 {
+        color: var(--primary-green);
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+    }
 
-            100% {
-                transform: translateX(100%);
-            }
-        }
+    /* Workshop Section */
+    .workshop-highlights {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin: 3rem 0;
+    }
 
-        .hero-content {
-            position: relative;
-            z-index: 1;
-        }
+    .workshop-card {
+        background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%);
+        color: var(--pure-white);
+        padding: 2rem;
+        border-radius: 15px;
+        text-align: center;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
 
+    .workshop-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .workshop-card .icon {
+        font-size: 3rem;
+        color: var(--accent-yellow);
+        margin-bottom: 1rem;
+    }
+
+    .workshop-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: var(--accent-yellow);
+    }
+
+    /* Stats Cards */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+    }
+
+    .stat-card {
+        background: var(--pure-white);
+        padding: 1.5rem;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: var(--primary-green);
+    }
+
+    .stat-label {
+        color: var(--text-dark);
+        font-weight: 500;
+    }
+
+    /* Remove extra space */
+    .section:last-of-type {
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
+    }
+
+    /* CTA Section */
+    .cta-section {
+        background: linear-gradient(135deg, var(--accent-yellow) 0%, #f7dc6f 100%);
+        color: var(--primary-green);
+        padding: 5rem 0 10rem 0;
+        text-align: center;
+        margin: 0;
+    }
+
+    .cta-section h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        font-weight: bold;
+    }
+
+    .cta-section p {
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .cta-buttons {
+        display: flex;
+        gap: 1.5rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .btn-primary {
+        background: var(--primary-green);
+        color: var(--pure-white);
+    }
+
+    .btn-secondary {
+        background: transparent;
+        color: var(--primary-green);
+        border: 2px solid var(--primary-green);
+    }
+
+    .btn-primary:hover,
+    .btn-secondary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-primary:hover {
+        color: var(--pure-white);
+    }
+
+    .btn-secondary:hover {
+        color: var(--primary-green);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
         .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1.5rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            animation: fadeInUp 1s ease;
+            font-size: 2.5rem;
         }
 
         .hero p {
-            font-size: 1.3rem;
-            margin-bottom: 2.5rem;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-            color: var(--pure-white);
-        }
-
-        .cta-button {
-            background: linear-gradient(135deg, var(--accent-yellow) 0%, #f7dc6f 100%);
-            color: var(--primary-green);
-            padding: 1.2rem 3rem;
-            border: none;
-            border-radius: 50px;
             font-size: 1.1rem;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(244, 208, 63, 0.3);
-            text-decoration: none;
-            display: inline-block;
         }
 
-        .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(244, 208, 63, 0.4);
-            color: var(--primary-green);
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Main Sections */
-        .section {
-            padding: 5rem 0;
-        }
-
-        .section:nth-child(even) {
-            background: var(--pure-white);
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 3rem;
-            color: var(--primary-green);
-            margin-bottom: 3rem;
-            position: relative;
-        }
-
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 100px;
-            height: 4px;
-            background: var(--accent-yellow);
-            margin: 1.5rem auto;
-            border-radius: 2px;
-        }
-
-        /* Features Grid */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .feature-card {
-            background: var(--pure-white);
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        .feature-icon {
-            font-size: 3rem;
-            color: var(--light-green);
-            margin-bottom: 1.5rem;
-            display: block;
-        }
-
-        .feature-card h3 {
-            color: var(--primary-green);
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            font-weight: bold;
-        }
-
-        .feature-card p {
-            color: var(--text-dark);
-            line-height: 1.8;
-        }
-
-        /* Community Grid */
-        .community-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
-
-        .community-card {
-            background: var(--pure-white);
-            border: 2px solid var(--light-green);
-            border-radius: 15px;
-            padding: 2rem;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .community-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-        }
-
-        .community-card .icon {
-            font-size: 3rem;
-            color: var(--light-green);
-            margin-bottom: 1rem;
-            display: block;
-        }
-
-        .community-card h3 {
-            color: var(--primary-green);
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
-        }
-
-        /* Workshop Section */
+        .features-grid,
+        .community-grid,
         .workshop-highlights {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
-
-        .workshop-card {
-            background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%);
-            color: var(--pure-white);
-            padding: 2rem;
-            border-radius: 15px;
-            text-align: center;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .workshop-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .workshop-card .icon {
-            font-size: 3rem;
-            color: var(--accent-yellow);
-            margin-bottom: 1rem;
-        }
-
-        .workshop-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--accent-yellow);
-        }
-
-        /* Workshops Calendar */
-        .workshops-calendar {
-            background: var(--pure-white);
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-            max-width: 800px;
-            margin: 3rem auto;
-        }
-
-        .calendar-container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 30px;
-            box-shadow: 0 20px 40px rgba(45, 80, 22, 0.15);
-            overflow: hidden;
-            backdrop-filter: blur(10px);
-        }
-
-        .calendar-header {
-            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
-            color: var(--pure-white);
-            padding: 25px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .calendar-header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
-        }
-
-        .calendar-header h3 {
-            font-size: 20px;
-            font-weight: 600;
-            position: relative;
-            z-index: 2;
-        }
-
-        @keyframes rotate {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        .calendar-nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 25px;
-            background: rgba(250, 251, 252, 0.8);
-        }
-
-        .nav-btn {
-            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
-            color: var(--pure-white);
-            border: none;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 8px 16px rgba(45, 80, 22, 0.2);
-        }
-
-        .nav-btn:hover {
-            transform: translateY(-3px) scale(1.1);
-            box-shadow: 0 12px 24px rgba(45, 80, 22, 0.3);
-        }
-
-        .nav-btn:active {
-            transform: translateY(-1px) scale(1.05);
-        }
-
-        .month-display {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--primary-green);
-            text-align: center;
-            padding: 10px 20px;
-            background: rgba(45, 80, 22, 0.05);
-            border-radius: 25px;
-            border: 2px solid rgba(45, 80, 22, 0.1);
-        }
-
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 1px;
-            padding: 20px;
-            background: rgba(245, 247, 250, 0.5);
-        }
-
-        .day-header {
-            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
-            color: var(--pure-white);
-            padding: 12px;
-            text-align: center;
-            font-weight: 600;
-            font-size: 12px;
-            border-radius: 50%;
-            margin: 2px;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 10px auto;
-        }
-
-        .calendar-day {
-            height: 40px;
-            width: 40px;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border-radius: 50%;
-            margin: 2px;
-        }
-
-        .calendar-day:hover {
-            transform: scale(1.1);
-            background: rgba(74, 124, 89, 0.1);
-        }
-
-        .calendar-day.other-month {
-            opacity: 0.3;
-        }
-
-        .calendar-day.today {
-            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
-            box-shadow: 0 0 20px rgba(255, 193, 7, 0.4);
-            border: 3px solid var(--light-green);
-        }
-
-        .calendar-day.has-workshop {
-            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
-            color: var(--pure-white);
-            box-shadow: 0 8px 16px rgba(45, 80, 22, 0.3);
-        }
-
-        .calendar-day.has-workshop:hover {
-            transform: scale(1.15);
-            box-shadow: 0 12px 24px rgba(45, 80, 22, 0.4);
-        }
-
-        .day-number {
-            font-weight: 700;
-            font-size: 14px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .upcoming-section {
-            padding: 25px;
-            background: linear-gradient(135deg, rgba(250, 251, 252, 0.9), rgba(248, 249, 250, 0.9));
-        }
-
-        .upcoming-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .upcoming-title {
-            color: var(--primary-green);
-            font-size: 16px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .toggle-btn {
-            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
-            color: var(--pure-white);
-            border: none;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 8px rgba(45, 80, 22, 0.2);
-        }
-
-        .toggle-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 12px rgba(45, 80, 22, 0.3);
-        }
-
-        .workshops-list {
-            transition: all 0.4s ease;
-            overflow: hidden;
-        }
-
-        .workshops-list.collapsed {
-            max-height: 90px;
-        }
-
-        .workshops-list.expanded {
-            max-height: 500px;
-        }
-
-        .upcoming-title i {
-            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
-            color: var(--pure-white);
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-        }
-
-        .workshop-item {
-            background: var(--pure-white);
-            border-radius: 25px;
-            padding: 20px;
-            margin-bottom: 15px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: 2px solid transparent;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .workshop-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 5px;
-            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
-            border-radius: 0 25px 25px 0;
-        }
-
-        .workshop-item:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 15px 30px rgba(45, 80, 22, 0.2);
-            border-color: rgba(74, 124, 89, 0.3);
-        }
-
-        .workshop-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 8px;
-        }
-
-        .workshop-date-circle {
-            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
-            color: var(--pure-white);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 11px;
-            box-shadow: 0 6px 12px rgba(45, 80, 22, 0.3);
-        }
-
-        .workshop-name {
-            font-weight: 700;
-            font-size: 16px;
-            color: var(--primary-green);
-            flex: 1;
-        }
-
-        .workshop-location {
-            color: #666;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-left: 65px;
-        }
-
-        .workshop-location i {
-            background: rgba(74, 124, 89, 0.1);
-            color: var(--light-green);
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-        }
-
-        .tooltip {
-            position: absolute;
-            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
-            color: var(--pure-white);
-            padding: 10px 12px;
-            border-radius: 15px;
-            font-size: 11px;
-            z-index: 1000;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.3s ease;
-            bottom: 120%;
-            left: 50%;
-            transform: translateX(-50%);
-            box-shadow: 0 8px 16px rgba(45, 80, 22, 0.3);
-        }
-
-        .tooltip:after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 6px solid transparent;
-            border-top-color: var(--primary-green);
-        }
-
-        .calendar-day:hover .tooltip {
-            opacity: 1;
-            transform: translateX(-50%) translateY(-5px);
-        }
-
-        /* Call to Action Section */
-        .cta-section {
-            background: linear-gradient(135deg, var(--accent-yellow) 0%, #f7dc6f 100%);
-            color: var(--primary-green);
-            padding: 4rem 0;
-            text-align: center;
-        }
-
-        .cta-section h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-            font-weight: bold;
-        }
-
-        .cta-section p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
+            grid-template-columns: 1fr;
         }
 
         .cta-buttons {
-            display: flex;
-            gap: 1.5rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn-primary,
-        .btn-secondary {
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
-
-        .btn-primary {
-            background: var(--primary-green);
-            color: var(--pure-white);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--primary-green);
-            border: 2px solid var(--primary-green);
-        }
-
-        .btn-primary:hover,
-        .btn-secondary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn-primary:hover {
-            color: var(--pure-white);
-        }
-
-        .btn-secondary:hover {
-            color: var(--primary-green);
-        }
-
-        /* Footer */
-        footer {
-            background: var(--primary-green);
-            color: var(--pure-white);
-            padding: 3rem 0 1rem;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-section h3 {
-            color: var(--accent-yellow);
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
-        }
-
-        .footer-section a {
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            display: block;
-            margin: 0.5rem 0;
-            transition: all 0.3s ease;
-        }
-
-        .footer-section a:hover {
-            color: var(--accent-yellow);
-            transform: translateX(5px);
-        }
-
-        .footer-bottom {
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            padding-top: 1.5rem;
-            text-align: center;
-        }
-
-        /* Image Styling */
-        .section-image {
-            width: 100%;
-            height: 800px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-            display: block;
-            margin: 2rem auto;
-            transition: transform 0.3s ease;
-        }
-
-        .section-image:hover {
-            transform: scale(1.02);
-        }
-
-        .section-img {
-            width: 800px;
-            height: 400px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-            display: block;
-            margin: 2rem auto;
-            transition: transform 0.3s ease;
-        }
-
-        /* Image Placeholders */
-        .image-placeholder {
-            background: linear-gradient(45deg, #e8f5e8, #f0f8f0);
-            border: 2px dashed var(--light-green);
-            display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            color: var(--light-green);
-            font-style: italic;
-            text-align: center;
-            padding: 2rem;
-            border-radius: 10px;
-            margin: 2rem 0;
-            transition: all 0.3s ease;
         }
+    }
+</style>
+{% endblock %}
 
-        .image-placeholder:hover {
-            border-color: var(--accent-yellow);
-            background: linear-gradient(45deg, #fff5e1, #fefbf0);
-            color: var(--primary-green);
-        }
-
-        /* Messages */
-        .messages {
-            margin: 1rem 0;
-        }
-
-        .alert {
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 1rem;
-        }
-
-        .alert-success {
-            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .alert-info {
-            background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
-            color: #0c5460;
-            border: 1px solid #bee5eb;
-        }
-
-        /* Stats Cards */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
-        }
-
-        .stat-card {
-            background: var(--pure-white);
-            padding: 1.5rem;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--primary-green);
-        }
-
-        .stat-label {
-            color: var(--text-dark);
-            font-weight: 500;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .nav-links {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .hero p {
-                font-size: 1.1rem;
-            }
-
-            .features-grid,
-            .community-grid,
-            .workshop-highlights {
-                grid-template-columns: 1fr;
-            }
-
-            .cta-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .auth-links {
-                flex-direction: column;
-            }
-
-            .calendar-container {
-                margin: 10px;
-                border-radius: 25px;
-            }
-
-            .calendar-grid {
-                padding: 15px;
-            }
-
-            .calendar-day {
-                height: 50px;
-            }
-
-            .day-header {
-                width: 35px;
-                height: 35px;
-                font-size: 10px;
-            }
-
-            .workshop-item {
-                padding: 15px;
-            }
-
-            .workshop-date-circle {
-                width: 40px;
-                height: 40px;
-                font-size: 10px;
-            }
-        }
-
-        /* Ripple Animation for Buttons */
-        .btn-primary,
-        .btn-secondary,
-        .cta-button,
-        .nav-links a,
-        .nav-btn {
-            position: relative;
-            overflow: hidden;
-        }
-
-        @keyframes ripple {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
-        }
-    </style>
-</head>
-
-<body>
-    <!-- Messages -->
-    {% if messages %}
-    <div class="messages">
-        {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">
-            {{ message }}
-        </div>
-        {% endfor %}
-    </div>
-    {% endif %}
-
-    <!-- Navigation -->
-    <nav>
-        <div class="container">
-            <div class="nav-container">
-                <a href="{% url 'farmconnect_app:home' %}" class="logo">
-                    <i class="fas fa-seedling"></i> FarmConnect Senegal
-                </a>
-                <ul class="nav-links">
-                    <li><a href="{% url 'farmconnect_app:home' %}">{% trans "Accueil" %}</a></li>
-                    <li><a href="{% url 'farmconnect_app:community' %}" class="active">{% trans "Communauté" %}</a></li>
-                    <li><a href="{% url 'farmconnect_app:about' %}">{% trans "À propos" %}</a></li>
-                    {% if user.is_authenticated %}
-                    <li><a href="{% url 'farmconnect_app:dashboard' %}">{% trans "Tableau de bord" %}</a></li>
-                    {% endif %}
-                </ul>
-
-                <!-- Auth Links -->
-                <div class="auth-links">
-                    {% if user.is_authenticated %}
-                    <div class="user-menu">
-                        <span>{% trans "Bienvenue" %}, {{ user.get_full_name|default:user.username }}!</span>
-                        <div class="user-avatar">
-                            {{ user.first_name.0|default:user.username.0|upper }}
-                        </div>
-                        <a href="{% url 'farmconnect_app:profile' %}" class="nav-links" style="margin: 0;">
-                            <i class="fas fa-user"></i>
-                        </a>
-                        <a href="{% url 'logout' %}" class="nav-links" style="margin: 0;">
-                            <i class="fas fa-sign-out-alt"></i>
-                        </a>
-                    </div>
-                    {% else %}
-                    <a href="{% url 'login' %}" class="btn-login">{% trans "Connexion" %}</a>
-                    <a href="{% url 'farmconnect_app:register' %}" class="btn-register">{% trans "Inscription" %}</a>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1>{% trans "Cultivons Ensemble l'Avenir" %}</h1>
-                <p>{% trans "Rejoignez FarmConnect Senegal, la plateforme qui unit les agriculteurs sénégalais pour partager des connaissances, accéder à des outils modernes et booster la productivité agricole. Ensemble, transformons l'agriculture pour un avenir durable et prospère." %}</p>
-                {% if not user.is_authenticated %}
-                <a href="{% url 'farmconnect_app:register' %}" class="cta-button">{% trans "Rejoindre Notre Communauté" %}</a>
-                {% else %}
-                <a href="{% url 'farmconnect_app:dashboard' %}" class="cta-button">{% trans "Accéder à Mon Tableau de Bord" %}</a>
-                {% endif %}
-            </div>
-        </div>
-    </section>
-
-    <!-- Hero Image -->
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
     <div class="container">
+        <div class="hero-content">
+            <h1 class="fade-down">{% trans "Cultivons Ensemble l'Avenir" %}</h1>
+            <p class="fade-up">{% trans "Rejoignez FarmConnect Senegal, la plateforme qui unit les agriculteurs sénégalais pour partager des connaissances, accéder à des outils modernes et booster la productivité agricole. Ensemble, transformons l'agriculture pour un avenir durable et prospère." %}</p>
+            {% if not user.is_authenticated %}
+            <a href="{% url 'farmconnect_app:register' %}" class="cta-button float-animate">{% trans "Rejoindre Notre Communauté" %}</a>
+            {% else %}
+            <a href="{% url 'farmconnect_app:dashboard' %}" class="cta-button float-animate">{% trans "Accéder à Mon Tableau de Bord" %}</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Hero Image -->
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <figure class="text-center">
+                <img src="{% static 'img/together.jpg' %}"
+                     alt="{% trans 'Agriculteurs sénégalais travaillant ensemble dans les champs' %}"
+                     class="img-fluid rounded-3 my-4"
+                     style="max-width: 100%; height: auto; max-height: 500px; object-fit: cover;">
+                <figcaption class="text-muted mt-2">
+                    {% trans "Agriculteurs collaborant dans les champs sénégalais" %}
+                </figcaption>
+            </figure>
+        </div>
+    </div>
+</div>
+
+<!-- Stats Section -->
+<div class="container">
+    <div class="stats-grid stagger-children">
+        <div class="stat-card scale-up">
+            <div class="stat-number">{{ total_farmers|default:"5000+" }}</div>
+            <div class="stat-label">{% trans "Agriculteurs Connectés" %}</div>
+        </div>
+        <div class="stat-card scale-up">
+            <div class="stat-number">{{ total_regions|default:"14" }}</div>
+            <div class="stat-label">{% trans "Régions Couvertes" %}</div>
+        </div>
+        <div class="stat-card scale-up">
+            <div class="stat-number">{{ total_workshops|default:"100+" }}</div>
+            <div class="stat-label">{% trans "Ateliers Organisés" %}</div>
+        </div>
+        <div class="stat-card scale-up">
+            <div class="stat-number">{{ total_crops|default:"50+" }}</div>
+            <div class="stat-label">{% trans "Cultures Supportées" %}</div>
+        </div>
+    </div>
+</div>
+
+<!-- Market Prices Section -->
+{% if latest_prices %}
+<section class="section" style="background: var(--pure-white);">
+    <div class="container">
+        <h2 class="section-title">{% trans "Prix du Marché" %}</h2>
+        <p style="text-align: center; max-width: 800px; margin: 0 auto 2rem; color: var(--text-dark);">
+            {% trans "Consultez les prix actuels des produits agricoles dans les différentes régions du Sénégal." %}
+        </p>
         <div class="row">
-            <div class="col-12">
-                <figure class="text-center">
-                    <img src="{% static 'img/together.jpg' %}"
-                         alt="{% trans 'Agriculteurs sénégalais travaillant ensemble dans les champs' %}"
-                         class="img-fluid rounded-3 my-4"
-                         style="max-width: 100%; height: auto; max-height: 500px; object-fit: cover;">
-                    <figcaption class="text-muted mt-2">
-                        {% trans "Agriculteurs collaborant dans les champs sénégalais" %}
-                    </figcaption>
-                </figure>
-            </div>
-        </div>
-    </div>
-
-    <!-- Stats Section -->
-    <div class="container">
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-number">{{ total_farmers|default:"5000+" }}</div>
-                <div class="stat-label">{% trans "Agriculteurs Connectés" %}</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">{{ total_regions|default:"14" }}</div>
-                <div class="stat-label">{% trans "Régions Couvertes" %}</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">{{ total_workshops|default:"100+" }}</div>
-                <div class="stat-label">{% trans "Ateliers Organisés" %}</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">{{ total_crops|default:"50+" }}</div>
-                <div class="stat-label">{% trans "Cultures Supportées" %}</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Community Section -->
-    <section id="community" class="section">
-        <div class="container">
-            <h2 class="section-title">{% trans "Notre Communauté Unie" %}</h2>
-            <p style="text-align: center; max-width: 800px; margin: 0 auto 3rem; color: var(--text-dark);">
-                {% trans "FarmConnect Senegal est plus qu'une plateforme : c'est une communauté vibrante où les agriculteurs partagent leurs expériences, apprennent des experts et collaborent pour une agriculture sénégalaise plus forte." %}
-            </p>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <i class="fas fa-handshake feature-icon"></i>
-                    <h3>{% trans "Réseau de Contacts" %}</h3>
-                    <p>{% trans "Connectez-vous avec des milliers d'agriculteurs à travers le Sénégal. Échangez des idées, formez des partenariats stratégiques et développez un réseau professionnel solide pour faire prospérer votre exploitation." %}</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-book feature-icon"></i>
-                    <h3>{% trans "Techniques de Conservation" %}</h3>
-                    <p>{% trans "Découvrez des guides pratiques, des vidéos éducatives et des innovations pour optimiser le stockage et la conservation des récoltes, réduisant ainsi les pertes post-récolte et augmentant vos bénéfices." %}</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-chart-line feature-icon"></i>
-                    <h3>{% trans "Prix du Marché en Temps Réel" %}</h3>
-                    <p>{% trans "Restez informé des prix actuels des produits agricoles sur les marchés sénégalais. FarmConnect vous aide à identifier les meilleures opportunités de vente pour maximiser vos revenus." %}</p>
-                </div>
-            </div>
-            <img src="{% static 'img/community.jpg' %}"
-                 alt="{% trans 'Interface de la plateforme FarmConnect' %}"
-                 style="width: 100%; max-width: 600px; height: auto; border: 4px solid #4CAF50; border-radius: 20px; box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); display: block; margin: 20px auto;">
-        </div>
-    </section>
-
-    <!-- Services Section -->
-    <section id="services" class="section">
-        <div class="container">
-            <h2 class="section-title">{% trans "Services Communautaires" %}</h2>
-            <p style="text-align: center; max-width: 800px; margin: 0 auto 3rem; color: var(--text-dark);">
-                {% trans "Nos services sont conçus pour répondre aux besoins des agriculteurs sénégalais, en leur offrant des outils et des ressources pour travailler plus efficacement et rester connectés." %}
-            </p>
-            <div class="community-grid">
-                <div class="community-card">
-                    <i class="fas fa-comments icon"></i>
-                    <h3>{% trans "Forum d'Échange" %}</h3>
-                    <p>{% trans "Participez à des discussions dynamiques, posez vos questions et partagez vos réussites avec d'autres agriculteurs. Bénéficiez des conseils d'experts pour résoudre vos défis agricoles." %}</p>
-                </div>
-                <div class="community-card">
-                    <i class="fas fa-mobile-alt icon"></i>
-                    <h3>{% trans "Application Mobile" %}</h3>
-                    <p>{% trans "Accédez à FarmConnect où que vous soyez : consultez les prix, connectez-vous à la communauté, recevez des alertes météo et explorez nos ressources directement depuis votre smartphone." %}</p>
-                </div>
-                <div class="community-card">
-                    <i class="fas fa-bell icon"></i>
-                    <h3>{% trans "Alertes Personnalisées" %}</h3>
-                    <p>{% trans "Recevez des notifications sur les variations de prix, les opportunités de marché, les alertes météo et les formations locales pour rester toujours un pas en avant." %}</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Workshops Section -->
-    <section id="workshops" class="section">
-        <div class="container">
-            <h2 class="section-title">{% trans "Ateliers et Formations" %}</h2>
-            <img src="{% static 'img/workshop.jpg' %}"
-                 alt="{% trans 'Agriculteurs participant à un atelier de formation au Sénégal' %}"
-                 class="section-img">
-            <p style="text-align: center; max-width: 800px; margin: 0 auto 3rem; color: var(--text-dark);">
-                {% trans "Participez à nos ateliers pratiques pour acquérir des compétences modernes et durables. Nos formations sont conçues pour aider les agriculteurs sénégalais à innover et à prospérer." %}
-            </p>
-            <div class="workshop-highlights">
-                <div class="workshop-card">
-                    <i class="fas fa-seedling icon"></i>
-                    <h3>{% trans "Agriculture Durable" %}</h3>
-                    <p>{% trans "Apprenez des techniques écologiques pour augmenter vos rendements tout en préservant les sols fertiles du Sénégal, pour une agriculture durable à long terme." %}</p>
-                </div>
-                <div class="workshop-card">
-                    <i class="fas fa-laptop icon"></i>
-                    <h3>{% trans "Technologies Modernes" %}</h3>
-                    <p>{% trans "Maîtrisez les outils numériques et les techniques d'agriculture de précision pour optimiser vos ressources et moderniser votre exploitation agricole." %}</p>
-                </div>
-                <div class="workshop-card">
-                    <i class="fas fa-briefcase icon"></i>
-                    <h3>{% trans "Gestion d'Exploitation" %}</h3>
-                    <p>{% trans "Développez vos compétences en gestion financière, marketing et planification pour maximiser vos profits et assurer la pérennité de votre ferme." %}</p>
-                </div>
-            </div>
-
-            <!-- Calendar Section -->
-            <div class="workshops-calendar">
-                <div class="calendar-container">
-                    <div class="calendar-header">
-                        <h3><i class="fas fa-seedling"></i> {% trans "Calendrier des Ateliers" %}</h3>
-                    </div>
-                    <div class="calendar-nav">
-                        <button class="nav-btn" onclick="previousMonth()" id="prevBtn"
-                            aria-label="{% trans 'Mois précédent' %}">
-                            <i class="fas fa-chevron-left"></i>
-                        </button>
-                        <div class="month-display" id="monthDisplay"></div>
-                        <button class="nav-btn" onclick="nextMonth()" id="nextBtn"
-                            aria-label="{% trans 'Mois suivant' %}">
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                    </div>
-                    <div class="calendar-grid" id="calendarGrid">
-                        <!-- Calendar will be generated here -->
-                    </div>
-                    <div class="upcoming-section">
-                        <div class="upcoming-header">
-                            <div class="upcoming-title">
-                                <i class="fas fa-clock"></i>{% trans "Prochains Ateliers" %}
-                            </div>
-                            <button class="toggle-btn" onclick="toggleWorkshops()" id="toggleBtn"
-                                aria-label="{% trans 'Afficher/Masquer les ateliers' %}">
-                                <i class="fas fa-chevron-down"></i>
-                            </button>
-                        </div>
-                        <div class="workshops-list collapsed" id="workshopsList">
-                            <!-- Workshop list will be generated here -->
-                        </div>
+            {% for price in latest_prices %}
+            <div class="col-md-4 col-sm-6 mb-3">
+                <div class="card h-100" style="border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                    <div class="card-body">
+                        <h5 class="card-title" style="color: var(--primary-green);">{{ price.crop_name }}</h5>
+                        <p class="card-text">
+                            <strong style="font-size: 1.5rem; color: var(--primary-green);">{{ price.price_per_kg }} FCFA</strong>/kg
+                            <br>
+                            <small class="text-muted">{{ price.get_region_display }}</small>
+                        </p>
+                        <span class="badge {% if price.trend == 'up' %}bg-success{% elif price.trend == 'down' %}bg-danger{% else %}bg-secondary{% endif %}">
+                            {% if price.trend == 'up' %}
+                            <i class="fas fa-arrow-up"></i> +{{ price.percentage_change }}%
+                            {% elif price.trend == 'down' %}
+                            <i class="fas fa-arrow-down"></i> {{ price.percentage_change }}%
+                            {% else %}
+                            <i class="fas fa-minus"></i> Stable
+                            {% endif %}
+                        </span>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- Call to Action Section -->
-    <section class="cta-section">
-        <div class="container">
-            <h2>{% trans "Prêt à Transformer Votre Agriculture ?" %}</h2>
-            <p>{% trans "Rejoignez des milliers d'agriculteurs sénégalais qui utilisent FarmConnect pour améliorer leurs rendements, accéder à des marchés rentables et apprendre des techniques modernes. Inscrivez-vous dès aujourd'hui et faites partie de la révolution agricole au Sénégal." %}</p>
-
-            {% if testimonials %}
-            <div class="testimonials-grid"
-                style="margin: 2rem 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
-                {% for testimonial in testimonials %}
-                <div class="testimonial-card"
-                    style="background: rgba(255,255,255,0.9); padding: 1.5rem; border-radius: 15px;">
-                    <p style="font-style: italic; margin-bottom: 1rem;">"{{ testimonial.content }}"</p>
-                    <strong>- {{ testimonial.author_name }}, {{ testimonial.location }}</strong>
-                </div>
-                {% endfor %}
-            </div>
-            {% else %}
-            <div class="image-placeholder"
-                style="height: 200px; background: rgba(255,255,255,0.9); color: var(--primary-green);">
-                <div>
-                    📸 {% trans "Image: Témoignages d'agriculteurs sénégalais" %}<br>
-                    {% trans "Photos et citations d'agriculteurs ayant réussi avec FarmConnect" %}
-                </div>
-            </div>
-            {% endif %}
-
-            <div class="cta-buttons">
-                {% if not user.is_authenticated %}
-                <a href="{% url 'farmconnect_app:register' %}" class="btn-primary">{% trans "S'inscrire Maintenant" %}</a>
-                <a href="{% url 'farmconnect_app:about' %}" class="btn-secondary">{% trans "Découvrir les Témoignages" %}</a>
-                {% else %}
-                <a href="{% url 'farmconnect_app:dashboard' %}" class="btn-primary">{% trans "Mon Tableau de Bord" %}</a>
-                <a href="{% url 'farmconnect_app:profile' %}" class="btn-secondary">{% trans "Mon Profil" %}</a>
-                {% endif %}
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>FarmConnect Senegal</h3>
-                    <p>{% trans "FarmConnect Senegal est dédié à l'autonomisation des agriculteurs sénégalais grâce à une plateforme communautaire qui favorise l'échange, l'apprentissage et l'innovation pour une agriculture durable et prospère." %}</p>
-                    <div style="margin-top: 1rem;">
-                        <strong>{{ total_farmers|default:"5000+" }} {% trans "agriculteurs connectés" %}</strong><br>
-                        <strong>{{ total_workshops|default:"100+" }} {% trans "ateliers organisés" %}</strong><br>
-                        <strong>{% trans "Présent dans tout le Sénégal" %}</strong>
-                    </div>
-                </div>
-                <div class="footer-section">
-                    <h3>{% trans "Services" %}</h3>
-                    <a href="#community">{% trans "Réseau d'Agriculteurs" %}</a>
-                    <a href="#services">{% trans "Conservation des Récoltes" %}</a>
-                    <a href="#services">{% trans "Prix du Marché" %}</a>
-                    <a href="#services">{% trans "Forum d'Échange" %}</a>
-                    <a href="#services">{% trans "Application Mobile" %}</a>
-                </div>
-                <div class="footer-section">
-                    <h3>{% trans "Formations" %}</h3>
-                    <a href="#workshops">{% trans "Agriculture Durable" %}</a>
-                    <a href="#workshops">{% trans "Technologies Modernes" %}</a>
-                    <a href="#workshops">{% trans "Gestion d'Exploitation" %}</a>
-                    <a href="#workshops">{% trans "Calendrier des Formations" %}</a>
-                </div>
-                <div class="footer-section">
-                    <h3>{% trans "Contact" %}</h3>
-                    <p>Email: <a href="mailto:info@farmconnect.sn">info@farmconnect.sn</a></p>
-                    <p>{% trans "Téléphone" %}: <a href="tel:+221771234567">+221 77 123 4567</a></p>
-                    <p>Support: <a href="mailto:support@farmconnect.sn">support@farmconnect.sn</a></p>
-                    <p>{% trans "Adresse" %}: Dakar, Sénégal</p>
-                    {% if 'farmconnect_app:investors' %}
-                    <a href="{% url 'farmconnect_app:investors' %}"
-                        style="color: var(--accent-yellow); font-weight: bold; margin-top: 1rem;">→ {% trans "Page Investisseurs" %}</a>
-                    {% endif %}
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>© 2025 FarmConnect Senegal. {% trans "Tous droits réservés" %}.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Workshop data - can be dynamically loaded from Django context
-        const workshops = [
-            {% if upcoming_workshops %}
-            {% for workshop in upcoming_workshops %}
-            {
-                date: new Date('{{ workshop.date|date:"Y-m-d" }}'),
-                title: "{{ workshop.title|escapejs }}",
-                location: "{{ workshop.location|escapejs }}"
-            } {% if not forloop.last %}, {% endif %}
             {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Upcoming Events Section -->
+{% if upcoming_events %}
+<section class="section">
+    <div class="container">
+        <h2 class="section-title">{% trans "Événements à Venir" %}</h2>
+        <p style="text-align: center; max-width: 800px; margin: 0 auto 2rem; color: var(--text-dark);">
+            {% trans "Participez aux ateliers, formations et rencontres organisés dans votre région." %}
+        </p>
+        <div class="row">
+            {% for event in upcoming_events %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100" style="border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); overflow: hidden;">
+                    <div class="card-header" style="background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%); color: white;">
+                        <h5 class="mb-0">{{ event.title }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">{{ event.description|truncatewords:20 }}</p>
+                        <ul class="list-unstyled small">
+                            <li><i class="fas fa-calendar text-primary"></i> {{ event.date|date:"d M Y" }}</li>
+                            <li><i class="fas fa-clock text-info"></i> {{ event.start_time|time:"H:i" }}</li>
+                            <li><i class="fas fa-map-marker-alt text-danger"></i> {{ event.location }}</li>
+                            <li><i class="fas fa-globe text-success"></i> {{ event.get_region_display }}</li>
+                        </ul>
+                        <span class="badge" style="background-color: {{ event.get_event_type_color }}; color: white;">
+                            {{ event.get_event_type_display }}
+                        </span>
+                        {% if event.is_free %}
+                        <span class="badge bg-info">{% trans "Gratuit" %}</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Community Section -->
+<section id="community" class="section">
+    <div class="container">
+        <h2 class="section-title fade-down">{% trans "Notre Communauté Unie" %}</h2>
+        <p class="fade-up" style="text-align: center; max-width: 800px; margin: 0 auto 3rem; color: var(--text-dark);">
+            {% trans "FarmConnect Senegal est plus qu'une plateforme : c'est une communauté vibrante où les agriculteurs partagent leurs expériences, apprennent des experts et collaborent pour une agriculture sénégalaise plus forte." %}
+        </p>
+        <div class="features-grid stagger-children">
+            <div class="feature-card fade-up">
+                <i class="fas fa-handshake feature-icon"></i>
+                <h3>{% trans "Réseau de Contacts" %}</h3>
+                <p>{% trans "Connectez-vous avec des milliers d'agriculteurs à travers le Sénégal. Échangez des idées, formez des partenariats stratégiques et développez un réseau professionnel solide pour faire prospérer votre exploitation." %}</p>
+            </div>
+            <div class="feature-card fade-up">
+                <i class="fas fa-book feature-icon"></i>
+                <h3>{% trans "Techniques de Conservation" %}</h3>
+                <p>{% trans "Découvrez des guides pratiques, des vidéos éducatives et des innovations pour optimiser le stockage et la conservation des récoltes, réduisant ainsi les pertes post-récolte et augmentant vos bénéfices." %}</p>
+            </div>
+            <div class="feature-card fade-up">
+                <i class="fas fa-chart-line feature-icon"></i>
+                <h3>{% trans "Prix du Marché en Temps Réel" %}</h3>
+                <p>{% trans "Restez informé des prix actuels des produits agricoles sur les marchés sénégalais. FarmConnect vous aide à identifier les meilleures opportunités de vente pour maximiser vos revenus." %}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section id="services" class="section">
+    <div class="container">
+        <h2 class="section-title fade-down">{% trans "Services Communautaires" %}</h2>
+        <p class="fade-up" style="text-align: center; max-width: 800px; margin: 0 auto 3rem; color: var(--text-dark);">
+            {% trans "Nos services sont conçus pour répondre aux besoins des agriculteurs sénégalais, en leur offrant des outils et des ressources pour travailler plus efficacement et rester connectés." %}
+        </p>
+        <div class="community-grid stagger-children">
+            <div class="community-card fade-left">
+                <i class="fas fa-comments icon"></i>
+                <h3>{% trans "Forum d'Échange" %}</h3>
+                <p>{% trans "Participez à des discussions dynamiques, posez vos questions et partagez vos réussites avec d'autres agriculteurs. Bénéficiez des conseils d'experts pour résoudre vos défis agricoles." %}</p>
+            </div>
+            <div class="community-card fade-up">
+                <i class="fas fa-mobile-alt icon"></i>
+                <h3>{% trans "Application Mobile" %}</h3>
+                <p>{% trans "Accédez à FarmConnect où que vous soyez : consultez les prix, connectez-vous à la communauté, recevez des alertes météo et explorez nos ressources directement depuis votre smartphone." %}</p>
+            </div>
+            <div class="community-card fade-right">
+                <i class="fas fa-bell icon"></i>
+                <h3>{% trans "Alertes Personnalisées" %}</h3>
+                <p>{% trans "Recevez des notifications sur les variations de prix, les opportunités de marché, les alertes météo et les formations locales pour rester toujours un pas en avant." %}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Workshops Section -->
+<section id="workshops" class="section">
+    <div class="container">
+        <h2 class="section-title fade-down">{% trans "Ateliers et Formations" %}</h2>
+        <img src="{% static 'img/workshop.jpg' %}"
+             alt="{% trans 'Agriculteurs participant à un atelier de formation au Sénégal' %}"
+             class="img-fluid rounded-3 my-4 scale-up"
+             style="max-width: 800px; height: auto; display: block; margin: 2rem auto;">
+        <p class="fade-up" style="text-align: center; max-width: 800px; margin: 0 auto 3rem; color: var(--text-dark);">
+            {% trans "Participez à nos ateliers pratiques pour acquérir des compétences modernes et durables. Nos formations sont conçues pour aider les agriculteurs sénégalais à innover et à prospérer." %}
+        </p>
+        <div class="workshop-highlights stagger-children">
+            <div class="workshop-card fade-up">
+                <i class="fas fa-seedling icon"></i>
+                <h3>{% trans "Agriculture Durable" %}</h3>
+                <p>{% trans "Apprenez des techniques écologiques pour augmenter vos rendements tout en préservant les sols fertiles du Sénégal, pour une agriculture durable à long terme." %}</p>
+            </div>
+            <div class="workshop-card fade-up">
+                <i class="fas fa-laptop icon"></i>
+                <h3>{% trans "Technologies Modernes" %}</h3>
+                <p>{% trans "Maîtrisez les outils numériques et les techniques d'agriculture de précision pour optimiser vos ressources et moderniser votre exploitation agricole." %}</p>
+            </div>
+            <div class="workshop-card fade-up">
+                <i class="fas fa-briefcase icon"></i>
+                <h3>{% trans "Gestion d'Exploitation" %}</h3>
+                <p>{% trans "Développez vos compétences en gestion financière, marketing et planification pour maximiser vos profits et assurer la pérennité de votre ferme." %}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="cta-section">
+    <div class="container">
+        <h2 class="fade-up">{% trans "Prêt à Transformer Votre Agriculture ?" %}</h2>
+        <p class="fade-up">{% trans "Rejoignez des milliers d'agriculteurs sénégalais qui utilisent FarmConnect pour améliorer leurs rendements, accéder à des marchés rentables et apprendre des techniques modernes. Inscrivez-vous dès aujourd'hui et faites partie de la révolution agricole au Sénégal." %}</p>
+
+        <div class="cta-buttons">
+            {% if not user.is_authenticated %}
+            <a href="{% url 'farmconnect_app:register' %}" class="btn-primary scale-up">{% trans "S'inscrire Maintenant" %}</a>
+            <a href="{% url 'farmconnect_app:about' %}" class="btn-secondary scale-up">{% trans "Découvrir les Témoignages" %}</a>
             {% else %}
-            {
-                date: new Date(2025, 6, 15),
-                title: "{% trans 'Agriculture Biologique'|escapejs %}",
-                location: "Dakar"
-            },
-            {
-                date: new Date(2025, 6, 22),
-                title: "{% trans 'Techniques d\'Irrigation'|escapejs %}",
-                location: "Thiès"
-            },
-            {
-                date: new Date(2025, 7, 5),
-                title: "{% trans 'Conservation des Sols'|escapejs %}",
-                location: "Kaolack"
-            },
-            {
-                date: new Date(2025, 7, 12),
-                title: "{% trans 'Marketing Agricole'|escapejs %}",
-                location: "Saint-Louis"
-            },
-            {
-                date: new Date(2025, 7, 25),
-                title: "{% trans 'Gestion de l\'Eau'|escapejs %}",
-                location: "Tambacounda"
-            }
+
             {% endif %}
-        ];
-
-        let currentDate = new Date();
-        const monthNames = [
-            "{% trans 'Janvier' %}", "{% trans 'Février' %}", "{% trans 'Mars' %}", "{% trans 'Avril' %}", "{% trans 'Mai' %}", "{% trans 'Juin' %}",
-            "{% trans 'Juillet' %}", "{% trans 'Août' %}", "{% trans 'Septembre' %}", "{% trans 'Octobre' %}", "{% trans 'Novembre' %}", "{% trans 'Décembre' %}"
-        ];
-        const dayNames = ["{% trans 'Dim' %}", "{% trans 'Lun' %}", "{% trans 'Mar' %}", "{% trans 'Mer' %}", "{% trans 'Jeu' %}", "{% trans 'Ven' %}", "{% trans 'Sam' %}"];
-
-        function generateCalendar(year, month) {
-            const firstDay = new Date(year, month, 1);
-            const lastDay = new Date(year, month + 1, 0);
-            const startDate = new Date(firstDay);
-            startDate.setDate(startDate.getDate() - firstDay.getDay());
-
-            const calendarGrid = document.getElementById('calendarGrid');
-            calendarGrid.innerHTML = '';
-
-            // Add day headers
-            dayNames.forEach(day => {
-                const dayHeader = document.createElement('div');
-                dayHeader.className = 'day-header';
-                dayHeader.textContent = day;
-                calendarGrid.appendChild(dayHeader);
-            });
-
-            // Generate calendar days
-            const endDate = new Date(startDate);
-            endDate.setDate(endDate.getDate() + 41);
-
-            for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
-                const dayElement = document.createElement('div');
-                dayElement.className = 'calendar-day';
-
-                const isCurrentMonth = date.getMonth() === month;
-                const isToday = date.toDateString() === new Date().toDateString();
-
-                if (!isCurrentMonth) {
-                    dayElement.classList.add('other-month');
-                }
-                if (isToday) {
-                    dayElement.classList.add('today');
-                }
-
-                const dayNumber = document.createElement('div');
-                dayNumber.className = 'day-number';
-                dayNumber.textContent = date.getDate();
-                dayElement.appendChild(dayNumber);
-
-                // Check for workshops on this date
-                const dayWorkshops = workshops.filter(workshop =>
-                    workshop.date.toDateString() === date.toDateString()
-                );
-
-                if (dayWorkshops.length > 0) {
-                    dayElement.classList.add('has-workshop');
-
-                    // Add tooltip
-                    const tooltip = document.createElement('div');
-                    tooltip.className = 'tooltip';
-                    tooltip.innerHTML = dayWorkshops.map(w => `${w.title}<br><small>${w.location}</small>`).join('<br><br>');
-                    dayElement.appendChild(tooltip);
-                }
-
-                calendarGrid.appendChild(dayElement);
-            }
-
-            // Update month display
-            document.getElementById('monthDisplay').textContent =
-                `${monthNames[month]} ${year}`;
-        }
-
-        function generateWorkshopsList() {
-            const workshopsList = document.getElementById('workshopsList');
-            const now = new Date();
-            const upcomingWorkshops = workshops
-                .filter(workshop => workshop.date >= now)
-                .sort((a, b) => a.date - b.date);
-
-            workshopsList.innerHTML = '';
-
-            if (upcomingWorkshops.length === 0) {
-                workshopsList.innerHTML = '<div style="color: #666; font-size: 14px; text-align: center; padding: 20px; border-radius: 20px; background: rgba(255,255,255,0.5);">{% trans "Aucun atelier prévu" %}</div>';
-                return;
-            }
-
-            upcomingWorkshops.forEach(workshop => {
-                const workshopItem = document.createElement('div');
-                workshopItem.className = 'workshop-item';
-
-                const day = workshop.date.getDate();
-                const month = workshop.date.toLocaleDateString('fr-FR', { month: 'short' });
-
-                workshopItem.innerHTML = `
-                    <div class="workshop-header">
-                        <div class="workshop-date-circle">
-                            <div>${day}</div>
-                            <div style="font-size: 9px;">${month}</div>
-                        </div>
-                        <div class="workshop-name">${workshop.title}</div>
-                    </div>
-                    <div class="workshop-location">
-                        <i class="fas fa-map-marker-alt"></i>${workshop.location}
-                    </div>
-                `;
-                workshopsList.appendChild(workshopItem);
-            });
-        }
-
-        function toggleWorkshops() {
-            const workshopsList = document.getElementById('workshopsList');
-            const toggleBtn = document.getElementById('toggleBtn');
-            const icon = toggleBtn.querySelector('i');
-
-            if (workshopsList.classList.contains('collapsed')) {
-                workshopsList.classList.remove('collapsed');
-                workshopsList.classList.add('expanded');
-                icon.className = 'fas fa-chevron-up';
-            } else {
-                workshopsList.classList.remove('expanded');
-                workshopsList.classList.add('collapsed');
-                icon.className = 'fas fa-chevron-down';
-            }
-        }
-
-        function previousMonth() {
-            currentDate.setMonth(currentDate.getMonth() - 1);
-            generateCalendar(currentDate.getFullYear(), currentDate.getMonth());
-        }
-
-        function nextMonth() {
-            currentDate.setMonth(currentDate.getMonth() + 1);
-            generateCalendar(currentDate.getFullYear(), currentDate.getMonth());
-        }
-
-        // Initialize calendar and workshops
-        generateCalendar(currentDate.getFullYear(), currentDate.getMonth());
-        generateWorkshopsList();
-
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-
-        // Sticky nav effect
-        window.addEventListener('scroll', function () {
-            const nav = document.querySelector('nav');
-            if (window.scrollY > 100) {
-                nav.style.background = 'linear-gradient(135deg, rgba(45,80,22,0.95) 0%, rgba(74,124,89,0.95) 100%)';
-                nav.style.backdropFilter = 'blur(10px)';
-            } else {
-                nav.style.background = 'linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%)';
-                nav.style.backdropFilter = 'none';
-            }
-        });
-
-        // Intersection Observer for animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.feature-card, .community-card, .workshop-card, .stat-card').forEach(element => {
-            element.style.opacity = '0';
-            element.style.transform = 'translateY(30px)';
-            element.style.transition = 'all 0.6s ease';
-            observer.observe(element);
-        });
-
-        // Ripple effect for buttons
-        document.querySelectorAll('.btn-primary, .btn-secondary, .cta-button, .nav-links a, .nav-btn').forEach(btn => {
-            btn.addEventListener('click', function (e) {
-                const ripple = document.createElement('div');
-                ripple.style.position = 'absolute';
-                ripple.style.borderRadius = '50%';
-                ripple.style.background = 'rgba(255,255,255,0.3)';
-                ripple.style.transform = 'scale(0)';
-                ripple.style.animation = 'ripple 0.6s linear';
-                ripple.style.left = `${e.clientX - this.getBoundingClientRect().left}px`;
-                ripple.style.top = `${e.clientY - this.getBoundingClientRect().top}px`;
-                ripple.style.width = ripple.style.height = '20px';
-                this.appendChild(ripple);
-                setTimeout(() => {
-                    ripple.remove();
-                }, 600);
-            });
-        });
-    </script>
-</body>
-</html>
+        </div>
+    </div>
+</section>
 {% endblock %}

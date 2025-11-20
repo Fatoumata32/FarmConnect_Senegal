@@ -2,894 +2,705 @@
 {% load static %}
 {% load i18n %}
 
-{% block title %}{% trans "Profil" %} - FarmConnect{% endblock %}
+{% block title %}{% trans "Investisseurs" %} - FarmConnect Senegal{% endblock %}
 
 {% block extra_css %}
+<style>
+    /* Hero Section */
+    .hero {
+        background: linear-gradient(to top, rgba(45, 80, 22, 0.9) 0%, rgba(74, 124, 89, 0.5) 50%, rgba(74, 124, 89, 0.3) 100%),
+                    url('{% static "img/image.png" %}');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        color: var(--pure-white);
+        padding: 6rem 0;
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+        margin: 0;
+    }
 
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% trans "Opportunité d'Investissement" %} - FarmConnect Senegal</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    .hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, transparent 30%, rgba(244,208,63,0.1) 50%, transparent 70%);
+        animation: shimmer 3s infinite;
+    }
 
-        :root {
-            --primary-green: #2d5016;
-            --light-green: #4a7c59;
-            --accent-yellow: #f4d03f;
-            --earth-brown: #8b4513;
-            --sky-blue: #87ceeb;
-            --text-dark: #2c3e50;
-            --pure-white: #ffffff;
-            --yellow-gradient: linear-gradient(135deg, var(--accent-yellow) 0%, #f7dc6f 100%);
-        }
+    @keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--text-dark);
-            background: linear-gradient(135deg, var(--pure-white) 0%, #f0f8f0 100%);
-        }
+    .hero-content {
+        position: relative;
+        z-index: 1;
+    }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+    .hero h1 {
+        font-size: 4rem;
+        margin-bottom: 2rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        animation: fadeInUp 1s ease;
+    }
 
-        /* Navigation */
-        nav {
-            background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%);
-            padding: 1rem 0;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
+    .hero-subtitle {
+        font-size: 1.3rem;
+        margin-bottom: 3rem;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    }
 
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(50px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 
-        .logo {
-            color: var(--pure-white);
-            font-size: 1.8rem;
-            font-weight: bold;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+    /* Stats Section */
+    .stats-hero {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 2rem;
+        margin: 4rem 0;
+    }
 
-        .nav-links {
-            display: flex;
-            gap: 1.5rem;
-            list-style: none;
-        }
+    .stat-card {
+        background: rgba(255, 255, 255, 0.714);
+        padding: 2rem;
+        border-radius: 20px;
+        text-align: center;
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(244,208,63,0.3);
+        transition: all 0.3s ease;
+    }
 
-        .nav-links a {
-            color: rgba(255,255,255,0.9);
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
+    .stat-card:hover {
+        transform: translateY(-10px);
+        background: rgba(255, 255, 255, 0.25);
+    }
 
-        .nav-links a:hover, .nav-links a.active {
-            color: var(--accent-yellow);
-            transform: translateY(-2px);
-        }
+    .stat-number {
+        font-size: 3rem;
+        font-weight: bold;
+        color: var(--accent-yellow);
+        display: block;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
 
-        .community-link {
-            background: var(--yellow-gradient);
-            color: var(--primary-green) !important;
-            font-weight: bold;
-            animation: pulse 2s infinite;
-        }
+    .stat-label {
+        font-size: 1.1rem;
+        margin-top: 0.5rem;
+        color: #4a7c59;
+    }
 
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(244,208,63,0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(244,208,63,0); }
-            100% { box-shadow: 0 0 0 0 rgba(244,208,63,0); }
-        }
+    /* Main Sections */
+    .section {
+        padding: 5rem 0;
+        margin: 0;
+    }
 
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, rgba(45,80,22,0.8) 0%, rgba(74,124,89,0.8) 100%), url('{% static "img/hero_background.jpg" %}');
-            background-size: cover;
-            background-position: center;
-            color: var(--pure-white);
-            padding: 6rem 0;
-            position: relative;
-            overflow: hidden;
-            text-align: center;
-        }
+    .section:nth-child(even) {
+        background: var(--pure-white);
+    }
 
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, transparent 30%, rgba(244,208,63,0.1) 50%, transparent 70%);
-            animation: shimmer 3s infinite;
-        }
+    .section-title {
+        font-size: 3rem;
+        color: var(--primary-green);
+        margin-bottom: 3rem;
+        text-align: center;
+        position: relative;
+    }
 
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
+    .section-title::after {
+        content: '';
+        display: block;
+        width: 100px;
+        height: 4px;
+        background: linear-gradient(135deg, var(--accent-yellow) 0%, #f7dc6f 100%);
+        margin: 1.5rem auto;
+        border-radius: 2px;
+    }
 
-        .hero-content {
-            position: relative;
-            z-index: 1;
-        }
+    /* Investment Opportunity */
+    .opportunity-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: center;
+        margin: 4rem 0;
+    }
 
+    .opportunity-content h3 {
+        color: var(--primary-green);
+        font-size: 2.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .opportunity-content p {
+        font-size: 1.2rem;
+        line-height: 1.8;
+        color: var(--text-dark);
+        margin-bottom: 1.5rem;
+    }
+
+    .highlight-box {
+        background: linear-gradient(135deg, var(--accent-yellow) 0%, #f7dc6f 100%);
+        color: var(--primary-green);
+        padding: 2rem;
+        border-radius: 15px;
+        margin: 2rem 0;
+        text-align: center;
+        box-shadow: 0 10px 25px rgba(244,208,63,0.3);
+    }
+
+    .highlight-box h4 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    /* Market Analysis */
+    .market-insights {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 3rem;
+        margin: 4rem 0;
+    }
+
+    .insight-card {
+        background: var(--pure-white);
+        padding: 3rem;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        border: none;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .insight-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(135deg, var(--accent-yellow) 0%, #f7dc6f 100%);
+    }
+
+    .insight-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+
+    .insight-icon {
+        font-size: 3rem;
+        color: var(--light-green);
+        margin-bottom: 1.5rem;
+    }
+
+    .insight-card h4 {
+        color: var(--primary-green);
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+    }
+
+    .insight-card p {
+        color: var(--text-dark);
+        line-height: 1.7;
+        font-size: 1.1rem;
+    }
+
+    /* Financial Projections */
+    .projections-section {
+        background: linear-gradient(135deg, var(--accent-yellow) 0%, #f7dc6f 100%);
+        color: var(--primary-green);
+        padding: 5rem 0;
+        margin: 0;
+    }
+
+    .projections-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin: 3rem 0;
+    }
+
+    .projection-card {
+        background: var(--pure-white);
+        padding: 2.5rem;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+
+    .projection-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    }
+
+    .projection-year {
+        font-size: 1.3rem;
+        color: var(--accent-yellow);
+        font-weight: bold;
+        margin-bottom: 1rem;
+    }
+
+    .projection-value {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: var(--primary-green);
+        margin-bottom: 0.5rem;
+    }
+
+    .projection-metric {
+        font-size: 1rem;
+        color: var(--text-dark);
+    }
+
+    /* Contact Section */
+    .contact-section {
+        background: linear-gradient(135deg, var(--accent-yellow) 0%, #f7dc6f 100%);
+        color: var(--primary-green);
+        padding: 5rem 0 10rem 0;
+        margin: 0;
+    }
+
+    .contact-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: start;
+    }
+
+    .contact-info {
+        background: var(--pure-white);
+        padding: 3rem;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .contact-info h3 {
+        font-size: 2.2rem;
+        margin-bottom: 2rem;
+        color: var(--primary-green);
+    }
+
+    .contact-item {
+        margin: 1.5rem 0;
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 10px;
+        border-left: 5px solid var(--accent-yellow);
+    }
+
+    .contact-item strong {
+        color: var(--primary-green);
+        display: block;
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+    }
+
+    .contact-item span {
+        color: var(--text-dark);
+        font-size: 1rem;
+    }
+
+    .team-section {
+        text-align: center;
+    }
+
+    .team-section h3 {
+        font-size: 2.5rem;
+        margin-bottom: 2rem;
+        color: var(--primary-green);
+    }
+
+    .team-member {
+        background: var(--pure-white);
+        padding: 2rem;
+        border-radius: 15px;
+        margin: 2rem 0;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+
+    .team-member:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    }
+
+    .member-name {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: var(--primary-green);
+        margin-bottom: 0.5rem;
+    }
+
+    .member-title {
+        color: var(--light-green);
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+    }
+
+    .member-contact {
+        font-size: 0.95rem;
+        color: var(--text-dark);
+    }
+
+    /* CTA Buttons */
+    .cta-buttons {
+        display: flex;
+        gap: 1.5rem;
+        justify-content: center;
+        margin: 3rem 0 0 0;
+        padding-bottom: 30px;
+        flex-wrap: wrap;
+    }
+
+    .btn-primary, .btn-secondary {
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .btn-primary {
+        background: var(--primary-green);
+        color: var(--pure-white);
+    }
+
+    .btn-secondary {
+        background: transparent;
+        color: var(--primary-green);
+        border: 2px solid var(--primary-green);
+    }
+
+    .btn-primary:hover, .btn-secondary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    .btn-primary:hover {
+        color: var(--pure-white);
+    }
+
+    .btn-secondary:hover {
+        color: var(--primary-green);
+        border-color: var(--accent-yellow);
+    }
+
+    /* Image Containers */
+    .image-container {
+        width: 100%;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+
+    .image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .image-container:hover {
+        transform: scale(1.02);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+
+    /* Remove extra space at bottom */
+    .section:last-of-type {
+        margin-bottom: 0 !important;
+    }
+
+    .contact-section {
+        margin-bottom: 0 !important;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
         .hero h1 {
-            font-size: 4rem;
-            margin-bottom: 2rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            animation: fadeInUp 1s ease;
+            font-size: 2.8rem;
         }
 
         .hero-subtitle {
-            font-size: 1.3rem;
-            margin-bottom: 3rem;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            font-size: 1.1rem;
         }
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
+        .opportunity-grid, .contact-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
         }
 
-        /* Stats Section */
         .stats-hero {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin: 4rem 0;
+            grid-template-columns: 1fr;
         }
 
-        .stat-card {
-            background: rgba(255, 255, 255, 0.714);
-            padding: 2rem;
-            border-radius: 20px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(244,208,63,0.3);
-            transition: all 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-10px);
-            background: rgba(255, 255, 255, 0.25);
-        }
-
-        .stat-number {
-            font-size: 3rem;
-            font-weight: bold;
-            color: var(--accent-yellow);
-            display: block;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .stat-label {
-            font-size: 1.1rem;
-            margin-top: 0.5rem;
-            color: #4a7c59;
-        }
-
-        /* Main Sections */
-        .section {
-            padding: 5rem 0;
-        }
-
-        .section:nth-child(even) {
-            background: var(--pure-white);
-        }
-
-        .section-title {
-            font-size: 3rem;
-            color: var(--primary-green);
-            margin-bottom: 3rem;
-            text-align: center;
-            position: relative;
-        }
-
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 100px;
-            height: 4px;
-            background: var(--yellow-gradient);
-            margin: 1.5rem auto;
-            border-radius: 2px;
-        }
-
-        /* Investment Opportunity */
-        .opportunity-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-            margin: 4rem 0;
-        }
-
-        .opportunity-content h3 {
-            color: var(--primary-green);
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .opportunity-content p {
-            font-size: 1.2rem;
-            line-height: 1.8;
-            color: var(--text-dark);
-            margin-bottom: 1.5rem;
-        }
-
-        .highlight-box {
-            background: var(--yellow-gradient);
-            color: var(--primary-green);
-            padding: 2rem;
-            border-radius: 15px;
-            margin: 2rem 0;
-            text-align: center;
-            box-shadow: 0 10px 25px rgba(244,208,63,0.3);
-        }
-
-        .highlight-box h4 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        /* Market Analysis */
-        .market-insights {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 3rem;
-            margin: 4rem 0;
-        }
-
-        .insight-card {
-            background: var(--pure-white);
-            padding: 3rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            border: none;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .insight-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--yellow-gradient);
-        }
-
-        .insight-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-        }
-
-        .insight-icon {
-            font-size: 3rem;
-            color: var(--light-green);
-            margin-bottom: 1.5rem;
-        }
-
-        .insight-card h4 {
-            color: var(--primary-green);
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-        }
-
-        .insight-card p {
-            color: var(--text-dark);
-            line-height: 1.7;
-            font-size: 1.1rem;
-        }
-
-        /* Financial Projections */
-        .projections-section {
-            background: var(--yellow-gradient);
-            color: var(--primary-green);
-            padding: 5rem 0;
-        }
-
-        .projections-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
-
-        .projection-card {
-            background: var(--pure-white);
-            padding: 2.5rem;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-        }
-
-        .projection-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-        }
-
-        .projection-year {
-            font-size: 1.3rem;
-            color: var(--accent-yellow);
-            font-weight: bold;
-            margin-bottom: 1rem;
-        }
-
-        .projection-value {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--primary-green);
-            margin-bottom: 0.5rem;
-        }
-
-        .projection-metric {
-            font-size: 1rem;
-            color: var(--text-dark);
-        }
-
-        /* Contact Section */
-        .contact-section {
-            background: var(--yellow-gradient);
-            color: var(--primary-green);
-            padding: 5rem 0;
-        }
-
-        .contact-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: start;
-        }
-
-        .contact-info {
-            background: var(--pure-white);
-            padding: 3rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        .contact-info h3 {
-            font-size: 2.2rem;
-            margin-bottom: 2rem;
-            color: var(--primary-green);
-        }
-
-        .contact-item {
-            margin: 1.5rem 0;
-            padding: 1rem;
-            background: #f8f9fa;
-            border-radius: 10px;
-            border-left: 5px solid var(--accent-yellow);
-        }
-
-        .contact-item strong {
-            color: var(--primary-green);
-            display: block;
-            margin-bottom: 0.5rem;
-            font-size: 1.1rem;
-        }
-
-        .contact-item span {
-            color: var(--text-dark);
-            font-size: 1rem;
-        }
-
-        .team-section {
-            text-align: center;
-        }
-
-        .team-section h3 {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            color: var(--primary-green);
-        }
-
-        .team-member {
-            background: var(--pure-white);
-            padding: 2rem;
-            border-radius: 15px;
-            margin: 2rem 0;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-        }
-
-        .team-member:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-        }
-
-        .member-name {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--primary-green);
-            margin-bottom: 0.5rem;
-        }
-
-        .member-title {
-            color: var(--light-green);
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-        }
-
-        .member-contact {
-            font-size: 0.95rem;
-            color: var(--text-dark);
-        }
-
-        /* CTA Buttons */
         .cta-buttons {
-            display: flex;
-            gap: 1.5rem;
-            justify-content: center;
-            margin: 3rem 0;
-            flex-wrap: wrap;
+            flex-direction: column;
+            align-items: center;
         }
+    }
+</style>
+{% endblock %}
 
-        .btn-primary, .btn-secondary {
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="fade-down"><i class="fas fa-seedling"></i> {% trans "Investissez dans la Révolution Agricole Sénégalaise" %}</h1>
+            <p class="hero-subtitle fade-up">{% trans "FarmConnect Senegal transforme l'agriculture en équipant plus de 5 000 agriculteurs avec des conseils météo, des techniques agricoles avancées et des outils accessibles via des paiements échelonnés. Rejoignez notre mission pour un avenir agricole durable." %}</p>
 
-        .btn-primary {
-            background: var(--primary-green);
-            color: var(--pure-white);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--primary-green);
-            border: 2px solid var(--primary-green);
-        }
-
-        .btn-primary:hover, .btn-secondary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            border-color: var(--accent-yellow);
-        }
-
-        /* Footer */
-        footer {
-            background: var(--primary-green);
-            color: var(--pure-white);
-            padding: 3rem 0;
-            text-align: center;
-        }
-
-        /* Image Containers */
-        .image-container {
-            width: 100%;
-            height: 100%;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-        }
-
-        .image-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .image-container:hover {
-            transform: scale(1.02);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-        }
-
-        /* Ripple Animation for Buttons */
-        .btn-primary, .btn-secondary, .nav-links a {
-            position: relative;
-            overflow: hidden;
-        }
-
-        @keyframes ripple {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.8rem;
-            }
-
-            .hero-subtitle {
-                font-size: 1.1rem;
-            }
-
-            .opportunity-grid, .contact-grid {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-
-            .stats-hero {
-                grid-template-columns: 1fr;
-            }
-
-            .cta-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-        }
-    </style>
-</head>
-<body>
-    <!-- Navigation -->
-    <nav>
-        <div class="container">
-            <div class="nav-container">
-                <a href="{% url 'farmconnect_app:home' %}" class="logo">
-                    <i class="fas fa-seedling"></i> FarmConnect Senegal
-                </a>
-                <ul class="nav-links">
-                    <li><a href="{% url 'farmconnect_app:home' %}">{% trans "Accueil" %}</a></li>
-                    <li><a href="{% url 'farmconnect_app:investors' %}" class="active">{% trans "Investisseurs" %}</a></li>
-                    <li><a href="{% url 'farmconnect_app:community' %}" class="community-link">{% trans "Communauté" %}</a></li>
-                    <li><a href="{% url 'farmconnect_app:tools' %}">{% trans "Outils" %}</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1><i class="fas fa-seedling"></i> {% trans "Investissez dans la Révolution Agricole Sénégalaise" %}</h1>
-                <p class="hero-subtitle">{% trans "FarmConnect Senegal transforme l'agriculture en équipant plus de 5 000 agriculteurs avec des conseils météo, des techniques agricoles avancées et des outils accessibles via des paiements échelonnés. Rejoignez notre mission pour un avenir agricole durable." %}</p>
-                
-                <div class="stats-hero">
-                    <div class="stat-card">
-                        <span class="stat-number">5K+</span>
-                        <div class="stat-label">{% trans "Agriculteurs Connectés" %}</div>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-number">XOF 25M</span>
-                        <div class="stat-label">{% trans "Transactions Facilitées" %}</div>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-number">30%</span>
-                        <div class="stat-label">{% trans "Augmentation des Revenus" %}</div>
-                    </div>
+            <div class="stats-hero stagger-children">
+                <div class="stat-card scale-up">
+                    <span class="stat-number">5K+</span>
+                    <div class="stat-label">{% trans "Agriculteurs Connectés" %}</div>
+                </div>
+                <div class="stat-card scale-up">
+                    <span class="stat-number">XOF 25M</span>
+                    <div class="stat-label">{% trans "Transactions Facilitées" %}</div>
+                </div>
+                <div class="stat-card scale-up">
+                    <span class="stat-number">30%</span>
+                    <div class="stat-label">{% trans "Augmentation des Revenus" %}</div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Investment Opportunity -->
-    <section id="opportunity" class="section">
-        <div class="container">
-            <h2 class="section-title"><i class="fas fa-hand-holding-usd"></i> {% trans "Une Opportunité d'Impact et de Profit" %}</h2>
-            
-            <div class="opportunity-grid">
-                <div class="opportunity-content">
-                    <h3>{% trans "Pourquoi Investir dans FarmConnect Senegal ?" %}</h3>
-                    <p>{% trans "FarmConnect Senegal est une plateforme innovante qui fournit aux agriculteurs sénégalais des conseils personnalisés sur la météo, les cultures et les meilleures pratiques agricoles, tout en leur offrant un accès à des outils via des paiements échelonnés. Notre section 'Outils' permet aux investisseurs et aux fournisseurs de commercialiser leurs produits agricoles directement aux agriculteurs." %}</p>
-                    
-                    <p>{% trans "En soutenant FarmConnect, vous investissez dans la durabilité et la rentabilité de l'agriculture sénégalaise, tout en accédant à un marché en croissance rapide avec un potentiel de rendement élevé." %}</p>
-                    
-                    <div class="highlight-box">
-                        <h4>{% trans "Impact et Rentabilité" %}</h4>
-                        <p><strong>{% trans "250% ROI sur 5 ans" %}</strong> {% trans "avec un marché adressable de" %} <strong>XOF 327.5B</strong> {% trans "au Sénégal" %}</p>
-                    </div>
+<!-- Investment Opportunity -->
+<section id="opportunity" class="section">
+    <div class="container">
+        <h2 class="section-title fade-down"><i class="fas fa-hand-holding-usd"></i> {% trans "Une Opportunité d'Impact et de Profit" %}</h2>
+
+        <div class="opportunity-grid">
+            <div class="opportunity-content fade-left">
+                <h3>{% trans "Pourquoi Investir dans FarmConnect Senegal ?" %}</h3>
+                <p>{% trans "FarmConnect Senegal est une plateforme innovante qui fournit aux agriculteurs sénégalais des conseils personnalisés sur la météo, les cultures et les meilleures pratiques agricoles, tout en leur offrant un accès à des outils via des paiements échelonnés. Notre section 'Outils' permet aux investisseurs et aux fournisseurs de commercialiser leurs produits agricoles directement aux agriculteurs." %}</p>
+
+                <p>{% trans "En soutenant FarmConnect, vous investissez dans la durabilité et la rentabilité de l'agriculture sénégalaise, tout en accédant à un marché en croissance rapide avec un potentiel de rendement élevé." %}</p>
+
+                <div class="highlight-box">
+                    <h4>{% trans "Impact et Rentabilité" %}</h4>
+                    <p><strong>{% trans "250% ROI sur 5 ans" %}</strong> {% trans "avec un marché adressable de" %} <strong>XOF 327.5B</strong> {% trans "au Sénégal" %}</p>
                 </div>
-                
-                <div class="image-container" style="height: 400px;">
-                    <img src="{% static 'img/FarmConnect_square.png' %}" alt="{% trans 'Infographie Impact Investissement' %}">
+            </div>
+
+            <div class="image-container fade-right" style="height: 400px;">
+                <img src="{% static 'img/FarmConnect_square.png' %}" alt="{% trans 'Infographie Impact Investissement' %}">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Market Analysis -->
+<section id="market" class="section">
+    <div class="container">
+        <h2 class="section-title fade-down"><i class="fas fa-chart-line"></i> {% trans "Potentiel du Marché" %}</h2>
+
+        <div class="image-container" style="height: 500px; margin-bottom: 3rem;">
+            <img src="{% static 'img/maee.png' %}" alt="{% trans 'Analyse de Marché' %}">
+        </div>
+
+        <div class="market-insights stagger-children">
+            <div class="insight-card fade-up">
+                <div class="insight-icon"><i class="fas fa-globe-africa"></i></div>
+                <h4>{% trans "Marché AgTech en Expansion" %}</h4>
+                <p>{% trans "Le marché des technologies agricoles au Sénégal croît à 12% par an, avec une projection de XOF 785B d'ici 2027. FarmConnect vise à capturer 10% de ce marché." %}</p>
+            </div>
+
+            <div class="insight-card fade-up">
+                <div class="insight-icon"><i class="fas fa-users"></i></div>
+                <h4>{% trans "2M d'Agriculteurs à Atteindre" %}</h4>
+                <p>{% trans "Avec 70% de la population sénégalaise dépendant de l'agriculture, FarmConnect cible un marché vaste et mal desservi." %}</p>
+            </div>
+
+            <div class="insight-card fade-up">
+                <div class="insight-icon"><i class="fas fa-mobile-alt"></i></div>
+                <h4>{% trans "Solution Mobile-First" %}</h4>
+                <p>{% trans "Avec 90% de pénétration mobile, notre application est conçue pour atteindre les agriculteurs là où ils sont." %}</p>
+            </div>
+
+            <div class="insight-card fade-up">
+                <div class="insight-icon"><i class="fas fa-shopping-cart"></i></div>
+                <h4>{% trans "Place de Marché Intégrée" %}</h4>
+                <p>{% trans "Notre section 'Outils' crée une plateforme où les investisseurs peuvent vendre directement aux agriculteurs, avec un marché estimé à XOF 50B d'ici 2027." %}</p>
+            </div>
+
+            <div class="insight-card fade-up">
+                <div class="insight-icon"><i class="fas fa-bolt"></i></div>
+                <h4>{% trans "Position de Leader" %}</h4>
+                <p>{% trans "Avec 5K+ utilisateurs et des partenariats stratégiques, FarmConnect bénéficie d'une avance significative sur le marché." %}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Financial Projections -->
+<section id="projections" class="projections-section">
+    <div class="container">
+        <h2 class="section-title fade-down"><i class="fas fa-analytics"></i> {% trans "Projections Financières" %}</h2>
+
+        <div class="image-container" style="height: 400px; max-width: 700px; margin: 0 auto 3rem auto;">
+            <img src="{% static 'img/scaling business.jpg' %}" alt="{% trans 'Graphiques Financiers' %}">
+        </div>
+
+        <div class="projections-grid stagger-children">
+            <div class="projection-card scale-up">
+                <div class="projection-year">2025</div>
+                <div class="projection-value">XOF 981M</div>
+                <div class="projection-metric">{% trans "Chiffre d'Affaires" %}</div>
+            </div>
+
+            <div class="projection-card scale-up">
+                <div class="projection-year">2026</div>
+                <div class="projection-value">XOF 2.75B</div>
+                <div class="projection-metric">{% trans "Chiffre d'Affaires" %}</div>
+            </div>
+
+            <div class="projection-card scale-up">
+                <div class="projection-year">2027</div>
+                <div class="projection-value">XOF 5.89B</div>
+                <div class="projection-metric">{% trans "Chiffre d'Affaires" %}</div>
+            </div>
+
+            <div class="projection-card scale-up">
+                <div class="projection-year">2028</div>
+                <div class="projection-value">XOF 10.0B</div>
+                <div class="projection-metric">{% trans "Chiffre d'Affaires" %}</div>
+            </div>
+
+            <div class="projection-card scale-up">
+                <div class="projection-year">2029</div>
+                <div class="projection-value">XOF 16.2B</div>
+                <div class="projection-metric">{% trans "Chiffre d'Affaires" %}</div>
+            </div>
+
+            <div class="projection-card scale-up">
+                <div class="projection-year">2030</div>
+                <div class="projection-value">XOF 25.2B</div>
+                <div class="projection-metric">{% trans "Chiffre d'Affaires" %}</div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin: 3rem 0;">
+            <h3 style="color: var(--primary-green); font-size: 2rem; margin-bottom: 1rem;">{% trans "Indicateurs Clés" %}</h3>
+            <p style="font-size: 1.3rem; margin-bottom: 2rem;">{% trans "Besoin de financement" %}: <strong>XOF 3.27B</strong> | {% trans "Valorisation pré-money" %}: <strong>XOF 9.81B</strong></p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; max-width: 800px; margin: 0 auto;">
+                <div style="background: var(--pure-white); padding: 1.5rem; border-radius: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+                    <strong style="color: var(--accent-yellow); font-size: 1.5rem;">250%</strong><br>
+                    {% trans "ROI sur 5 ans" %}
+                </div>
+                <div style="background: var(--pure-white); padding: 1.5rem; border-radius: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+                    <strong style="color: var(--accent-yellow); font-size: 1.5rem;">20 mois</strong><br>
+                    {% trans "Point d'équilibre" %}
+                </div>
+                <div style="background: var(--pure-white); padding: 1.5rem; border-radius: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+                    <strong style="color: var(--accent-yellow); font-size: 1.5rem;">22%</strong><br>
+                    {% trans "Marge EBITDA (2027)" %}
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Market Analysis -->
-    <section id="market" class="section">
-        <div class="container">
-            <h2 class="section-title"><i class="fas fa-chart-line"></i> {% trans "Potentiel du Marché" %}</h2>
-            
-            <div class="image-container" style="height: 500px;">
-                <img src="{% static 'img/maee.png' %}" alt="{% trans 'Analyse de Marché' %}">
-            </div>
-            
-            <div class="market-insights">
-                <div class="insight-card">
-                    <div class="insight-icon"><i class="fas fa-globe-africa"></i></div>
-                    <h4>{% trans "Marché AgTech en Expansion" %}</h4>
-                    <p>{% trans "Le marché des technologies agricoles au Sénégal croît à 12% par an, avec une projection de XOF 785B d'ici 2027. FarmConnect vise à capturer 10% de ce marché." %}</p>
-                </div>
-                
-                <div class="insight-card">
-                    <div class="insight-icon"><i class="fas fa-users"></i></div>
-                    <h4>{% trans "2M d'Agriculteurs à Atteindre" %}</h4>
-                    <p>{% trans "Avec 70% de la population sénégalaise dépendant de l'agriculture, FarmConnect cible un marché vaste et mal desservi." %}</p>
-                </div>
-                
-                <div class="insight-card">
-                    <div class="insight-icon"><i class="fas fa-mobile-alt"></i></div>
-                    <h4>{% trans "Solution Mobile-First" %}</h4>
-                    <p>{% trans "Avec 90% de pénétration mobile, notre application est conçue pour atteindre les agriculteurs là où ils sont." %}</p>
+<!-- Contact Section -->
+<section id="contact" class="contact-section">
+    <div class="container">
+        <h2 class="section-title fade-down"><i class="fas fa-envelope"></i> {% trans "Contactez-Nous" %}</h2>
+
+        <div class="contact-grid">
+            <div class="contact-info fade-left">
+                <h3>{% trans "Rejoignez la Révolution Agricole" %}</h3>
+
+                <div class="contact-item">
+                    <strong>{% trans "Email" %}</strong>
+                    <span>investisseurs@farmconnect.sn</span>
                 </div>
 
-                <div class="insight-card">
-                    <div class="insight-icon"><i class="fas fa-shopping-cart"></i></div>
-                    <h4>{% trans "Place de Marché Intégrée" %}</h4>
-                    <p>{% trans "Notre section 'Outils' crée une plateforme où les investisseurs peuvent vendre directement aux agriculteurs, avec un marché estimé à XOF 50B d'ici 2027." %}</p>
+                <div class="contact-item">
+                    <strong>{% trans "Téléphone" %}</strong>
+                    <span>+221 77 123 4567</span>
                 </div>
-                
-                <div class="insight-card">
-                    <div class="insight-icon"><i class="fas fa-bolt"></i></div>
-                    <h4>{% trans "Position de Leader" %}</h4>
-                    <p>{% trans "Avec 5K+ utilisateurs et des partenariats stratégiques, FarmConnect bénéficie d'une avance significative sur le marché." %}</p>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Financial Projections -->
-    <section id="projections" class="projections-section">
-        <div class="container">
-            <h2 class="section-title"><i class="fas fa-analytics"></i> {% trans "Projections Financières" %}</h2>
-            
-            <div class="image-container" style="height: 400px; width: 700px; display: block; margin: 0 auto;">
-                <img src="{% static 'img/scaling business.jpg' %}" alt="{% trans 'Graphiques Financiers' %}">
-            </div>
+                <div class="contact-item">
+                    <strong>WhatsApp</strong>
+                    <span>+221 77 987 6543</span>
+                </div>
 
-            <div class="projections-grid">
-                <div class="projection-card">
-                    <div class="projection-year">2025</div>
-                    <div class="projection-value">XOF 981M</div>
-                    <div class="projection-metric">{% trans "Chiffre d'Affaires" %}</div>
+                <div class="contact-item">
+                    <strong>{% trans "Siège Social" %}</strong>
+                    <span>VDN, Immeuble Keur Gorgui<br>Dakar, Sénégal</span>
                 </div>
-                
-                <div class="projection-card">
-                    <div class="projection-year">2026</div>
-                    <div class="projection-value">XOF 2.75B</div>
-                    <div class="projection-metric">{% trans "Chiffre d'Affaires" %}</div>
-                </div>
-                
-                <div class="projection-card">
-                    <div class="projection-year">2027</div>
-                    <div class="projection-value">XOF 5.89B</div>
-                    <div class="projection-metric">{% trans "Chiffre d'Affaires" %}</div>
-                </div>
-                
-                <div class="projection-card">
-                    <div class="projection-year">2028</div>
-                    <div class="projection-value">XOF 10.0B</div>
-                    <div class="projection-metric">{% trans "Chiffre d'Affaires" %}</div>
-                </div>
-                
-                <div class="projection-card">
-                    <div class="projection-year">2029</div>
-                    <div class="projection-value">XOF 16.2B</div>
-                    <div class="projection-metric">{% trans "Chiffre d'Affaires" %}</div>
-                </div>
-                
-                <div class="projection-card">
-                    <div class="projection-year">2030</div>
-                    <div class="projection-value">XOF 25.2B</div>
-                    <div class="projection-metric">{% trans "Chiffre d'Affaires" %}</div>
+
+                <div class="contact-item">
+                    <strong>LinkedIn</strong>
+                    <span>/company/farmconnect-senegal</span>
                 </div>
             </div>
 
-            <div style="text-align: center; margin: 3rem 0;">
-                <h3 style="color: var(--primary-green); font-size: 2rem; margin-bottom: 1rem;">{% trans "Indicateurs Clés" %}</h3>
-                <p style="font-size: 1.3rem; margin-bottom: 2rem;">{% trans "Besoin de financement" %}: <strong>XOF 3.27B</strong> | {% trans "Valorisation pré-money" %}: <strong>XOF 9.81B</strong></p>
-                
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; max-width: 800px; margin: 0 auto;">
-                    <div style="background: var(--pure-white); padding: 1.5rem; border-radius: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
-                        <strong style="color: var(--accent-yellow); font-size: 1.5rem;">250%</strong><br>
-                        {% trans "ROI sur 5 ans" %}
+            <div class="team-section fade-right">
+                <h3>{% trans "Notre Équipe de Direction" %}</h3>
+
+                <div class="team-member scale-up">
+                    <div class="member-name">Fatoumata Ndiaye</div>
+                    <div class="member-title">{% trans "CEO & Co-fondatrice" %}</div>
+                    <div class="member-contact">
+                        f.ndiaye@farmconnect.sn<br>
+                        +221 77 171 23 53<br>
+                        {% trans "15+ ans en AgTech" %}
                     </div>
-                    <div style="background: var(--pure-white); padding: 1.5rem; border-radius: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
-                        <strong style="color: var(--accent-yellow); font-size: 1.5rem;">20 mois</strong><br>
-                        {% trans "Point d'équilibre" %}
+                </div>
+
+                <div class="team-member scale-up">
+                    <div class="member-name">Amadou Diallo</div>
+                    <div class="member-title">{% trans "CTO & Co-fondateur" %}</div>
+                    <div class="member-contact">
+                        a.diallo@farmconnect.sn<br>
+                        +221 77 171 23 54<br>
+                        {% trans "Expert en Solutions Digitales" %}
                     </div>
-                    <div style="background: var(--pure-white); padding: 1.5rem; border-radius: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
-                        <strong style="color: var(--accent-yellow); font-size: 1.5rem;">22%</strong><br>
-                        {% trans "Marge EBITDA (2027)" %}
+                </div>
+
+                <div class="team-member scale-up">
+                    <div class="member-name">El Hadji Malick Seye</div>
+                    <div class="member-title">{% trans "Directeur Financier" %}</div>
+                    <div class="member-contact">
+                        m.seye@farmconnect.sn<br>
+                        +221 77 171 23 55<br>
+                        {% trans "Ex-BCG, MBA HEC Dakar" %}
                     </div>
                 </div>
             </div>
         </div>
-    </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact-section">
-        <div class="container">
-            <h2 class="section-title"><i class="fas fa-envelope"></i> {% trans "Contactez-Nous" %}</h2>
-            
-            <div class="contact-grid">
-                <div class="contact-info">
-                    <h3>{% trans "Rejoignez la Révolution Agricole" %}</h3>
-                    
-                    <div class="contact-item">
-                        <strong>{% trans "Email" %}</strong>
-                        <span>investisseurs@farmconnect.sn</span>
-                    </div>
-                    
-                    <div class="contact-item">
-                        <strong>{% trans "Téléphone" %}</strong>
-                        <span>+221 77 123 4567</span>
-                    </div>
-                    
-                    <div class="contact-item">
-                        <strong>WhatsApp</strong>
-                        <span>+221 77 987 6543</span>
-                    </div>
-                    
-                    <div class="contact-item">
-                        <strong>{% trans "Siège Social" %}</strong>
-                        <span>VDN, Immeuble Keur Gorgui<br>Dakar, Sénégal</span>
-                    </div>
-                    
-                    <div class="contact-item">
-                        <strong>LinkedIn</strong>
-                        <span>/company/farmconnect-senegal</span>
-                    </div>
-                </div>
-                
-                <div class="team-section">
-                    <h3>{% trans "Notre Équipe de Direction" %}</h3>
-                    
-                    <div class="team-member">
-                        <div class="member-name">Fatoumata Ndiaye</div>
-                        <div class="member-title">{% trans "CEO & Co-fondatrice" %}</div>
-                        <div class="member-contact">
-                            f.ndiaye@farmconnect.sn<br>
-                            +221 77 171 23 53<br>
-                            {% trans "15+ ans en AgTech" %}
-                        </div>
-                    </div>
-                    
-                    <div class="team-member">
-                        <div class="member-name">Amadou Diallo</div>
-                        <div class="member-title">{% trans "CTO & Co-fondateur" %}</div>
-                        <div class="member-contact">
-                            a.diallo@farmconnect.sn<br>
-                            +221 77 171 23 54<br>
-                            {% trans "Expert en Solutions Digitales" %}
-                        </div>
-                    </div>
-                    
-                    <div class="team-member">
-                        <div class="member-name">El Hadji Malick Seye</div>
-                        <div class="member-title">{% trans "Directeur Financier" %}</div>
-                        <div class="member-contact">
-                            m.seye@farmconnect.sn<br>
-                            +221 77 171 23 55<br>
-                            {% trans "Ex-BCG, MBA HEC Dakar" %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="cta-buttons">
-                <a href="https://prezi.com/view/tWXg8q6ya1o32ktkkzYu/" target="_blank" rel="noopener" class="btn-primary">{% trans "Obtenir le Pitch Deck" %}</a>
-                <a href="https://calendar.app.google/EZePhACoBCMoJV7D9" class="btn-secondary" target="_blank" rel="noopener">{% trans "Planifier une Rencontre" %}</a>
-            </div>
+        <div class="cta-buttons">
+            <a href="https://prezi.com/view/tWXg8q6ya1o32ktkkzYu/" target="_blank" rel="noopener" class="btn-primary float-animate">{% trans "Obtenir le Pitch Deck" %}</a>
+            <a href="https://calendar.app.google/JBtjRpX3tKoFUJG8A" class="btn-secondary float-animate" target="_blank" rel="noopener">{% trans "Planifier une Rencontre" %}</a>
         </div>
-    </section>
+    </div>
+</section>
+{% endblock %}
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <p style="font-size: 1.2rem; margin-bottom: 1rem;">
-                <strong>FarmConnect Senegal - {% trans "Transformer l'Agriculture, Ensemble" %}</strong>
-            </p>
-            <p>© 2025 FarmConnect Senegal. {% trans "Tous droits réservés" %}. | {% trans "Investir dans un avenir agricole durable" %}</p>
-            <p style="margin-top: 1rem;">
-                <a href="{% url 'farmconnect_app:community' %}" style="color: var(--accent-yellow); text-decoration: none; font-weight: bold;">
-                    <i class="fas fa-users"></i> {% trans "Rejoindre notre Communauté" %}
-                </a>
-            </p>
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        
-
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-
-        window.addEventListener('scroll', function() {
-            const nav = document.querySelector('nav');
-            if (window.scrollY > 100) {
-                nav.style.background = 'linear-gradient(135deg, rgba(45,80,22,0.95) 0%, rgba(74,124,89,0.95) 100%)';
-                nav.style.backdropFilter = 'blur(10px)';
-            } else {
-                nav.style.background = 'linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%)';
-                nav.style.backdropFilter = 'none';
-            }
-        });
-
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.stat-card, .insight-card, .projection-card, .team-member').forEach(card => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(30px)';
-            card.style.transition = 'all 0.6s ease';
-            observer.observe(card);
-        });
-
-        document.querySelectorAll('.btn-primary, .btn-secondary, .nav-links a').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                const ripple = document.createElement('div');
-                ripple.style.position = 'absolute';
-                ripple.style.borderRadius = '50%';
-                ripple.style.background = 'rgba(255,255,255,0.3)';
-                ripple.style.transform = 'scale(0)';
-                ripple.style.animation = 'ripple 0.6s linear';
-                ripple.style.left = (e.clientX - e.target.offsetLeft) + 'px';
-                ripple.style.top = (e.clientY - e.target.offsetTop) + 'px';
-                ripple.style.width = ripple.style.height = '20px';
-                this.appendChild(ripple);
-                setTimeout(() => {
-                    ripple.remove();
-                }, 600);
-            });
-        });
-    </script>
-</body>
-</html>
+{% block extra_js %}
+<script>
+    // Smooth scrolling is handled by base.html
+    console.log('[Investors] Page loaded with modern scroll effects');
+</script>
 {% endblock %}

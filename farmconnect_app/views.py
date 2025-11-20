@@ -11,6 +11,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import Q, Count
 from .models import User
+from .security import rate_limit_login, rate_limit_api
 import json
 import logging
 import re
@@ -20,25 +21,38 @@ logger = logging.getLogger(__name__)
 
 
 def home(request):
-    """Page d'accueil avec gestion sécurisée des imports"""
-    
-    # Calcul sécurisé des totaux
-    total_farmers = User.objects.filter(role='farmer').count()
-    total_crops = 50  # Valeur par défaut
-    
+    """Page d'accueil avec données réelles"""
+    from crops.models import Crop, CropTip
+    from community.models import ForumPost
+    from advice.models import CropAdvice
+
+    # Calcul des totaux depuis la base de données
+    total_farmers = User.objects.filter(role='farmer', is_active=True).count()
+    total_crops = Crop.objects.filter(is_active=True).count()
+
+    # Récupérer les données récentes
+    recent_tips = CropTip.objects.select_related('crop', 'created_by').order_by('-created_at')[:5]
+    recent_posts = ForumPost.objects.filter(is_active=True).select_related('author').order_by('-created_at')[:5]
+    crops = Crop.objects.filter(is_active=True).order_by('name_fr')[:8]
+
+    # Récupérer 6 conseils de cultures aléatoires pour la page d'accueil
+    crop_advice_previews = CropAdvice.objects.filter(is_active=True).select_related('crop').order_by('?')[:6]
+
     context = {
         'total_farmers': total_farmers,
         'total_crops': total_crops,
-        'recent_tips': [],
-        'recent_posts': [],
+        'recent_tips': recent_tips,
+        'recent_posts': recent_posts,
         'weather_data': None,
-        'crops': [],
+        'crops': crops,
+        'crop_advice_previews': crop_advice_previews,
     }
     return render(request, 'farmconnect_app/home.html', context)
 
 
 @csrf_protect
 @never_cache
+@rate_limit_login(requests_per_minute=5)
 def custom_login(request):
     """Vue de connexion personnalisée avec username simple"""
     
@@ -46,8 +60,13 @@ def custom_login(request):
     
     # Rediriger si l'utilisateur est déjà connecté
     if request.user.is_authenticated:
-        logger.info("User already authenticated, redirecting to dashboard")
-        return redirect('farmconnect_app:dashboard')
+        # Rediriger admin vers admin dashboard, autres vers dashboard normal
+        if request.user.is_superuser or request.user.role == 'admin':
+            logger.info("Admin user already authenticated, redirecting to admin dashboard")
+            return redirect('farmconnect_app:admin_dashboard')
+        else:
+            logger.info("User already authenticated, redirecting to dashboard")
+            return redirect('farmconnect_app:dashboard')
     
     # Initialiser le formulaire pour les requêtes GET
     form = AuthenticationForm()
@@ -105,10 +124,17 @@ def custom_login(request):
                     if next_url:
                         redirect_to = next_url
                     else:
-                        try:
-                            redirect_to = reverse('farmconnect_app:dashboard')
-                        except:
-                            redirect_to = '/dashboard/'
+                        # Rediriger admin vers admin dashboard
+                        if user.is_superuser or user.role == 'admin':
+                            try:
+                                redirect_to = reverse('farmconnect_app:admin_dashboard')
+                            except:
+                                redirect_to = '/admin-dashboard/'
+                        else:
+                            try:
+                                redirect_to = reverse('farmconnect_app:dashboard')
+                            except:
+                                redirect_to = '/dashboard/'
                     
                     logger.info(f"Redirecting authenticated user to: {redirect_to}")
                     
@@ -344,14 +370,16 @@ def about(request):
     return render(request, 'farmconnect_app/about.html')
 
 def investors(request):
-    """Page investisseurs"""
+    """Page investisseurs avec statistiques réelles"""
+    from crops.models import Crop
+
     stats = {
         'total_users': User.objects.count(),
         'active_farmers': User.objects.filter(role='farmer', is_active=True).count(),
-        'regions_covered': User.objects.values('region').distinct().count(),
-        'crops_supported': 50,  # Valeur par défaut
+        'regions_covered': User.objects.values('region').exclude(region='').distinct().count(),
+        'crops_supported': Crop.objects.filter(is_active=True).count(),
     }
-    
+
     return render(request, 'farmconnect_app/investors.html', {'stats': stats})
 
 def password_reset_request(request):
@@ -386,53 +414,70 @@ def debug_view(request):
 
 
 def community(request):
-    """Page communauté avec statistiques et informations"""
-    
+    """Page communauté avec statistiques, prix du marché et événements"""
+    from crops.models import Crop
+    from community.models import ForumPost, MarketPrice, Event
+    from django.db.models import Avg, Max, Min
+    from datetime import date, timedelta
+
+    # Get latest market prices (one per crop, most recent)
+    latest_prices = []
+    crops_with_prices = MarketPrice.objects.values_list('crop_name', flat=True).distinct()
+
+    for crop in crops_with_prices:
+        latest_price = MarketPrice.objects.filter(crop_name=crop).order_by('-date').first()
+        if latest_price:
+            latest_prices.append(latest_price)
+
+    # Get regional variations for display
+    regional_data = []
+    for crop in list(crops_with_prices)[:5]:  # Top 5 crops
+        crop_prices = MarketPrice.objects.filter(
+            crop_name=crop,
+            date__gte=date.today() - timedelta(days=7)
+        )
+        if crop_prices.exists():
+            regional_data.append({
+                'crop': crop,
+                'avg_price': round(crop_prices.aggregate(Avg('price_per_kg'))['price_per_kg__avg'], 2),
+                'max_price': round(crop_prices.aggregate(Max('price_per_kg'))['price_per_kg__max'], 2),
+                'min_price': round(crop_prices.aggregate(Min('price_per_kg'))['price_per_kg__min'], 2),
+                'regions_count': crop_prices.values('region').distinct().count()
+            })
+
     # Calculer les statistiques de la communauté
     total_farmers = User.objects.filter(role='farmer', is_active=True).count()
-    total_regions = User.objects.values('region').distinct().count()
-    total_crops = 50  # Valeur par défaut, à remplacer par un modèle Crop si vous en avez
-    total_workshops = 100  # Valeur par défaut, à remplacer par un modèle Workshop si vous en avez
-    
-    # Prochains ateliers (exemple - à adapter selon vos modèles)
-    upcoming_workshops = []
-    # Si vous avez un modèle Workshop:
-    # from datetime import date
-    # upcoming_workshops = Workshop.objects.filter(date__gte=date.today()).order_by('date')[:4]
-    
-    # Témoignages (exemple - à adapter selon vos modèles)
-    testimonials = []
-    # Si vous avez un modèle Testimonial:
-    # testimonials = Testimonial.objects.filter(is_published=True).order_by('-created_at')[:3]
-    
+    total_regions = User.objects.values('region').exclude(region='').distinct().count()
+    total_crops = Crop.objects.filter(is_active=True).count()
+    total_posts = ForumPost.objects.filter(is_active=True).count()
+
+    # Posts récents
+    recent_posts = ForumPost.objects.filter(is_active=True).select_related('author').order_by('-created_at')[:5]
+
+    # Upcoming events
+    upcoming_events = Event.objects.filter(
+        is_active=True,
+        date__gte=date.today()
+    ).order_by('date', 'start_time')[:5]
+
+    # Total workshops/events
+    total_workshops = Event.objects.filter(is_active=True).count()
+
     context = {
+        'latest_prices': latest_prices[:10],  # Top 10 crops
+        'regional_data': regional_data,
         'total_farmers': total_farmers,
         'total_regions': total_regions,
         'total_crops': total_crops,
         'total_workshops': total_workshops,
-        'upcoming_workshops': upcoming_workshops,
-        'testimonials': testimonials,
-        # 'community_image': None,  # Ajoutez si vous avez un modèle pour les images
+        'total_posts': total_posts,
+        'upcoming_workshops': [],
+        'testimonials': [],
+        'recent_posts': recent_posts,
+        'upcoming_events': upcoming_events,
     }
-    
-    return render(request, 'community/community.html', context)
 
-def about(request):
-    """Page à propos de FarmConnect"""
-    
-    # Statistiques générales
-    stats = {
-        'total_users': User.objects.count(),
-        'active_farmers': User.objects.filter(role='farmer', is_active=True).count(),
-        'regions_covered': User.objects.values('region').distinct().count(),
-        'years_experience': 2,  # Depuis le lancement de la plateforme
-    }
-    
-    context = {
-        'stats': stats,
-    }
-    
-    return render(request, 'farmconnect_app/about.html', context)
+    return render(request, 'farmconnect_app/community.html', context)
 
 def community_view(request):
     return render(request, 'farmconnect_app/community.html')
@@ -441,4 +486,410 @@ def investors_view(request):
     return render(request, 'farmconnect_app/investors.html')
 
 def tools_view(request):
-    return render(request, 'farmconnect_app/tools.html')
+    """Ancienne vue - redirige vers marketplace"""
+    return render(request, 'farmconnect_app/marketplace.html')
+
+def marketplace_view(request):
+    """
+    Vue Marketplace/Tools - Outils agricoles avec paiements échelonnés
+    """
+    from marketplace.models import Product
+
+    # Charger les produits depuis la base de données
+    products = Product.objects.filter(is_available=True).order_by('-created_at')
+
+    # Obtenir les catégories uniques
+    categories = Product.objects.filter(is_available=True).values_list('category', flat=True).distinct()
+
+    context = {
+        'page_title': 'Outils Agricoles',
+        'products': products,
+        'categories': categories,
+    }
+    return render(request, 'farmconnect_app/tools.html', context)
+
+
+# ============================================
+# ADMIN DASHBOARD VIEWS
+# ============================================
+
+def admin_required(view_func):
+    """Decorator to check if user is admin"""
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.error(request, "Vous devez être connecté pour accéder à cette page.")
+            return redirect('farmconnect_app:login')
+        if not (request.user.is_superuser or request.user.role == 'admin'):
+            messages.error(request, "Vous n'avez pas les permissions pour accéder à cette page.")
+            return redirect('farmconnect_app:home')
+        return view_func(request, *args, **kwargs)
+    return wrapper
+
+
+@admin_required
+def admin_dashboard(request):
+    """Dashboard principal de l'admin"""
+    from community.models import MarketPrice, Event
+    from marketplace.models import Product, ToolOrder
+    from advice.models import CropAdvice
+
+    context = {
+        'total_farmers': User.objects.filter(role='farmer', is_active=True).count(),
+        'total_products': Product.objects.filter(is_available=True).count(),
+        'total_events': Event.objects.filter(is_active=True).count(),
+        'total_prices': MarketPrice.objects.count(),
+        'total_advice': CropAdvice.objects.filter(is_active=True).count(),
+        'total_orders': ToolOrder.objects.count(),
+        'pending_orders': ToolOrder.objects.filter(status='pending').count(),
+        'recent_prices': MarketPrice.objects.all().order_by('-date')[:5],
+        'upcoming_events': Event.objects.filter(is_active=True).order_by('date')[:5],
+        'recent_products': Product.objects.all().order_by('-created_at')[:5],
+        'recent_orders': ToolOrder.objects.all().order_by('-created_at')[:5],
+    }
+    return render(request, 'admin_dashboard/dashboard.html', context)
+
+
+@admin_required
+def admin_prices(request):
+    """Gestion des prix du marché"""
+    from community.models import MarketPrice
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+
+        if action == 'add':
+            MarketPrice.objects.create(
+                crop_name=request.POST.get('crop_name'),
+                region=request.POST.get('region'),
+                price_per_kg=request.POST.get('price_per_kg'),
+                trend=request.POST.get('trend', 'stable'),
+                percentage_change=request.POST.get('percentage_change', 0)
+            )
+            messages.success(request, "Prix ajouté avec succès!")
+
+        elif action == 'update':
+            price_id = request.POST.get('price_id')
+            price = MarketPrice.objects.get(id=price_id)
+            price.price_per_kg = request.POST.get('price_per_kg')
+            price.trend = request.POST.get('trend')
+            price.percentage_change = request.POST.get('percentage_change', 0)
+            price.save()
+            messages.success(request, "Prix mis à jour avec succès!")
+
+        elif action == 'delete':
+            price_id = request.POST.get('price_id')
+            MarketPrice.objects.filter(id=price_id).delete()
+            messages.success(request, "Prix supprimé avec succès!")
+
+        return redirect('farmconnect_app:admin_prices')
+
+    prices = MarketPrice.objects.all().order_by('-date', 'crop_name')
+    regions = MarketPrice.REGION_CHOICES
+
+    return render(request, 'admin_dashboard/prices.html', {
+        'prices': prices,
+        'regions': regions,
+    })
+
+
+@admin_required
+def admin_events(request):
+    """Gestion des événements"""
+    from community.models import Event
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+
+        if action == 'add':
+            Event.objects.create(
+                title=request.POST.get('title'),
+                description=request.POST.get('description'),
+                event_type=request.POST.get('event_type'),
+                date=request.POST.get('date'),
+                start_time=request.POST.get('start_time'),
+                end_time=request.POST.get('end_time') or None,
+                location=request.POST.get('location'),
+                region=request.POST.get('region'),
+                organizer=request.POST.get('organizer'),
+                contact_phone=request.POST.get('contact_phone', ''),
+                contact_email=request.POST.get('contact_email', ''),
+                is_free=request.POST.get('is_free') == 'on',
+                created_by=request.user
+            )
+            messages.success(request, "Événement ajouté avec succès!")
+
+        elif action == 'update':
+            event_id = request.POST.get('event_id')
+            event = Event.objects.get(id=event_id)
+            event.title = request.POST.get('title')
+            event.description = request.POST.get('description')
+            event.event_type = request.POST.get('event_type')
+            event.date = request.POST.get('date')
+            event.start_time = request.POST.get('start_time')
+            event.end_time = request.POST.get('end_time') or None
+            event.location = request.POST.get('location')
+            event.region = request.POST.get('region')
+            event.organizer = request.POST.get('organizer')
+            event.is_active = request.POST.get('is_active') == 'on'
+            event.save()
+            messages.success(request, "Événement mis à jour avec succès!")
+
+        elif action == 'delete':
+            event_id = request.POST.get('event_id')
+            Event.objects.filter(id=event_id).delete()
+            messages.success(request, "Événement supprimé avec succès!")
+
+        return redirect('farmconnect_app:admin_events')
+
+    events = Event.objects.all().order_by('date')
+
+    return render(request, 'admin_dashboard/events.html', {
+        'events': events,
+        'event_types': Event.EVENT_TYPE_CHOICES,
+        'regions': Event.REGION_CHOICES,
+    })
+
+
+@admin_required
+def admin_products(request):
+    """Gestion des produits du marketplace"""
+    from marketplace.models import Product
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+
+        if action == 'add':
+            # Get or create default seller
+            seller, _ = User.objects.get_or_create(
+                username='farmconnect_store',
+                defaults={'email': 'store@farmconnect.sn', 'role': 'admin'}
+            )
+
+            Product.objects.create(
+                name=request.POST.get('name'),
+                description=request.POST.get('description'),
+                price=request.POST.get('price'),
+                category=request.POST.get('category'),
+                quantity_available=request.POST.get('quantity_available', 0),
+                seller=seller,
+                is_available=True
+            )
+            messages.success(request, "Produit ajouté avec succès!")
+
+        elif action == 'update':
+            product_id = request.POST.get('product_id')
+            product = Product.objects.get(id=product_id)
+            product.name = request.POST.get('name')
+            product.description = request.POST.get('description')
+            product.price = request.POST.get('price')
+            product.category = request.POST.get('category')
+            product.quantity_available = request.POST.get('quantity_available', 0)
+            product.is_available = request.POST.get('is_available') == 'on'
+            product.save()
+            messages.success(request, "Produit mis à jour avec succès!")
+
+        elif action == 'delete':
+            product_id = request.POST.get('product_id')
+            Product.objects.filter(id=product_id).delete()
+            messages.success(request, "Produit supprimé avec succès!")
+
+        return redirect('farmconnect_app:admin_products')
+
+    products = Product.objects.all().order_by('-created_at')
+    categories = Product.objects.values_list('category', flat=True).distinct()
+
+    return render(request, 'admin_dashboard/products.html', {
+        'products': products,
+        'categories': categories,
+    })
+
+
+@admin_required
+def admin_advice(request):
+    """Gestion des conseils de cultures"""
+    from advice.models import CropAdvice
+    from crops.models import Crop
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+
+        if action == 'add':
+            crop_id = request.POST.get('crop_id')
+            crop = Crop.objects.get(id=crop_id)
+
+            CropAdvice.objects.create(
+                crop=crop,
+                planting_season_fr=request.POST.get('planting_season_fr', ''),
+                maturity_time_fr=request.POST.get('maturity_time_fr', ''),
+                soil_type_fr=request.POST.get('soil_type_fr', ''),
+                challenges_insects_fr=request.POST.get('challenges_insects_fr', ''),
+                challenges_diseases_fr=request.POST.get('challenges_diseases_fr', ''),
+                challenges_environmental_fr=request.POST.get('challenges_environmental_fr', ''),
+                prevention_tips_fr=request.POST.get('prevention_tips_fr', ''),
+                management_tips_fr=request.POST.get('management_tips_fr', ''),
+                recommended_fertilizers_fr=request.POST.get('recommended_fertilizers_fr', ''),
+                recommended_pesticides_fr=request.POST.get('recommended_pesticides_fr', ''),
+                recommended_tools_fr=request.POST.get('recommended_tools_fr', ''),
+                innovative_inputs_fr=request.POST.get('innovative_inputs_fr', ''),
+                additional_notes_fr=request.POST.get('additional_notes_fr', ''),
+                created_by=request.user
+            )
+            messages.success(request, "Conseil ajouté avec succès!")
+
+        elif action == 'update':
+            advice_id = request.POST.get('advice_id')
+            advice = CropAdvice.objects.get(id=advice_id)
+            advice.planting_season_fr = request.POST.get('planting_season_fr', '')
+            advice.maturity_time_fr = request.POST.get('maturity_time_fr', '')
+            advice.soil_type_fr = request.POST.get('soil_type_fr', '')
+            advice.challenges_insects_fr = request.POST.get('challenges_insects_fr', '')
+            advice.challenges_diseases_fr = request.POST.get('challenges_diseases_fr', '')
+            advice.challenges_environmental_fr = request.POST.get('challenges_environmental_fr', '')
+            advice.prevention_tips_fr = request.POST.get('prevention_tips_fr', '')
+            advice.management_tips_fr = request.POST.get('management_tips_fr', '')
+            advice.recommended_fertilizers_fr = request.POST.get('recommended_fertilizers_fr', '')
+            advice.recommended_pesticides_fr = request.POST.get('recommended_pesticides_fr', '')
+            advice.recommended_tools_fr = request.POST.get('recommended_tools_fr', '')
+            advice.innovative_inputs_fr = request.POST.get('innovative_inputs_fr', '')
+            advice.additional_notes_fr = request.POST.get('additional_notes_fr', '')
+            advice.is_active = request.POST.get('is_active') == 'on'
+            advice.save()
+            messages.success(request, "Conseil mis à jour avec succès!")
+
+        elif action == 'delete':
+            advice_id = request.POST.get('advice_id')
+            CropAdvice.objects.filter(id=advice_id).delete()
+            messages.success(request, "Conseil supprimé avec succès!")
+
+        return redirect('farmconnect_app:admin_advice')
+
+    # Get all advice with related crops
+    advice_list = CropAdvice.objects.select_related('crop').all().order_by('crop__name_fr')
+
+    # Get crops that don't have advice yet (for adding new advice)
+    crops_with_advice = CropAdvice.objects.values_list('crop_id', flat=True)
+    available_crops = Crop.objects.filter(is_active=True).exclude(id__in=crops_with_advice).order_by('name_fr')
+
+    return render(request, 'admin_dashboard/advice.html', {
+        'advice_list': advice_list,
+        'available_crops': available_crops,
+    })
+
+
+# ============================================
+# TOOL ORDER VIEWS
+# ============================================
+
+@login_required
+def place_order(request):
+    """Vue pour passer une commande d'outil"""
+    from marketplace.models import ToolOrder
+
+    if request.method == 'POST':
+        user = request.user
+
+        # Create the order
+        order = ToolOrder.objects.create(
+            buyer=user,
+            buyer_name=request.POST.get('buyer_name', f"{user.first_name} {user.last_name}"),
+            buyer_phone=request.POST.get('buyer_phone', user.phone_number or ''),
+            buyer_email=request.POST.get('buyer_email', user.email),
+            buyer_region=request.POST.get('buyer_region', user.region),
+            buyer_village=request.POST.get('buyer_village', user.village),
+            tool_name=request.POST.get('tool_name'),
+            tool_price=request.POST.get('tool_price'),
+            quantity=request.POST.get('quantity', 1),
+            payment_plan=request.POST.get('payment_plan', 'full'),
+            message=request.POST.get('message', '')
+        )
+
+        messages.success(
+            request,
+            _('Votre commande #{} a été enregistrée avec succès! Un administrateur vous contactera bientôt.').format(order.id)
+        )
+
+        return redirect('farmconnect_app:my_orders')
+
+    # GET request - show form
+    tool_name = request.GET.get('tool', '')
+    tool_price = request.GET.get('price', '')
+
+    context = {
+        'tool_name': tool_name,
+        'tool_price': tool_price,
+        'user': request.user,
+    }
+
+    return render(request, 'farmconnect_app/place_order.html', context)
+
+
+@login_required
+def my_orders(request):
+    """Vue pour voir mes commandes"""
+    from marketplace.models import ToolOrder
+
+    orders = ToolOrder.objects.filter(buyer=request.user).order_by('-created_at')
+
+    return render(request, 'farmconnect_app/my_orders.html', {
+        'orders': orders,
+    })
+
+
+@admin_required
+def admin_orders(request):
+    """Gestion des commandes d'outils"""
+    from marketplace.models import ToolOrder
+    from django.utils import timezone
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        order_id = request.POST.get('order_id')
+
+        try:
+            order = ToolOrder.objects.get(id=order_id)
+
+            if action == 'update_status':
+                new_status = request.POST.get('status')
+                order.status = new_status
+                if new_status == 'contacted' and not order.contacted_at:
+                    order.contacted_at = timezone.now()
+                order.save()
+                messages.success(request, f"Statut de la commande #{order_id} mis à jour!")
+
+            elif action == 'add_notes':
+                order.admin_notes = request.POST.get('admin_notes', '')
+                order.save()
+                messages.success(request, f"Notes ajoutées à la commande #{order_id}!")
+
+            elif action == 'delete':
+                order.delete()
+                messages.success(request, f"Commande #{order_id} supprimée!")
+
+        except ToolOrder.DoesNotExist:
+            messages.error(request, "Commande non trouvée!")
+
+        return redirect('farmconnect_app:admin_orders')
+
+    # Get orders with filters
+    status_filter = request.GET.get('status', '')
+    orders = ToolOrder.objects.all().order_by('-created_at')
+
+    if status_filter:
+        orders = orders.filter(status=status_filter)
+
+    # Count by status for quick filters
+    status_counts = {
+        'all': ToolOrder.objects.count(),
+        'pending': ToolOrder.objects.filter(status='pending').count(),
+        'contacted': ToolOrder.objects.filter(status='contacted').count(),
+        'confirmed': ToolOrder.objects.filter(status='confirmed').count(),
+        'completed': ToolOrder.objects.filter(status='completed').count(),
+        'cancelled': ToolOrder.objects.filter(status='cancelled').count(),
+    }
+
+    return render(request, 'admin_dashboard/orders.html', {
+        'orders': orders,
+        'status_counts': status_counts,
+        'current_filter': status_filter,
+        'status_choices': ToolOrder.STATUS_CHOICES,
+    })

@@ -1,0 +1,593 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Conseils Agricoles - FarmConnect Senegal{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Hero Section */
+    .hero-section {
+        background: linear-gradient(135deg, rgba(45, 80, 22, 0.9) 0%, rgba(74, 124, 89, 0.9) 100%);
+        padding: 80px 0 60px 0;
+        text-align: center;
+        color: white;
+        margin-bottom: 40px;
+    }
+
+    .hero-title {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 15px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-subtitle {
+        font-size: 1.1rem;
+        opacity: 0.9;
+    }
+
+    /* Category Filter */
+    .category-filter {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+    }
+
+    .filter-btn {
+        margin: 5px;
+        padding: 10px 20px;
+        border: 2px solid var(--primary-green);
+        background: white;
+        color: var(--primary-green);
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+        background: var(--primary-green);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(45, 80, 22, 0.3);
+    }
+
+    /* Crop Cards */
+    .crop-button-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        height: 100%;
+        min-height: 200px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .crop-button-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(45, 80, 22, 0.2);
+        border-color: var(--primary-green);
+    }
+
+    .crop-icon {
+        font-size: 3.5rem;
+        margin-bottom: 15px;
+        color: var(--primary-green);
+    }
+
+    .crop-emoji {
+        font-size: 4rem;
+        line-height: 1;
+    }
+
+    .crop-name {
+        font-size: 1.3rem;
+        font-weight: bold;
+        color: var(--primary-green);
+        margin-bottom: 8px;
+    }
+
+    .crop-scientific {
+        font-size: 0.85rem;
+        color: #666;
+        font-style: italic;
+        margin-bottom: 10px;
+    }
+
+    .crop-category-badge {
+        display: inline-block;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-top: 10px;
+    }
+
+    .badge-cereales { background: #e8f5e9; color: #2e7d32; }
+    .badge-legumineuses { background: #fff3e0; color: #ef6c00; }
+    .badge-legumes { background: #e3f2fd; color: #1565c0; }
+    .badge-fruits { background: #fce4ec; color: #c2185b; }
+    .badge-tubercules { background: #f3e5f5; color: #7b1fa2; }
+    .badge-oleagineux { background: #fff9c4; color: #f57f17; }
+
+    /* Loading State */
+    .loading-skeleton {
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: loading 1.5s ease-in-out infinite;
+        border-radius: 15px;
+        height: 200px;
+    }
+
+    @keyframes loading {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+    }
+
+    /* Modal Styles */
+    .advice-modal .modal-content {
+        border-radius: 20px;
+        border: none;
+    }
+
+    .advice-modal .modal-header {
+        background: linear-gradient(135deg, var(--primary-green) 0%, rgba(74, 124, 89) 100%);
+        color: white;
+        border-radius: 20px 20px 0 0;
+        padding: 25px;
+    }
+
+    .advice-modal .modal-title {
+        font-size: 1.8rem;
+        font-weight: bold;
+    }
+
+    .advice-section {
+        margin-bottom: 30px;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 15px;
+        border-left: 5px solid var(--primary-green);
+    }
+
+    .advice-section h4 {
+        color: var(--primary-green);
+        font-weight: bold;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .advice-section-content {
+        line-height: 1.8;
+        white-space: pre-wrap;
+        color: #333;
+    }
+
+    .view-count {
+        color: #666;
+        font-size: 0.9rem;
+        margin-top: 15px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 2rem;
+        }
+
+        .crop-icon {
+            font-size: 2.5rem;
+        }
+
+        .crop-name {
+            font-size: 1.1rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="container">
+        <h1 class="hero-title fade-down">
+            <i class="fas fa-lightbulb"></i> Conseils Agricoles
+        </h1>
+        <p class="hero-subtitle fade-up">
+            Conseils détaillés et pratiques pour réussir vos cultures au Sénégal
+        </p>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="container mb-5">
+    <!-- Category Filter -->
+    <div class="category-filter text-center scale-up">
+        <h5 class="mb-3" style="color: var(--primary-green);">
+            <i class="fas fa-filter"></i> Filtrer par catégorie
+        </h5>
+        <button class="filter-btn active" data-category="all">
+            <i class="fas fa-th"></i> Toutes
+        </button>
+        <button class="filter-btn" data-category="cereales">
+            <i class="fas fa-seedling"></i> Céréales
+        </button>
+        <button class="filter-btn" data-category="legumineuses">
+            <i class="fas fa-leaf"></i> Légumineuses
+        </button>
+        <button class="filter-btn" data-category="legumes">
+            <i class="fas fa-carrot"></i> Légumes
+        </button>
+        <button class="filter-btn" data-category="fruits">
+            <i class="fas fa-apple-alt"></i> Fruits
+        </button>
+        <button class="filter-btn" data-category="tubercules">
+            <i class="fas fa-cheese"></i> Tubercules
+        </button>
+        <button class="filter-btn" data-category="oleagineux">
+            <i class="fas fa-oil-can"></i> Oléagineux
+        </button>
+    </div>
+
+    <!-- Crops Grid -->
+    <div id="cropsGrid" class="row g-4">
+        <!-- Loading Skeletons -->
+        <div class="col-lg-3 col-md-4 col-sm-6 loading-item">
+            <div class="loading-skeleton"></div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 loading-item">
+            <div class="loading-skeleton"></div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 loading-item">
+            <div class="loading-skeleton"></div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 loading-item">
+            <div class="loading-skeleton"></div>
+        </div>
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="text-center py-5" style="display: none;">
+        <i class="fas fa-info-circle fa-3x text-muted mb-3"></i>
+        <h4>Aucune culture trouvée</h4>
+        <p class="text-muted">Essayez un autre filtre</p>
+    </div>
+</div>
+
+<!-- Advice Detail Modal -->
+<div class="modal fade advice-modal" id="adviceModal" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h3 class="modal-title" id="modalCropName"></h3>
+                    <p class="mb-0 opacity-75" id="modalScientificName"></p>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="adviceContent">
+                <!-- Content loaded dynamically -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let currentCategory = 'all';
+let cropsData = [];
+
+// Category Icons
+const categoryIcons = {
+    'cereales': 'fa-wheat-awn',
+    'legumineuses': 'fa-leaf',
+    'legumes': 'fa-carrot',
+    'fruits': 'fa-apple-alt',
+    'tubercules': 'fa-drumstick-bite',
+    'oleagineux': 'fa-droplet',
+    'cultures_rente': 'fa-dollar-sign',
+    'epices': 'fa-pepper-hot'
+};
+
+// Specific crop icons for accurate representation
+const cropIcons = {
+    // Céréales
+    'mil': '🌾',
+    'sorgho': '🌾',
+    'maïs': '🌽',
+    'riz': '🍚',
+    'fonio': '🌾',
+    // Légumineuses
+    'arachide': '🥜',
+    'niébé': '🫘',
+    'haricot': '🫘',
+    // Légumes
+    'tomate': '🍅',
+    'oignon': '🧅',
+    'piment': '🌶️',
+    'gombo': '🥒',
+    'aubergine': '🍆',
+    'chou': '🥬',
+    'carotte': '🥕',
+    'laitue': '🥬',
+    'poivron': '🫑',
+    'concombre': '🥒',
+    // Fruits
+    'mangue': '🥭',
+    'papaye': '🍈',
+    'banane': '🍌',
+    'orange': '🍊',
+    'citron': '🍋',
+    'pastèque': '🍉',
+    'melon': '🍈',
+    'anacarde': '🥜',
+    // Tubercules
+    'manioc': '🥔',
+    'patate douce': '🍠',
+    'igname': '🥔',
+    'pomme de terre': '🥔',
+    // Oléagineux
+    'sésame': '🌻',
+    'tournesol': '🌻',
+    // Cultures de rente
+    'coton': '☁️',
+    'canne à sucre': '🎋',
+    // Default
+    'default': '🌱'
+};
+
+// Category Labels
+const categoryLabels = {
+    'cereales': 'Céréales',
+    'legumineuses': 'Légumineuses',
+    'legumes': 'Légumes',
+    'fruits': 'Fruits',
+    'tubercules': 'Tubercules',
+    'oleagineux': 'Oléagineux',
+    'cultures_rente': 'Cultures de rente',
+    'epices': 'Épices'
+};
+
+// Load crops with advice
+async function loadCrops() {
+    try {
+        const lang = localStorage.getItem('preferred_language') || 'fr';
+        const response = await fetch(`/api/crop-advice/crops_with_advice/?lang=${lang}`);
+
+        if (!response.ok) throw new Error('Failed to load crops');
+
+        cropsData = await response.json();
+        console.log('[Crop Advice] Loaded', cropsData.length, 'crops with advice');
+
+        renderCrops();
+    } catch (error) {
+        console.error('[Crop Advice] Error:', error);
+        document.getElementById('cropsGrid').innerHTML = `
+            <div class="col-12 text-center py-5">
+                <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+                <h4>Erreur de chargement</h4>
+                <p class="text-muted">${error.message}</p>
+                <button class="btn btn-success mt-3" onclick="loadCrops()">
+                    <i class="fas fa-sync"></i> Réessayer
+                </button>
+            </div>
+        `;
+    }
+}
+
+// Render crops
+function renderCrops() {
+    const grid = document.getElementById('cropsGrid');
+    const emptyState = document.getElementById('emptyState');
+
+    // Filter crops
+    const filtered = currentCategory === 'all'
+        ? cropsData
+        : cropsData.filter(crop => crop.category === currentCategory);
+
+    if (filtered.length === 0) {
+        grid.style.display = 'none';
+        emptyState.style.display = 'block';
+        return;
+    }
+
+    grid.style.display = 'flex';
+    emptyState.style.display = 'none';
+
+    grid.innerHTML = filtered.map(crop => createCropCard(crop)).join('');
+
+    // Reinitialize scroll animations for dynamically loaded content
+    if (typeof window.reinitScrollAnimations === 'function') {
+        window.reinitScrollAnimations();
+    }
+}
+
+// Get crop-specific icon
+function getCropIcon(cropName) {
+    const normalizedName = cropName.toLowerCase().trim();
+    // Check for exact match first
+    if (cropIcons[normalizedName]) {
+        return cropIcons[normalizedName];
+    }
+    // Check for partial match
+    for (const [key, icon] of Object.entries(cropIcons)) {
+        if (normalizedName.includes(key) || key.includes(normalizedName)) {
+            return icon;
+        }
+    }
+    return cropIcons['default'];
+}
+
+// Create crop card
+function createCropCard(crop) {
+    const cropEmoji = getCropIcon(crop.name_fr);
+    const categoryBadge = `badge-${crop.category}`;
+    const categoryLabel = categoryLabels[crop.category] || crop.category;
+
+    return `
+        <div class="col-lg-3 col-md-4 col-sm-6 fade-up">
+            <div class="crop-button-card" onclick="showAdvice(${crop.id}, '${crop.name_fr}')">
+                <div class="crop-icon crop-emoji">
+                    ${cropEmoji}
+                </div>
+                <div class="crop-name">${crop.name_fr}</div>
+                ${crop.scientific_name ? `<div class="crop-scientific">${crop.scientific_name}</div>` : ''}
+                <div class="crop-category-badge ${categoryBadge}">
+                    ${categoryLabel}
+                </div>
+                ${crop.has_advice ? '<small class="text-success mt-2"><i class="fas fa-check-circle"></i> Conseils disponibles</small>' : ''}
+            </div>
+        </div>
+    `;
+}
+
+// Show advice detail
+async function showAdvice(cropId, cropName) {
+    try {
+        const lang = localStorage.getItem('preferred_language') || 'fr';
+        const response = await fetch(`/api/crop-advice/by_crop/?crop_id=${cropId}&lang=${lang}`);
+
+        if (!response.ok) {
+            throw new Error('Conseils non disponibles pour cette culture');
+        }
+
+        const data = await response.json();
+        displayAdviceModal(data);
+
+    } catch (error) {
+        console.error('[Crop Advice] Error loading advice:', error);
+        alert(error.message);
+    }
+}
+
+// Helper function to convert **text** to <strong>text</strong> and preserve line breaks
+function formatAdviceText(text) {
+    if (!text) return '';
+    // Convert **text** to <strong>text</strong>
+    text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    // Convert newlines to <br>
+    text = text.replace(/\n/g, '<br>');
+    return text;
+}
+
+// Display advice in modal
+function displayAdviceModal(data) {
+    const modal = new bootstrap.Modal(document.getElementById('adviceModal'));
+    const cropInfo = data.crop_info;
+    const advice = data.advice_data;
+
+    // Set modal title
+    document.getElementById('modalCropName').textContent = cropInfo.name_fr;
+    document.getElementById('modalScientificName').textContent = cropInfo.scientific_name || '';
+
+    // Build content
+    const content = `
+        <div class="advice-section">
+            <h4><i class="fas fa-calendar-alt"></i> Saison de Plantation</h4>
+            <div class="advice-section-content">${formatAdviceText(advice.planting_season)}</div>
+        </div>
+
+        <div class="advice-section">
+            <h4><i class="fas fa-clock"></i> Durée de Maturation</h4>
+            <div class="advice-section-content">${formatAdviceText(advice.maturity_time)}</div>
+        </div>
+
+        <div class="advice-section">
+            <h4><i class="fas fa-mountain"></i> Types de Sol Recommandés</h4>
+            <div class="advice-section-content">${formatAdviceText(advice.soil_type)}</div>
+        </div>
+
+        <div class="advice-section">
+            <h4><i class="fas fa-bug"></i> Défis - Insectes Nuisibles</h4>
+            <div class="advice-section-content">${formatAdviceText(advice.challenges.insects)}</div>
+        </div>
+
+        <div class="advice-section">
+            <h4><i class="fas fa-viruses"></i> Défis - Maladies</h4>
+            <div class="advice-section-content">${formatAdviceText(advice.challenges.diseases)}</div>
+        </div>
+
+        <div class="advice-section">
+            <h4><i class="fas fa-cloud-sun"></i> Défis - Environnementaux</h4>
+            <div class="advice-section-content">${formatAdviceText(advice.challenges.environmental)}</div>
+        </div>
+
+        <div class="advice-section">
+            <h4><i class="fas fa-shield-alt"></i> Conseils de Prévention</h4>
+            <div class="advice-section-content">${formatAdviceText(advice.tips.prevention)}</div>
+        </div>
+
+        <div class="advice-section">
+            <h4><i class="fas fa-tasks"></i> Conseils de Gestion</h4>
+            <div class="advice-section-content">${formatAdviceText(advice.tips.management)}</div>
+        </div>
+
+        <div class="advice-section">
+            <h4><i class="fas fa-flask"></i> Engrais Recommandés</h4>
+            <div class="advice-section-content">${formatAdviceText(advice.recommended_materials.fertilizers)}</div>
+        </div>
+
+        <div class="advice-section">
+            <h4><i class="fas fa-spray-can"></i> Pesticides Recommandés</h4>
+            <div class="advice-section-content">${formatAdviceText(advice.recommended_materials.pesticides)}</div>
+        </div>
+
+        <div class="advice-section">
+            <h4><i class="fas fa-tools"></i> Outils Recommandés</h4>
+            <div class="advice-section-content">${formatAdviceText(advice.recommended_materials.tools)}</div>
+        </div>
+
+        <div class="advice-section">
+            <h4><i class="fas fa-lightbulb"></i> Intrants Innovants</h4>
+            <div class="advice-section-content">${formatAdviceText(advice.recommended_materials.innovative_inputs)}</div>
+        </div>
+
+        ${advice.additional_notes ? `
+            <div class="advice-section">
+                <h4><i class="fas fa-info-circle"></i> Notes Supplémentaires</h4>
+                <div class="advice-section-content">${formatAdviceText(advice.additional_notes)}</div>
+            </div>
+        ` : ''}
+
+        <div class="view-count text-center">
+            <i class="fas fa-eye"></i> ${data.view_count} vues
+        </div>
+    `;
+
+    document.getElementById('adviceContent').innerHTML = content;
+    modal.show();
+}
+
+// Category filter event listeners
+document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        // Remove active from all
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        // Add active to clicked
+        this.classList.add('active');
+        // Update category
+        currentCategory = this.dataset.category;
+        // Re-render
+        renderCrops();
+    });
+});
+
+// Load crops on page load
+document.addEventListener('DOMContentLoaded', loadCrops);
+
+console.log('[Crop Advice Guide] Page loaded');
+</script>
+{% endblock %}

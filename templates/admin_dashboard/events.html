@@ -1,0 +1,234 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Gestion des Événements - Admin FarmConnect{% endblock %}
+
+{% block extra_css %}
+<style>
+    .admin-hero {
+        background: linear-gradient(135deg, #1a3a0f 0%, #2d5016 100%);
+        color: white;
+        padding: 40px 0;
+        margin-bottom: 30px;
+    }
+
+    .admin-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        overflow: hidden;
+        margin-bottom: 20px;
+    }
+
+    .admin-card-header {
+        background: linear-gradient(135deg, #2d5016 0%, #4a7c59 100%);
+        color: white;
+        padding: 20px;
+        font-weight: bold;
+    }
+
+    .admin-card-body {
+        padding: 20px;
+    }
+
+    .btn-admin {
+        background: linear-gradient(135deg, #2d5016 0%, #4a7c59 100%);
+        color: white;
+        border: none;
+    }
+
+    .btn-admin:hover {
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .event-card {
+        border: 1px solid #eee;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .event-card:hover {
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .event-badge {
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        color: white;
+    }
+
+    .btn-action {
+        padding: 5px 10px;
+        font-size: 0.85rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Admin Hero -->
+<section class="admin-hero">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h1><i class="fas fa-calendar-alt"></i> Gestion des Événements</h1>
+                <p class="mb-0">Ajouter, modifier et supprimer les workshops et rencontres</p>
+            </div>
+            <div>
+                <a href="{% url 'farmconnect_app:admin_dashboard' %}" class="btn btn-outline-light">
+                    <i class="fas fa-arrow-left"></i> Retour au Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container mb-5">
+    <div class="row">
+        <!-- Add Event Form -->
+        <div class="col-lg-5 mb-4">
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <i class="fas fa-plus"></i> Ajouter un Événement
+                </div>
+                <div class="admin-card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="add">
+
+                        <div class="mb-3">
+                            <label class="form-label">Titre</label>
+                            <input type="text" name="title" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea name="description" class="form-control" rows="3" required></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Type d'événement</label>
+                            <select name="event_type" class="form-select" required>
+                                {% for value, label in event_types %}
+                                <option value="{{ value }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Date</label>
+                                <input type="date" name="date" class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Heure début</label>
+                                <input type="time" name="start_time" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Heure fin (optionnel)</label>
+                            <input type="time" name="end_time" class="form-control">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Lieu</label>
+                            <input type="text" name="location" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Région</label>
+                            <select name="region" class="form-select" required>
+                                {% for value, label in regions %}
+                                <option value="{{ value }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Organisateur</label>
+                            <input type="text" name="organizer" class="form-control" required value="FarmConnect Senegal">
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Téléphone</label>
+                                <input type="text" name="contact_phone" class="form-control">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" name="contact_email" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" name="is_free" class="form-check-input" id="is_free" checked>
+                            <label class="form-check-label" for="is_free">Événement gratuit</label>
+                        </div>
+
+                        <button type="submit" class="btn btn-admin w-100">
+                            <i class="fas fa-plus"></i> Ajouter l'événement
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Events List -->
+        <div class="col-lg-7">
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <i class="fas fa-list"></i> Événements ({{ events|length }})
+                </div>
+                <div class="admin-card-body">
+                    {% for event in events %}
+                    <div class="event-card">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="mb-0">{{ event.title }}</h5>
+                            <span class="event-badge" style="background-color: {{ event.get_event_type_color }};">
+                                {{ event.get_event_type_display }}
+                            </span>
+                        </div>
+                        <p class="text-muted small mb-2">{{ event.description|truncatewords:20 }}</p>
+                        <div class="small mb-2">
+                            <i class="fas fa-calendar text-primary"></i> {{ event.date|date:"d M Y" }} à {{ event.start_time|time:"H:i" }}
+                            <br>
+                            <i class="fas fa-map-marker-alt text-danger"></i> {{ event.location }} ({{ event.get_region_display }})
+                            <br>
+                            <i class="fas fa-user text-success"></i> {{ event.organizer }}
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>
+                                {% if event.is_active %}
+                                <span class="badge bg-success">Actif</span>
+                                {% else %}
+                                <span class="badge bg-secondary">Inactif</span>
+                                {% endif %}
+                                {% if event.is_free %}
+                                <span class="badge bg-info">Gratuit</span>
+                                {% endif %}
+                            </span>
+                            <div>
+                                <form method="post" style="display:inline;" onsubmit="return confirm('Supprimer cet événement?');">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="event_id" value="{{ event.id }}">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger btn-action">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-center text-muted py-4">Aucun événement</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

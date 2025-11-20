@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Mes Commandes - FarmConnect Senegal{% endblock %}
+
+{% block extra_css %}
+<style>
+    .orders-hero {
+        background: linear-gradient(135deg, #1a3a0f 0%, #2d5016 100%);
+        color: white;
+        padding: 40px 0;
+        margin-bottom: 30px;
+    }
+
+    .order-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+
+    .order-header {
+        background: #f8f9fa;
+        padding: 15px 20px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .order-body {
+        padding: 20px;
+    }
+
+    .order-id {
+        font-weight: bold;
+        color: #2d5016;
+    }
+
+    .status-badge {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .status-pending { background: #fff3cd; color: #856404; }
+    .status-contacted { background: #d1ecf1; color: #0c5460; }
+    .status-confirmed { background: #d4edda; color: #155724; }
+    .status-completed { background: #e2e3e5; color: #383d41; }
+    .status-cancelled { background: #f8d7da; color: #721c24; }
+
+    .order-detail {
+        margin-bottom: 10px;
+    }
+
+    .order-detail-label {
+        color: #666;
+        font-size: 0.9rem;
+    }
+
+    .order-detail-value {
+        font-weight: 500;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+    }
+
+    .empty-state i {
+        font-size: 4rem;
+        color: #ddd;
+        margin-bottom: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<section class="orders-hero">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h1><i class="fas fa-shopping-bag"></i> Mes Commandes</h1>
+                <p class="mb-0">Suivez l'état de vos commandes d'outils</p>
+            </div>
+            <a href="{% url 'farmconnect_app:tools' %}" class="btn btn-outline-light">
+                <i class="fas fa-tools"></i> Voir les Outils
+            </a>
+        </div>
+    </div>
+</section>
+
+<div class="container mb-5">
+    {% if orders %}
+        {% for order in orders %}
+        <div class="order-card">
+            <div class="order-header">
+                <span class="order-id">
+                    <i class="fas fa-receipt"></i> Commande #{{ order.id }}
+                </span>
+                <span class="status-badge status-{{ order.status }}">
+                    {{ order.get_status_display }}
+                </span>
+            </div>
+            <div class="order-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="order-detail">
+                            <div class="order-detail-label">Outil</div>
+                            <div class="order-detail-value">{{ order.tool_name }}</div>
+                        </div>
+                        <div class="order-detail">
+                            <div class="order-detail-label">Prix unitaire</div>
+                            <div class="order-detail-value">{{ order.tool_price|floatformat:0 }} FCFA</div>
+                        </div>
+                        <div class="order-detail">
+                            <div class="order-detail-label">Quantité</div>
+                            <div class="order-detail-value">{{ order.quantity }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="order-detail">
+                            <div class="order-detail-label">Plan de paiement</div>
+                            <div class="order-detail-value">{{ order.get_payment_plan_display }}</div>
+                        </div>
+                        <div class="order-detail">
+                            <div class="order-detail-label">Date de commande</div>
+                            <div class="order-detail-value">{{ order.created_at|date:"d M Y à H:i" }}</div>
+                        </div>
+                        {% if order.contacted_at %}
+                        <div class="order-detail">
+                            <div class="order-detail-label">Date de contact</div>
+                            <div class="order-detail-value">{{ order.contacted_at|date:"d M Y à H:i" }}</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if order.message %}
+                <div class="mt-3 pt-3 border-top">
+                    <div class="order-detail-label">Votre message</div>
+                    <div class="order-detail-value">{{ order.message }}</div>
+                </div>
+                {% endif %}
+
+                <div class="mt-3 pt-3 border-top">
+                    <strong class="text-success">
+                        Total: {{ order.get_total_price|floatformat:0 }} FCFA
+                    </strong>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="order-card">
+            <div class="empty-state">
+                <i class="fas fa-shopping-cart"></i>
+                <h4>Aucune commande</h4>
+                <p class="text-muted">Vous n'avez pas encore passé de commande.</p>
+                <a href="{% url 'farmconnect_app:tools' %}" class="btn btn-success">
+                    <i class="fas fa-tools"></i> Voir les Outils Disponibles
+                </a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

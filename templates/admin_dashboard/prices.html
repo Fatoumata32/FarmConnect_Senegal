@@ -1,0 +1,245 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Gestion des Prix - Admin FarmConnect{% endblock %}
+
+{% block extra_css %}
+<style>
+    .admin-hero {
+        background: linear-gradient(135deg, #1a3a0f 0%, #2d5016 100%);
+        color: white;
+        padding: 40px 0;
+        margin-bottom: 30px;
+    }
+
+    .admin-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        overflow: hidden;
+    }
+
+    .admin-card-header {
+        background: linear-gradient(135deg, #2d5016 0%, #4a7c59 100%);
+        color: white;
+        padding: 20px;
+        font-weight: bold;
+    }
+
+    .admin-card-body {
+        padding: 20px;
+    }
+
+    .btn-admin {
+        background: linear-gradient(135deg, #2d5016 0%, #4a7c59 100%);
+        color: white;
+        border: none;
+    }
+
+    .btn-admin:hover {
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .table-admin th {
+        background: #f8f9fa;
+        font-weight: 600;
+        color: #2d5016;
+    }
+
+    .trend-up { color: #28a745; }
+    .trend-down { color: #dc3545; }
+    .trend-stable { color: #6c757d; }
+
+    .btn-action {
+        padding: 5px 10px;
+        font-size: 0.85rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Admin Hero -->
+<section class="admin-hero">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h1><i class="fas fa-coins"></i> Gestion des Prix du Marché</h1>
+                <p class="mb-0">Ajouter, modifier et supprimer les prix des cultures</p>
+            </div>
+            <div>
+                <a href="{% url 'farmconnect_app:admin_dashboard' %}" class="btn btn-outline-light">
+                    <i class="fas fa-arrow-left"></i> Retour au Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container mb-5">
+    <div class="row">
+        <!-- Add Price Form -->
+        <div class="col-lg-4 mb-4">
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <i class="fas fa-plus"></i> Ajouter un Prix
+                </div>
+                <div class="admin-card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="add">
+
+                        <div class="mb-3">
+                            <label class="form-label">Culture</label>
+                            <input type="text" name="crop_name" class="form-control" required placeholder="Ex: Mil, Arachide...">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Région</label>
+                            <select name="region" class="form-select" required>
+                                {% for value, label in regions %}
+                                <option value="{{ value }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Prix par kg (FCFA)</label>
+                            <input type="number" name="price_per_kg" class="form-control" required step="0.01">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Tendance</label>
+                            <select name="trend" class="form-select">
+                                <option value="stable">Stable</option>
+                                <option value="up">En hausse</option>
+                                <option value="down">En baisse</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Changement (%)</label>
+                            <input type="number" name="percentage_change" class="form-control" step="0.1" value="0">
+                        </div>
+
+                        <button type="submit" class="btn btn-admin w-100">
+                            <i class="fas fa-plus"></i> Ajouter
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prices List -->
+        <div class="col-lg-8">
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <i class="fas fa-list"></i> Liste des Prix ({{ prices|length }})
+                </div>
+                <div class="admin-card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-admin table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Culture</th>
+                                    <th>Région</th>
+                                    <th>Prix/kg</th>
+                                    <th>Tendance</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for price in prices %}
+                                <tr>
+                                    <td><strong>{{ price.crop_name }}</strong></td>
+                                    <td>{{ price.get_region_display }}</td>
+                                    <td>{{ price.price_per_kg }} FCFA</td>
+                                    <td>
+                                        {% if price.trend == 'up' %}
+                                        <span class="trend-up"><i class="fas fa-arrow-up"></i> +{{ price.percentage_change }}%</span>
+                                        {% elif price.trend == 'down' %}
+                                        <span class="trend-down"><i class="fas fa-arrow-down"></i> {{ price.percentage_change }}%</span>
+                                        {% else %}
+                                        <span class="trend-stable"><i class="fas fa-minus"></i></span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary btn-action"
+                                                onclick="editPrice({{ price.id }}, '{{ price.price_per_kg }}', '{{ price.trend }}', '{{ price.percentage_change }}')">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <form method="post" style="display:inline;" onsubmit="return confirm('Supprimer ce prix?');">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="action" value="delete">
+                                            <input type="hidden" name="price_id" value="{{ price.id }}">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger btn-action">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center py-4 text-muted">Aucun prix enregistré</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="update">
+                <input type="hidden" name="price_id" id="edit_price_id">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modifier le Prix</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Prix par kg (FCFA)</label>
+                        <input type="number" name="price_per_kg" id="edit_price_per_kg" class="form-control" required step="0.01">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Tendance</label>
+                        <select name="trend" id="edit_trend" class="form-select">
+                            <option value="stable">Stable</option>
+                            <option value="up">En hausse</option>
+                            <option value="down">En baisse</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Changement (%)</label>
+                        <input type="number" name="percentage_change" id="edit_percentage_change" class="form-control" step="0.1">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-admin">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function editPrice(id, price, trend, change) {
+    document.getElementById('edit_price_id').value = id;
+    document.getElementById('edit_price_per_kg').value = price;
+    document.getElementById('edit_trend').value = trend;
+    document.getElementById('edit_percentage_change').value = change;
+    new bootstrap.Modal(document.getElementById('editModal')).show();
+}
+</script>
+{% endblock %}

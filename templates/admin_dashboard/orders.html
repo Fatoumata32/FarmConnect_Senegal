@@ -1,0 +1,372 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Gestion des Commandes - Admin FarmConnect{% endblock %}
+
+{% block extra_css %}
+<style>
+    .admin-hero {
+        background: linear-gradient(135deg, #1a3a0f 0%, #2d5016 100%);
+        color: white;
+        padding: 40px 0;
+        margin-bottom: 30px;
+    }
+
+    .filter-bar {
+        background: white;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .filter-btn {
+        padding: 8px 16px;
+        border-radius: 20px;
+        border: 1px solid #dee2e6;
+        background: white;
+        color: #666;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .filter-btn:hover, .filter-btn.active {
+        background: #2d5016;
+        color: white;
+        border-color: #2d5016;
+    }
+
+    .filter-btn .badge {
+        margin-left: 5px;
+    }
+
+    .order-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+
+    .order-header {
+        padding: 15px 20px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .order-body {
+        padding: 20px;
+    }
+
+    .order-id {
+        font-weight: bold;
+        font-size: 1.1rem;
+    }
+
+    .buyer-info {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+
+    .buyer-info h6 {
+        color: #2d5016;
+        margin-bottom: 10px;
+    }
+
+    .info-row {
+        display: flex;
+        margin-bottom: 5px;
+    }
+
+    .info-label {
+        width: 100px;
+        color: #666;
+        font-size: 0.9rem;
+    }
+
+    .info-value {
+        font-weight: 500;
+    }
+
+    .status-badge {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .status-pending { background: #fff3cd; color: #856404; }
+    .status-contacted { background: #d1ecf1; color: #0c5460; }
+    .status-confirmed { background: #d4edda; color: #155724; }
+    .status-completed { background: #e2e3e5; color: #383d41; }
+    .status-cancelled { background: #f8d7da; color: #721c24; }
+
+    .action-btn {
+        padding: 5px 10px;
+        font-size: 0.85rem;
+    }
+
+    .admin-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+
+    .admin-card-header {
+        background: linear-gradient(135deg, #2d5016 0%, #4a7c59 100%);
+        color: white;
+        padding: 15px 20px;
+        font-weight: bold;
+    }
+
+    .admin-card-body {
+        padding: 20px;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+    }
+
+    .empty-state i {
+        font-size: 4rem;
+        color: #ddd;
+        margin-bottom: 20px;
+    }
+
+    .phone-link {
+        color: #2d5016;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .phone-link:hover {
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Admin Hero -->
+<section class="admin-hero">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h1><i class="fas fa-shopping-cart"></i> Gestion des Commandes</h1>
+                <p class="mb-0">{{ status_counts.all }} commande(s) au total</p>
+            </div>
+            <a href="{% url 'farmconnect_app:admin_dashboard' %}" class="btn btn-outline-light">
+                <i class="fas fa-arrow-left"></i> Retour au Dashboard
+            </a>
+        </div>
+    </div>
+</section>
+
+<div class="container mb-5">
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+        <a href="{% url 'farmconnect_app:admin_orders' %}"
+           class="filter-btn {% if not current_filter %}active{% endif %}">
+            Toutes <span class="badge bg-secondary">{{ status_counts.all }}</span>
+        </a>
+        <a href="?status=pending"
+           class="filter-btn {% if current_filter == 'pending' %}active{% endif %}">
+            <i class="fas fa-clock"></i> En attente <span class="badge bg-warning text-dark">{{ status_counts.pending }}</span>
+        </a>
+        <a href="?status=contacted"
+           class="filter-btn {% if current_filter == 'contacted' %}active{% endif %}">
+            <i class="fas fa-phone"></i> Contacté <span class="badge bg-info">{{ status_counts.contacted }}</span>
+        </a>
+        <a href="?status=confirmed"
+           class="filter-btn {% if current_filter == 'confirmed' %}active{% endif %}">
+            <i class="fas fa-check"></i> Confirmé <span class="badge bg-success">{{ status_counts.confirmed }}</span>
+        </a>
+        <a href="?status=completed"
+           class="filter-btn {% if current_filter == 'completed' %}active{% endif %}">
+            <i class="fas fa-check-double"></i> Terminé <span class="badge bg-secondary">{{ status_counts.completed }}</span>
+        </a>
+        <a href="?status=cancelled"
+           class="filter-btn {% if current_filter == 'cancelled' %}active{% endif %}">
+            <i class="fas fa-times"></i> Annulé <span class="badge bg-danger">{{ status_counts.cancelled }}</span>
+        </a>
+    </div>
+
+    <!-- Orders List -->
+    {% if orders %}
+        {% for order in orders %}
+        <div class="order-card">
+            <div class="order-header">
+                <div>
+                    <span class="order-id">
+                        <i class="fas fa-receipt"></i> Commande #{{ order.id }}
+                    </span>
+                    <small class="text-muted ms-2">{{ order.created_at|date:"d M Y à H:i" }}</small>
+                </div>
+                <span class="status-badge status-{{ order.status }}">
+                    {{ order.get_status_display }}
+                </span>
+            </div>
+            <div class="order-body">
+                <div class="row">
+                    <!-- Buyer Information -->
+                    <div class="col-lg-6 mb-3">
+                        <div class="buyer-info">
+                            <h6><i class="fas fa-user"></i> Informations de l'Acheteur</h6>
+                            <div class="info-row">
+                                <span class="info-label">Nom:</span>
+                                <span class="info-value">{{ order.buyer_name }}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Téléphone:</span>
+                                <span class="info-value">
+                                    <a href="tel:{{ order.buyer_phone }}" class="phone-link">
+                                        <i class="fas fa-phone"></i> {{ order.buyer_phone }}
+                                    </a>
+                                </span>
+                            </div>
+                            {% if order.buyer_email %}
+                            <div class="info-row">
+                                <span class="info-label">Email:</span>
+                                <span class="info-value">{{ order.buyer_email }}</span>
+                            </div>
+                            {% endif %}
+                            <div class="info-row">
+                                <span class="info-label">Région:</span>
+                                <span class="info-value">{{ order.buyer_region|title }}</span>
+                            </div>
+                            {% if order.buyer_village %}
+                            <div class="info-row">
+                                <span class="info-label">Village:</span>
+                                <span class="info-value">{{ order.buyer_village }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Order Details -->
+                    <div class="col-lg-6 mb-3">
+                        <div class="buyer-info">
+                            <h6><i class="fas fa-tools"></i> Détails de la Commande</h6>
+                            <div class="info-row">
+                                <span class="info-label">Outil:</span>
+                                <span class="info-value">{{ order.tool_name }}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Prix:</span>
+                                <span class="info-value">{{ order.tool_price|floatformat:0 }} FCFA</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Quantité:</span>
+                                <span class="info-value">{{ order.quantity }}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Paiement:</span>
+                                <span class="info-value">{{ order.get_payment_plan_display }}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label"><strong>Total:</strong></span>
+                                <span class="info-value text-success"><strong>{{ order.get_total_price|floatformat:0 }} FCFA</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% if order.message %}
+                <div class="alert alert-light mb-3">
+                    <strong><i class="fas fa-comment"></i> Message du client:</strong><br>
+                    {{ order.message }}
+                </div>
+                {% endif %}
+
+                {% if order.admin_notes %}
+                <div class="alert alert-info mb-3">
+                    <strong><i class="fas fa-sticky-note"></i> Notes admin:</strong><br>
+                    {{ order.admin_notes }}
+                </div>
+                {% endif %}
+
+                <!-- Actions -->
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <div>
+                        <!-- Update Status Form -->
+                        <form method="post" style="display: inline-block;">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="update_status">
+                            <input type="hidden" name="order_id" value="{{ order.id }}">
+                            <select name="status" class="form-select form-select-sm d-inline-block" style="width: auto;"
+                                    onchange="this.form.submit()">
+                                {% for value, label in status_choices %}
+                                <option value="{{ value }}" {% if order.status == value %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </form>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary action-btn"
+                                data-bs-toggle="modal"
+                                data-bs-target="#notesModal{{ order.id }}">
+                            <i class="fas fa-sticky-note"></i> Notes
+                        </button>
+                        <form method="post" style="display: inline;"
+                              onsubmit="return confirm('Supprimer cette commande?');">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="order_id" value="{{ order.id }}">
+                            <button type="submit" class="btn btn-sm btn-outline-danger action-btn">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notes Modal -->
+        <div class="modal fade" id="notesModal{{ order.id }}" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="add_notes">
+                        <input type="hidden" name="order_id" value="{{ order.id }}">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Notes - Commande #{{ order.id }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <textarea name="admin_notes" class="form-control" rows="4"
+                                      placeholder="Ajouter des notes sur cette commande...">{{ order.admin_notes }}</textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="admin-card">
+            <div class="empty-state">
+                <i class="fas fa-inbox"></i>
+                <h4>Aucune commande</h4>
+                <p class="text-muted">
+                    {% if current_filter %}
+                        Aucune commande avec le statut "{{ current_filter }}"
+                    {% else %}
+                        Aucune commande enregistrée pour le moment.
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

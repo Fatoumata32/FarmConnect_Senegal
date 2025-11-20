@@ -1,0 +1,362 @@
+{% load static %}
+<!-- Section: Conseils Agricoles -->
+<section class="py-5" style="background: linear-gradient(135deg, #fff8e1 0%, #fffaf0 100%);">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold fade-down" style="color: #2d5016;">
+                <i class="fas fa-lightbulb"></i> <span data-translate="advice_title">Conseils Agricoles</span>
+            </h2>
+            <p class="lead text-muted fade-up" data-translate="advice_subtitle">
+                Découvrez nos conseils détaillés pour 15 cultures populaires du Sénégal
+            </p>
+        </div>
+
+        <!-- Advice Cards Container -->
+        <div class="row g-4 stagger-children" id="cropAdvicePreviewContainer">
+            {% if crop_advice_previews %}
+                {% for advice in crop_advice_previews %}
+                <div class="col-lg-4 col-md-6 fade-up">
+                    <div class="card crop-advice-card shadow-sm h-100" onclick="showCropAdviceModal({{ advice.crop.id }}, '{{ advice.crop.name_fr|escapejs }}')" style="cursor: pointer;">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="crop-icon-circle me-3">
+                                    <i class="fas fa-seedling"></i>
+                                </div>
+                                <div>
+                                    <h5 class="card-title mb-0">{{ advice.crop.name_fr }}</h5>
+                                    <small class="text-muted">{{ advice.crop.scientific_name }}</small>
+                                </div>
+                            </div>
+
+                            <div class="advice-preview-text">
+                                <p class="card-text text-muted mb-2">
+                                    <i class="fas fa-calendar-alt text-success"></i>
+                                    <strong>Saison:</strong> <span class="preview-text">{{ advice.planting_season_fr|slice:":80" }}</span>...
+                                </p>
+                                <p class="card-text text-muted mb-2">
+                                    <i class="fas fa-clock text-primary"></i>
+                                    <strong>Maturation:</strong> <span class="preview-text">{{ advice.maturity_time_fr|slice:":60" }}</span>...
+                                </p>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                                <small class="text-muted">
+                                    <i class="fas fa-eye"></i> {{ advice.view_count }} vues
+                                </small>
+                                <span class="btn btn-sm btn-outline-success">
+                                    <i class="fas fa-arrow-right"></i> Voir détails
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12 text-center py-5">
+                    <i class="fas fa-info-circle fa-3x text-muted mb-3"></i>
+                    <h5>Aucun conseil disponible pour le moment</h5>
+                    <p class="text-muted">Les conseils seront bientôt ajoutés.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- See All Button -->
+        <div class="text-center mt-5">
+            <a href="{% url 'advice:crop-guide' %}" class="btn btn-lg scale-up" style="background: linear-gradient(135deg, #2d5016 0%, #4a7c59 100%); color: white; border: none;">
+                <i class="fas fa-book"></i> <span data-translate="advice_view_all">Voir tous les conseils</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Modal for displaying full advice -->
+<div class="modal fade" id="cropAdviceModal" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header" style="background: linear-gradient(135deg, #2d5016 0%, #4a7c59 100%); color: white;">
+                <div>
+                    <h4 class="modal-title mb-0" id="modalCropName"></h4>
+                    <small id="modalScientificName"></small>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="adviceModalContent">
+                <div class="text-center py-5">
+                    <div class="spinner-border text-success" role="status">
+                        <span class="visually-hidden">Chargement...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .crop-advice-card {
+        transition: all 0.3s ease;
+        border-left: 4px solid #2d5016;
+    }
+
+    .crop-advice-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(45, 80, 22, 0.2) !important;
+        border-left-color: #f4d03f;
+    }
+
+    .crop-icon-circle {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #2d5016 0%, #4a7c59 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+    }
+
+    .advice-preview-text {
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+
+    .advice-section {
+        margin-bottom: 2rem;
+    }
+
+    .advice-section h4 {
+        color: #2d5016;
+        border-bottom: 2px solid #f4d03f;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .advice-section-content {
+        line-height: 1.8;
+        color: #333;
+    }
+
+    .advice-section-content strong {
+        color: #2d5016;
+        font-weight: 600;
+    }
+</style>
+
+<script>
+// Specific crop icons for accurate representation
+const cropIcons = {
+    // Céréales
+    'mil': '🌾',
+    'sorgho': '🌾',
+    'maïs': '🌽',
+    'riz': '🍚',
+    'fonio': '🌾',
+    // Légumineuses
+    'arachide': '🥜',
+    'niébé': '🫘',
+    'haricot': '🫘',
+    // Légumes
+    'tomate': '🍅',
+    'oignon': '🧅',
+    'piment': '🌶️',
+    'gombo': '🥒',
+    'aubergine': '🍆',
+    'chou': '🥬',
+    'carotte': '🥕',
+    'laitue': '🥬',
+    'poivron': '🫑',
+    'concombre': '🥒',
+    // Fruits
+    'mangue': '🥭',
+    'papaye': '🍈',
+    'banane': '🍌',
+    'orange': '🍊',
+    'citron': '🍋',
+    'pastèque': '🍉',
+    'melon': '🍈',
+    'anacarde': '🥜',
+    // Tubercules
+    'manioc': '🥔',
+    'patate douce': '🍠',
+    'igname': '🥔',
+    'pomme de terre': '🥔',
+    // Oléagineux
+    'sésame': '🌻',
+    'tournesol': '🌻',
+    // Cultures de rente
+    'coton': '☁️',
+    'canne à sucre': '🎋',
+    // Default
+    'default': '🌱'
+};
+
+// Get crop-specific icon
+function getCropIcon(cropName) {
+    const normalizedName = cropName.toLowerCase().trim();
+    if (cropIcons[normalizedName]) {
+        return cropIcons[normalizedName];
+    }
+    for (const [key, icon] of Object.entries(cropIcons)) {
+        if (normalizedName.includes(key) || key.includes(normalizedName)) {
+            return icon;
+        }
+    }
+    return cropIcons['default'];
+}
+
+// Helper function to convert **text** to <strong>text</strong> and preserve line breaks
+function formatAdviceText(text) {
+    if (!text) return '';
+    text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    text = text.replace(/\n/g, '<br>');
+    return text;
+}
+
+// Show crop advice modal
+async function showCropAdviceModal(cropId, cropName) {
+    const modal = new bootstrap.Modal(document.getElementById('cropAdviceModal'));
+    const content = document.getElementById('adviceModalContent');
+
+    // Show loading
+    content.innerHTML = `
+        <div class="text-center py-5">
+            <div class="spinner-border text-success" role="status">
+                <span class="visually-hidden">Chargement...</span>
+            </div>
+            <p class="mt-3 text-muted">Chargement des conseils...</p>
+        </div>
+    `;
+
+    modal.show();
+
+    try {
+        const lang = localStorage.getItem('preferred_language') || 'fr';
+        const response = await fetch(`/api/crop-advice/by_crop/?crop_id=${cropId}&lang=${lang}`);
+
+        if (!response.ok) {
+            throw new Error('Erreur lors du chargement des conseils');
+        }
+
+        const data = await response.json();
+        displayAdviceInModal(data);
+
+    } catch (error) {
+        console.error('[Crop Advice] Error:', error);
+        content.innerHTML = `
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-triangle"></i>
+                Erreur lors du chargement des conseils. Veuillez réessayer.
+            </div>
+        `;
+    }
+}
+
+// Display advice in modal
+function displayAdviceInModal(data) {
+    const cropInfo = data.crop_info;
+    const advice = data.advice_data;
+
+    document.getElementById('modalCropName').textContent = cropInfo.name_fr;
+    document.getElementById('modalScientificName').textContent = cropInfo.scientific_name || '';
+
+    const content = `
+        <div class="advice-section">
+            <h4><i class="fas fa-calendar-alt"></i> Saison de Plantation</h4>
+            <div class="advice-section-content">${formatAdviceText(advice.planting_season)}</div>
+        </div>
+
+        <div class="advice-section">
+            <h4><i class="fas fa-clock"></i> Durée de Maturation</h4>
+            <div class="advice-section-content">${formatAdviceText(advice.maturity_time)}</div>
+        </div>
+
+        <div class="advice-section">
+            <h4><i class="fas fa-mountain"></i> Types de Sol Recommandés</h4>
+            <div class="advice-section-content">${formatAdviceText(advice.soil_type)}</div>
+        </div>
+
+        <div class="advice-section">
+            <h4><i class="fas fa-bug"></i> Défis - Insectes Nuisibles</h4>
+            <div class="advice-section-content">${formatAdviceText(advice.challenges.insects)}</div>
+        </div>
+
+        <div class="advice-section">
+            <h4><i class="fas fa-viruses"></i> Défis - Maladies</h4>
+            <div class="advice-section-content">${formatAdviceText(advice.challenges.diseases)}</div>
+        </div>
+
+        <div class="advice-section">
+            <h4><i class="fas fa-cloud-sun"></i> Défis - Environnementaux</h4>
+            <div class="advice-section-content">${formatAdviceText(advice.challenges.environmental)}</div>
+        </div>
+
+        <div class="advice-section">
+            <h4><i class="fas fa-shield-alt"></i> Conseils de Prévention</h4>
+            <div class="advice-section-content">${formatAdviceText(advice.tips.prevention)}</div>
+        </div>
+
+        <div class="advice-section">
+            <h4><i class="fas fa-tasks"></i> Conseils de Gestion</h4>
+            <div class="advice-section-content">${formatAdviceText(advice.tips.management)}</div>
+        </div>
+
+        <div class="advice-section">
+            <h4><i class="fas fa-flask"></i> Engrais Recommandés</h4>
+            <div class="advice-section-content">${formatAdviceText(advice.recommended_materials.fertilizers)}</div>
+        </div>
+
+        <div class="advice-section">
+            <h4><i class="fas fa-spray-can"></i> Pesticides Recommandés</h4>
+            <div class="advice-section-content">${formatAdviceText(advice.recommended_materials.pesticides)}</div>
+        </div>
+
+        <div class="advice-section">
+            <h4><i class="fas fa-tools"></i> Outils Recommandés</h4>
+            <div class="advice-section-content">${formatAdviceText(advice.recommended_materials.tools)}</div>
+        </div>
+
+        <div class="advice-section">
+            <h4><i class="fas fa-lightbulb"></i> Intrants Innovants</h4>
+            <div class="advice-section-content">${formatAdviceText(advice.recommended_materials.innovative_inputs)}</div>
+        </div>
+
+        ${advice.additional_notes ? `
+            <div class="advice-section">
+                <h4><i class="fas fa-info-circle"></i> Notes Supplémentaires</h4>
+                <div class="advice-section-content">${formatAdviceText(advice.additional_notes)}</div>
+            </div>
+        ` : ''}
+
+        <div class="text-center text-muted mt-4">
+            <i class="fas fa-eye"></i> ${data.view_count} vues
+        </div>
+    `;
+
+    document.getElementById('adviceModalContent').innerHTML = content;
+}
+
+// Clean up **text** from preview cards and add crop-specific icons on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const previewTexts = document.querySelectorAll('.preview-text');
+    previewTexts.forEach(element => {
+        let text = element.textContent;
+        // Remove **text** markers but keep the text
+        text = text.replace(/\*\*/g, '');
+        element.textContent = text;
+    });
+
+    // Update crop icons with emojis
+    const cropCards = document.querySelectorAll('.crop-advice-card');
+    cropCards.forEach(card => {
+        const titleElement = card.querySelector('.card-title');
+        const iconCircle = card.querySelector('.crop-icon-circle');
+        if (titleElement && iconCircle) {
+            const cropName = titleElement.textContent.trim();
+            const emoji = getCropIcon(cropName);
+            iconCircle.innerHTML = `<span style="font-size: 1.8rem;">${emoji}</span>`;
+        }
+    });
+});
+
+console.log('[Crop Advice] Home advice section loaded');
+</script>

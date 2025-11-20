@@ -1,0 +1,530 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Bibliothèque de Conseils" %} - FarmConnect{% endblock %}
+
+{% block extra_css %}
+<style>
+    .advice-library {
+        padding: 40px 0;
+    }
+
+    .search-section {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+        padding: 60px 0;
+        margin-bottom: 40px;
+    }
+
+    .search-box {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .search-input {
+        border-radius: 50px;
+        padding: 15px 25px;
+        font-size: 1.1rem;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .filter-section {
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        margin-bottom: 30px;
+    }
+
+    .filter-btn {
+        margin: 5px;
+        border-radius: 25px;
+        padding: 8px 20px;
+        transition: all 0.3s;
+    }
+
+    .filter-btn.active {
+        background: #28a745;
+        color: white;
+        border-color: #28a745;
+    }
+
+    .advice-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 20px;
+        box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+        transition: transform 0.3s, box-shadow 0.3s;
+        cursor: pointer;
+    }
+
+    .advice-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+    }
+
+    .advice-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        margin-bottom: 15px;
+    }
+
+    .advice-title {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 10px;
+    }
+
+    .advice-crop {
+        display: inline-block;
+        background: #e8f5e9;
+        color: #2e7d32;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    .advice-badges {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .badge-category {
+        background: #e3f2fd;
+        color: #1976d2;
+    }
+
+    .badge-stage {
+        background: #fff3e0;
+        color: #f57c00;
+    }
+
+    .badge-severity {
+        padding: 5px 12px;
+        border-radius: 15px;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .severity-low { background: #e8f5e9; color: #2e7d32; }
+    .severity-medium { background: #fff3e0; color: #f57c00; }
+    .severity-high { background: #ffebee; color: #c62828; }
+    .severity-critical { background: #f3e5f5; color: #6a1b9a; }
+
+    .advice-description {
+        color: #555;
+        line-height: 1.6;
+        margin: 15px 0;
+    }
+
+    .advice-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+        padding-top: 15px;
+        border-top: 1px solid #eee;
+    }
+
+    .advice-stats {
+        display: flex;
+        gap: 20px;
+        font-size: 0.9rem;
+        color: #777;
+    }
+
+    .stat-item i {
+        margin-right: 5px;
+    }
+
+    .loading {
+        text-align: center;
+        padding: 60px 0;
+        font-size: 1.2rem;
+        color: #777;
+    }
+
+    .no-results {
+        text-align: center;
+        padding: 80px 20px;
+    }
+
+    .no-results i {
+        font-size: 4rem;
+        color: #ddd;
+        margin-bottom: 20px;
+    }
+
+    .category-icon {
+        font-size: 2rem;
+        margin-right: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Search Section -->
+<div class="search-section">
+    <div class="container">
+        <h1 class="text-center mb-4" data-translate="advice_library_title">
+            {% trans "Bibliothèque de Conseils Agricoles" %}
+        </h1>
+        <p class="text-center mb-4" data-translate="advice_library_subtitle">
+            {% trans "Recherchez des solutions pratiques pour vos cultures" %}
+        </p>
+
+        <div class="search-box">
+            <div class="input-group">
+                <input
+                    type="text"
+                    class="form-control search-input"
+                    id="searchInput"
+                    placeholder="{% trans 'Rechercher... (ex: feuilles jaunes, ravageurs, irrigation)' %}"
+                    data-translate-placeholder="search_advice_placeholder"
+                >
+                <button class="btn btn-light" id="searchBtn" style="border-radius: 0 50px 50px 0;">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Bouton Conseils Personnalisés -->
+        <div class="text-center mt-4">
+            <a href="tel:+221123456789" class="btn btn-warning btn-lg px-5 py-3" style="border-radius: 50px; font-weight: bold; box-shadow: 0 5px 20px rgba(255,193,7,0.4);">
+                <i class="fas fa-phone-alt me-2"></i>
+                Appelez pour Conseils Personnalisés
+            </a>
+            <p class="text-white mt-3 mb-0">
+                <i class="fas fa-info-circle"></i> Parlez à un expert agricole pour des conseils adaptés à votre situation
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Filter Section -->
+<div class="container">
+    <div class="filter-section">
+        <h5 class="mb-3" data-translate="filter_by_crop">{% trans "Filtrer par culture" %}</h5>
+        <div id="cropFilters" class="mb-4">
+            <button class="btn btn-outline-success filter-btn active" data-crop="all">
+                {% trans "Toutes les cultures" %}
+            </button>
+            <!-- Crop filters will be loaded dynamically -->
+        </div>
+
+        <h5 class="mb-3" data-translate="filter_by_category">{% trans "Filtrer par catégorie" %}</h5>
+        <div id="categoryFilters">
+            <button class="btn btn-outline-primary filter-btn active" data-category="all">
+                {% trans "Toutes les catégories" %}
+            </button>
+            <button class="btn btn-outline-primary filter-btn" data-category="pest">
+                <i class="fas fa-bug"></i> {% trans "Ravageurs" %}
+            </button>
+            <button class="btn btn-outline-primary filter-btn" data-category="disease">
+                <i class="fas fa-viruses"></i> {% trans "Maladies" %}
+            </button>
+            <button class="btn btn-outline-primary filter-btn" data-category="nutrient">
+                <i class="fas fa-seedling"></i> {% trans "Nutrition" %}
+            </button>
+            <button class="btn btn-outline-primary filter-btn" data-category="watering">
+                <i class="fas fa-tint"></i> {% trans "Irrigation" %}
+            </button>
+            <button class="btn btn-outline-primary filter-btn" data-category="soil">
+                <i class="fas fa-mountain"></i> {% trans "Sol" %}
+            </button>
+            <button class="btn btn-outline-primary filter-btn" data-category="weather">
+                <i class="fas fa-cloud-sun"></i> {% trans "Météo" %}
+            </button>
+            <button class="btn btn-outline-primary filter-btn" data-category="harvest">
+                <i class="fas fa-warehouse"></i> {% trans "Récolte" %}
+            </button>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div id="adviceResults">
+        <div class="loading">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p data-translate="loading">{% trans "Chargement des conseils..." %}</p>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div id="pagination" class="text-center mt-4" style="display: none;">
+        <!-- Pagination will be added dynamically -->
+    </div>
+</div>
+
+<!-- Advice Detail Modal -->
+<div class="modal fade" id="adviceModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="adviceModalTitle"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="adviceModalBody">
+                <!-- Content will be loaded dynamically -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="helpfulBtn">
+                    <i class="fas fa-thumbs-up"></i> {% trans "Utile" %}
+                </button>
+                <button type="button" class="btn btn-outline-secondary" id="notHelpfulBtn">
+                    <i class="fas fa-thumbs-down"></i> {% trans "Pas utile" %}
+                </button>
+                <button type="button" class="btn btn-primary" id="saveAdviceBtn">
+                    <i class="fas fa-bookmark"></i> {% trans "Sauvegarder" %}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    let currentFilters = {
+        crop: 'all',
+        category: 'all',
+        search: ''
+    };
+
+    let currentLanguage = localStorage.getItem('preferred_language') || 'fr';
+    let currentAdviceId = null;
+
+    // Load advice entries
+    async function loadAdvice() {
+        const resultsDiv = document.getElementById('adviceResults');
+        resultsDiv.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i><p>Chargement...</p></div>';
+
+        try {
+            let url = '/api/advice/?lang=' + currentLanguage;
+
+            if (currentFilters.crop !== 'all') {
+                url += '&crop=' + currentFilters.crop;
+            }
+            if (currentFilters.category !== 'all') {
+                url += '&category=' + currentFilters.category;
+            }
+            if (currentFilters.search) {
+                url = '/api/advice/search/?q=' + encodeURIComponent(currentFilters.search) + '&lang=' + currentLanguage;
+            }
+
+            const response = await fetch(url);
+            const data = await response.json();
+
+            // Handle paginated response (data.results) or direct array
+            displayAdvice(data.results || data);
+        } catch (error) {
+            console.error('Error loading advice:', error);
+            resultsDiv.innerHTML = '<div class="alert alert-danger">Erreur lors du chargement des conseils.</div>';
+        }
+    }
+
+    // Display advice cards
+    function displayAdvice(advice) {
+        const resultsDiv = document.getElementById('adviceResults');
+
+        if (!advice || advice.length === 0) {
+            resultsDiv.innerHTML = `
+                <div class="no-results">
+                    <i class="fas fa-search"></i>
+                    <h4>Aucun conseil trouvé</h4>
+                    <p>Essayez de modifier vos filtres ou votre recherche.</p>
+                </div>
+            `;
+            return;
+        }
+
+        let html = '';
+        advice.forEach(item => {
+            const severityClass = 'severity-' + item.severity;
+            html += `
+                <div class="advice-card" onclick="showAdviceDetail('${item.id}')">
+                    <div class="advice-header">
+                        <div>
+                            <h3 class="advice-title">${item.title}</h3>
+                            <span class="advice-crop">${item.crop.name_fr}</span>
+                        </div>
+                        <div>
+                            <span class="badge-severity ${severityClass}">${getSeverityLabel(item.severity)}</span>
+                        </div>
+                    </div>
+
+                    <div class="advice-badges">
+                        <span class="badge badge-category">${getCategoryLabel(item.category)}</span>
+                        <span class="badge badge-stage">${getStageLabel(item.stage)}</span>
+                    </div>
+
+                    <p class="advice-description">${item.short_description}</p>
+
+                    <div class="advice-footer">
+                        <div class="advice-stats">
+                            <span class="stat-item"><i class="fas fa-eye"></i> ${item.view_count}</span>
+                            <span class="stat-item"><i class="fas fa-thumbs-up"></i> ${item.helpful_count}</span>
+                        </div>
+                        <small class="text-muted">${new Date(item.created_at).toLocaleDateString()}</small>
+                    </div>
+                </div>
+            `;
+        });
+
+        resultsDiv.innerHTML = html;
+    }
+
+    // Show advice detail in modal
+    async function showAdviceDetail(adviceId) {
+        currentAdviceId = adviceId;
+
+        try {
+            const response = await fetch(`/api/advice/${adviceId}/?lang=${currentLanguage}`);
+            const advice = await response.json();
+
+            document.getElementById('adviceModalTitle').textContent = advice.title;
+
+            let actionSteps = '';
+            if (advice.action_steps && advice.action_steps.length > 0) {
+                actionSteps = '<h5>Étapes d\'action:</h5><ol>';
+                advice.action_steps.forEach(step => {
+                    actionSteps += `<li>${step}</li>`;
+                });
+                actionSteps += '</ol>';
+            }
+
+            document.getElementById('adviceModalBody').innerHTML = `
+                <div class="mb-3">
+                    <span class="advice-crop">${advice.crop.name_fr}</span>
+                    <span class="badge badge-category ms-2">${getCategoryLabel(advice.category)}</span>
+                    <span class="badge badge-stage ms-2">${getStageLabel(advice.stage)}</span>
+                </div>
+                <div class="mb-3">${advice.content}</div>
+                ${actionSteps}
+                <div class="mt-3">
+                    <small class="text-muted">
+                        <i class="fas fa-eye"></i> ${advice.view_count} vues |
+                        <i class="fas fa-thumbs-up"></i> ${advice.helpful_count} utile
+                    </small>
+                </div>
+            `;
+
+            const modal = new bootstrap.Modal(document.getElementById('adviceModal'));
+            modal.show();
+        } catch (error) {
+            console.error('Error loading advice detail:', error);
+        }
+    }
+
+    // Helper functions for labels
+    function getSeverityLabel(severity) {
+        const labels = {
+            'low': 'Faible',
+            'medium': 'Moyen',
+            'high': 'Élevé',
+            'critical': 'Critique'
+        };
+        return labels[severity] || severity;
+    }
+
+    function getCategoryLabel(category) {
+        const labels = {
+            'pest': 'Ravageurs',
+            'disease': 'Maladies',
+            'nutrient': 'Nutrition',
+            'watering': 'Irrigation',
+            'soil': 'Sol',
+            'weather': 'Météo',
+            'harvest': 'Récolte',
+            'general': 'Général'
+        };
+        return labels[category] || category;
+    }
+
+    function getStageLabel(stage) {
+        const labels = {
+            'planting': 'Plantation',
+            'growth': 'Croissance',
+            'flowering': 'Floraison',
+            'fruiting': 'Fructification',
+            'harvest': 'Récolte',
+            'post_harvest': 'Post-récolte',
+            'general': 'Général'
+        };
+        return labels[stage] || stage;
+    }
+
+    // Load crops for filters
+    async function loadCropFilters() {
+        try {
+            const response = await fetch('/api/crops/');
+            const crops = await response.json();
+
+            const filtersDiv = document.getElementById('cropFilters');
+            crops.forEach(crop => {
+                const btn = document.createElement('button');
+                btn.className = 'btn btn-outline-success filter-btn';
+                btn.dataset.crop = crop.id;
+                btn.textContent = crop.name_fr;
+                btn.onclick = () => filterByCrop(crop.id);
+                filtersDiv.appendChild(btn);
+            });
+        } catch (error) {
+            console.error('Error loading crops:', error);
+        }
+    }
+
+    // Filter functions
+    function filterByCrop(cropId) {
+        currentFilters.crop = cropId;
+        updateFilterButtons('crop', cropId);
+        loadAdvice();
+    }
+
+    function filterByCategory(category) {
+        currentFilters.category = category;
+        updateFilterButtons('category', category);
+        loadAdvice();
+    }
+
+    function updateFilterButtons(type, value) {
+        const selector = type === 'crop' ? '#cropFilters' : '#categoryFilters';
+        document.querySelectorAll(`${selector} .filter-btn`).forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.dataset[type] === value) {
+                btn.classList.add('active');
+            }
+        });
+    }
+
+    // Search functionality
+    document.getElementById('searchBtn').addEventListener('click', () => {
+        currentFilters.search = document.getElementById('searchInput').value;
+        loadAdvice();
+    });
+
+    document.getElementById('searchInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            currentFilters.search = e.target.value;
+            loadAdvice();
+        }
+    });
+
+    // Category filter buttons
+    document.querySelectorAll('#categoryFilters .filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => filterByCategory(btn.dataset.category));
+    });
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+        loadCropFilters();
+        loadAdvice();
+    });
+</script>
+{% endblock %}

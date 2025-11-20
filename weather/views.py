@@ -3,62 +3,49 @@ from django.shortcuts import render
 from django.conf import settings
 from .models import WeatherData
 from django.utils import timezone
-import requests
+from .weather_service import WeatherService
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 def get_current_weather(request):
+    """
+    API endpoint pour obtenir la météo actuelle et prévisions 3 jours
+    """
     region = request.GET.get('region', 'dakar')
-    
+
     try:
-        # Essayer d'obtenir les données en cache
-        weather = WeatherData.objects.filter(
-            region__icontains=region,
-            is_current=True
-        ).first()
-        
-        if not weather:
-            # Récupérer depuis l'API OpenWeatherMap si configurée
-            api_key = settings.OPENWEATHER_API_KEY
-            if api_key:
-                url = f"http://api.openweathermap.org/data/2.5/weather?q={region},SN&appid={api_key}&units=metric"
-                response = requests.get(url)
-                
-                if response.status_code == 200:
-                    data = response.json()
-                    weather = WeatherData.objects.create(
-                        region=region,
-                        temperature=data['main']['temp'],
-                        humidity=data['main']['humidity'],
-                        wind_speed=data['wind']['speed'],
-                        rain_chance=data.get('rain', {}).get('1h', 0) * 100,
-                        visibility=data['visibility'] / 1000,
-                        condition=data['weather'][0]['description'],
-                        forecast_date=timezone.now().date(),
-                        is_current=True
-                    )
-            else:
-                # Données fictives si pas d'API
-                import random
-                weather_data = {
-                    'temperature': f"{random.randint(25, 35)}°C",
-                    'humidity': f"{random.randint(50, 80)}%",
-                    'wind_speed': f"{random.randint(5, 20)} km/h",
-                    'rain_chance': f"{random.randint(0, 60)}%",
-                    'visibility': f"{random.randint(8, 15)} km",
-                    'condition': 'Ensoleillé'
-                }
-                return JsonResponse(weather_data)
-        
-        return JsonResponse({
-            'temperature': f"{weather.temperature}°C",
-            'humidity': f"{weather.humidity}%",
-            'wind_speed': f"{weather.wind_speed} km/h",
-            'rain_chance': f"{weather.rain_chance}%",
-            'visibility': f"{weather.visibility} km",
-            'condition': weather.condition
-        })
-    
+        # Utiliser le nouveau service météo
+        weather_service = WeatherService()
+
+        # Récupérer météo actuelle
+        current = weather_service.get_current_weather(region)
+
+        # Récupérer prévisions 3 jours
+        forecast = weather_service.get_forecast_3days(region)
+
+        # Générer conseils agricoles
+        advice = weather_service.get_agricultural_advice(current, forecast)
+
+        # Construire la réponse
+        response_data = {
+            'region': region.title(),
+            'current': current,
+            'forecast': forecast,
+            'advice': advice,
+            'timestamp': current.get('timestamp') if current else None
+        }
+
+        logger.info(f"[Weather API] Served data for {region}")
+        return JsonResponse(response_data)
+
     except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
+        logger.error(f"[Weather API] Error: {e}")
+        return JsonResponse({
+            'error': 'Unable to fetch weather data',
+            'message': str(e)
+        }, status=500)
 
 def weather_dashboard(request):
    

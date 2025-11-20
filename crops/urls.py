@@ -5,8 +5,9 @@ from . import views
 app_name = 'crops'
 
 urlpatterns = [
-    path('', views.crop_list, name='list'),
+    path('', views.crops_list, name='list'),
     path('<int:crop_id>/', views.crop_detail, name='detail'),
+    path('api/<int:crop_id>/', views.get_crop_detail_api, name='detail-api'),
     path('tips/', views.farming_tips, name='tips'),
     path('calendar/', views.farming_calendar, name='calendar'),
 ]

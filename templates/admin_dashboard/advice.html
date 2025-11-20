@@ -1,0 +1,342 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Gestion des Conseils - Admin FarmConnect{% endblock %}
+
+{% block extra_css %}
+<style>
+    .admin-hero {
+        background: linear-gradient(135deg, #1a3a0f 0%, #2d5016 100%);
+        color: white;
+        padding: 40px 0;
+        margin-bottom: 30px;
+    }
+
+    .admin-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        overflow: hidden;
+        margin-bottom: 20px;
+    }
+
+    .admin-card-header {
+        background: linear-gradient(135deg, #2d5016 0%, #4a7c59 100%);
+        color: white;
+        padding: 20px;
+        font-weight: bold;
+    }
+
+    .admin-card-body {
+        padding: 20px;
+    }
+
+    .btn-admin {
+        background: linear-gradient(135deg, #2d5016 0%, #4a7c59 100%);
+        color: white;
+        border: none;
+    }
+
+    .btn-admin:hover {
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .advice-card {
+        border: 1px solid #eee;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .advice-card:hover {
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .btn-action {
+        padding: 5px 10px;
+        font-size: 0.85rem;
+    }
+
+    .form-section {
+        border-bottom: 1px solid #eee;
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+    }
+
+    .form-section:last-child {
+        border-bottom: none;
+    }
+
+    .section-title {
+        color: #2d5016;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Admin Hero -->
+<section class="admin-hero">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h1><i class="fas fa-lightbulb"></i> Gestion des Conseils</h1>
+                <p class="mb-0">Ajouter et modifier les conseils agricoles par culture</p>
+            </div>
+            <div>
+                <a href="{% url 'farmconnect_app:admin_dashboard' %}" class="btn btn-outline-light">
+                    <i class="fas fa-arrow-left"></i> Retour au Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container mb-5">
+    <div class="row">
+        <!-- Add Advice Form -->
+        {% if available_crops %}
+        <div class="col-lg-5 mb-4">
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <i class="fas fa-plus"></i> Ajouter un Conseil
+                </div>
+                <div class="admin-card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="add">
+
+                        <div class="form-section">
+                            <div class="section-title"><i class="fas fa-seedling"></i> Culture</div>
+                            <select name="crop_id" class="form-select" required>
+                                <option value="">-- Sélectionner une culture --</option>
+                                {% for crop in available_crops %}
+                                <option value="{{ crop.id }}">{{ crop.name_fr }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-section">
+                            <div class="section-title"><i class="fas fa-calendar"></i> Informations de Base</div>
+                            <div class="mb-2">
+                                <label class="form-label small">Saison de plantation</label>
+                                <textarea name="planting_season_fr" class="form-control" rows="2" required placeholder="Ex: Juin à Août"></textarea>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label small">Durée de maturation</label>
+                                <textarea name="maturity_time_fr" class="form-control" rows="2" required placeholder="Ex: 90-120 jours"></textarea>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label small">Types de sol</label>
+                                <textarea name="soil_type_fr" class="form-control" rows="2" placeholder="Ex: Sol sablonneux, limoneux"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <div class="section-title"><i class="fas fa-exclamation-triangle"></i> Défis</div>
+                            <div class="mb-2">
+                                <label class="form-label small">Insectes nuisibles</label>
+                                <textarea name="challenges_insects_fr" class="form-control" rows="2" required></textarea>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label small">Maladies</label>
+                                <textarea name="challenges_diseases_fr" class="form-control" rows="2" required></textarea>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label small">Problèmes environnementaux</label>
+                                <textarea name="challenges_environmental_fr" class="form-control" rows="2" required></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <div class="section-title"><i class="fas fa-check-circle"></i> Conseils</div>
+                            <div class="mb-2">
+                                <label class="form-label small">Prévention</label>
+                                <textarea name="prevention_tips_fr" class="form-control" rows="2" required></textarea>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label small">Gestion</label>
+                                <textarea name="management_tips_fr" class="form-control" rows="2" required></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <div class="section-title"><i class="fas fa-tools"></i> Matériels Recommandés</div>
+                            <div class="mb-2">
+                                <label class="form-label small">Engrais</label>
+                                <textarea name="recommended_fertilizers_fr" class="form-control" rows="2" required></textarea>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label small">Pesticides</label>
+                                <textarea name="recommended_pesticides_fr" class="form-control" rows="2" required></textarea>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label small">Outils</label>
+                                <textarea name="recommended_tools_fr" class="form-control" rows="2" required></textarea>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label small">Intrants innovants</label>
+                                <textarea name="innovative_inputs_fr" class="form-control" rows="2" required></textarea>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small">Notes supplémentaires</label>
+                            <textarea name="additional_notes_fr" class="form-control" rows="2"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-admin w-100">
+                            <i class="fas fa-plus"></i> Ajouter le conseil
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Advice List -->
+        <div class="{% if available_crops %}col-lg-7{% else %}col-12{% endif %}">
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <i class="fas fa-list"></i> Conseils par Culture ({{ advice_list|length }})
+                </div>
+                <div class="admin-card-body">
+                    {% for advice in advice_list %}
+                    <div class="advice-card">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <h5 class="mb-1">{{ advice.crop.name_fr }}</h5>
+                                <small class="text-muted">{{ advice.crop.scientific_name }}</small>
+                            </div>
+                            <span class="badge {% if advice.is_active %}bg-success{% else %}bg-secondary{% endif %}">
+                                {% if advice.is_active %}Actif{% else %}Inactif{% endif %}
+                            </span>
+                        </div>
+
+                        <div class="small mb-2">
+                            <strong>Saison:</strong> {{ advice.planting_season_fr|truncatewords:10 }}<br>
+                            <strong>Maturation:</strong> {{ advice.maturity_time_fr|truncatewords:10 }}
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <small class="text-muted">
+                                <i class="fas fa-eye"></i> {{ advice.view_count }} vues
+                            </small>
+                            <div>
+                                <button class="btn btn-sm btn-outline-primary btn-action"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#editModal{{ advice.id }}">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <form method="post" style="display:inline;" onsubmit="return confirm('Supprimer ce conseil?');">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="advice_id" value="{{ advice.id }}">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger btn-action">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Edit Modal for each advice -->
+                    <div class="modal fade" id="editModal{{ advice.id }}" tabindex="-1">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="update">
+                                    <input type="hidden" name="advice_id" value="{{ advice.id }}">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Modifier: {{ advice.crop.name_fr }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-6 mb-2">
+                                                <label class="form-label small">Saison de plantation</label>
+                                                <textarea name="planting_season_fr" class="form-control" rows="2">{{ advice.planting_season_fr }}</textarea>
+                                            </div>
+                                            <div class="col-md-6 mb-2">
+                                                <label class="form-label small">Durée de maturation</label>
+                                                <textarea name="maturity_time_fr" class="form-control" rows="2">{{ advice.maturity_time_fr }}</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="mb-2">
+                                            <label class="form-label small">Types de sol</label>
+                                            <textarea name="soil_type_fr" class="form-control" rows="2">{{ advice.soil_type_fr }}</textarea>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4 mb-2">
+                                                <label class="form-label small">Insectes</label>
+                                                <textarea name="challenges_insects_fr" class="form-control" rows="2">{{ advice.challenges_insects_fr }}</textarea>
+                                            </div>
+                                            <div class="col-md-4 mb-2">
+                                                <label class="form-label small">Maladies</label>
+                                                <textarea name="challenges_diseases_fr" class="form-control" rows="2">{{ advice.challenges_diseases_fr }}</textarea>
+                                            </div>
+                                            <div class="col-md-4 mb-2">
+                                                <label class="form-label small">Environnement</label>
+                                                <textarea name="challenges_environmental_fr" class="form-control" rows="2">{{ advice.challenges_environmental_fr }}</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-2">
+                                                <label class="form-label small">Prévention</label>
+                                                <textarea name="prevention_tips_fr" class="form-control" rows="2">{{ advice.prevention_tips_fr }}</textarea>
+                                            </div>
+                                            <div class="col-md-6 mb-2">
+                                                <label class="form-label small">Gestion</label>
+                                                <textarea name="management_tips_fr" class="form-control" rows="2">{{ advice.management_tips_fr }}</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-2">
+                                                <label class="form-label small">Engrais</label>
+                                                <textarea name="recommended_fertilizers_fr" class="form-control" rows="2">{{ advice.recommended_fertilizers_fr }}</textarea>
+                                            </div>
+                                            <div class="col-md-6 mb-2">
+                                                <label class="form-label small">Pesticides</label>
+                                                <textarea name="recommended_pesticides_fr" class="form-control" rows="2">{{ advice.recommended_pesticides_fr }}</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-2">
+                                                <label class="form-label small">Outils</label>
+                                                <textarea name="recommended_tools_fr" class="form-control" rows="2">{{ advice.recommended_tools_fr }}</textarea>
+                                            </div>
+                                            <div class="col-md-6 mb-2">
+                                                <label class="form-label small">Intrants innovants</label>
+                                                <textarea name="innovative_inputs_fr" class="form-control" rows="2">{{ advice.innovative_inputs_fr }}</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="mb-2">
+                                            <label class="form-label small">Notes supplémentaires</label>
+                                            <textarea name="additional_notes_fr" class="form-control" rows="2">{{ advice.additional_notes_fr }}</textarea>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="is_active" class="form-check-input" id="is_active_{{ advice.id }}" {% if advice.is_active %}checked{% endif %}>
+                                            <label class="form-check-label" for="is_active_{{ advice.id }}">Actif</label>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                        <button type="submit" class="btn btn-admin">Enregistrer</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-center text-muted py-4">Aucun conseil enregistré</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

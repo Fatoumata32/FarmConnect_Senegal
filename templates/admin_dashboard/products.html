@@ -1,0 +1,256 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Gestion des Produits - Admin FarmConnect{% endblock %}
+
+{% block extra_css %}
+<style>
+    .admin-hero {
+        background: linear-gradient(135deg, #1a3a0f 0%, #2d5016 100%);
+        color: white;
+        padding: 40px 0;
+        margin-bottom: 30px;
+    }
+
+    .admin-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        overflow: hidden;
+    }
+
+    .admin-card-header {
+        background: linear-gradient(135deg, #2d5016 0%, #4a7c59 100%);
+        color: white;
+        padding: 20px;
+        font-weight: bold;
+    }
+
+    .admin-card-body {
+        padding: 20px;
+    }
+
+    .btn-admin {
+        background: linear-gradient(135deg, #2d5016 0%, #4a7c59 100%);
+        color: white;
+        border: none;
+    }
+
+    .btn-admin:hover {
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .table-admin th {
+        background: #f8f9fa;
+        font-weight: 600;
+        color: #2d5016;
+    }
+
+    .btn-action {
+        padding: 5px 10px;
+        font-size: 0.85rem;
+    }
+
+    .product-row:hover {
+        background: #f8f9fa;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Admin Hero -->
+<section class="admin-hero">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h1><i class="fas fa-tools"></i> Gestion des Produits</h1>
+                <p class="mb-0">Ajouter, modifier et supprimer les outils du marketplace</p>
+            </div>
+            <div>
+                <a href="{% url 'farmconnect_app:admin_dashboard' %}" class="btn btn-outline-light">
+                    <i class="fas fa-arrow-left"></i> Retour au Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container mb-5">
+    <div class="row">
+        <!-- Add Product Form -->
+        <div class="col-lg-4 mb-4">
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <i class="fas fa-plus"></i> Ajouter un Produit
+                </div>
+                <div class="admin-card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="add">
+
+                        <div class="mb-3">
+                            <label class="form-label">Nom du produit</label>
+                            <input type="text" name="name" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea name="description" class="form-control" rows="3" required></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Prix (FCFA)</label>
+                            <input type="number" name="price" class="form-control" required step="0.01">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Catégorie</label>
+                            <input type="text" name="category" class="form-control" required list="categories" placeholder="Ex: Outils Manuels">
+                            <datalist id="categories">
+                                {% for cat in categories %}
+                                <option value="{{ cat }}">
+                                {% endfor %}
+                            </datalist>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Quantité en stock</label>
+                            <input type="number" name="quantity_available" class="form-control" value="0">
+                        </div>
+
+                        <button type="submit" class="btn btn-admin w-100">
+                            <i class="fas fa-plus"></i> Ajouter
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products List -->
+        <div class="col-lg-8">
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <i class="fas fa-list"></i> Produits ({{ products|length }})
+                </div>
+                <div class="admin-card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-admin mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Produit</th>
+                                    <th>Catégorie</th>
+                                    <th>Prix</th>
+                                    <th>Stock</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for product in products %}
+                                <tr class="product-row">
+                                    <td>
+                                        <strong>{{ product.name }}</strong>
+                                        <div class="text-muted small">{{ product.description|truncatewords:8 }}</div>
+                                    </td>
+                                    <td><span class="badge bg-secondary">{{ product.category }}</span></td>
+                                    <td><strong class="text-success">{{ product.price|floatformat:0 }}</strong> FCFA</td>
+                                    <td>{{ product.quantity_available }}</td>
+                                    <td>
+                                        {% if product.is_available %}
+                                        <span class="badge bg-success">Disponible</span>
+                                        {% else %}
+                                        <span class="badge bg-danger">Indisponible</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary btn-action"
+                                                onclick="editProduct({{ product.id }}, '{{ product.name|escapejs }}', '{{ product.description|escapejs }}', '{{ product.price }}', '{{ product.category }}', '{{ product.quantity_available }}', {{ product.is_available|yesno:'true,false' }})">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <form method="post" style="display:inline;" onsubmit="return confirm('Supprimer ce produit?');">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="action" value="delete">
+                                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger btn-action">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center py-4 text-muted">Aucun produit</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="update">
+                <input type="hidden" name="product_id" id="edit_product_id">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modifier le Produit</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Nom</label>
+                        <input type="text" name="name" id="edit_name" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea name="description" id="edit_description" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Prix (FCFA)</label>
+                        <input type="number" name="price" id="edit_price" class="form-control" required step="0.01">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Catégorie</label>
+                        <input type="text" name="category" id="edit_category" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Quantité en stock</label>
+                        <input type="number" name="quantity_available" id="edit_quantity" class="form-control">
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" name="is_available" class="form-check-input" id="edit_available">
+                        <label class="form-check-label" for="edit_available">Disponible</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-admin">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function editProduct(id, name, description, price, category, quantity, available) {
+    document.getElementById('edit_product_id').value = id;
+    document.getElementById('edit_name').value = name;
+    document.getElementById('edit_description').value = description;
+    document.getElementById('edit_price').value = price;
+    document.getElementById('edit_category').value = category;
+    document.getElementById('edit_quantity').value = quantity;
+    document.getElementById('edit_available').checked = available;
+    new bootstrap.Modal(document.getElementById('editModal')).show();
+}
+</script>
+{% endblock %}

@@ -1,0 +1,442 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}Marketplace - FarmConnect Senegal{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Hero Section */
+    .marketplace-hero {
+        background: linear-gradient(135deg, rgba(45, 80, 22, 0.95) 0%, rgba(74, 124, 89, 0.95) 100%);
+        color: white;
+        padding: 80px 0 60px;
+        margin: 0;
+    }
+
+    .marketplace-hero h1 {
+        font-size: 3rem;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+
+    .marketplace-hero .lead {
+        font-size: 1.3rem;
+        opacity: 0.95;
+    }
+
+    /* Search & Filter Bar */
+    .search-filter-bar {
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        margin-top: -40px;
+        position: relative;
+        z-index: 10;
+    }
+
+    /* Product Cards */
+    .product-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .product-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 35px rgba(45, 80, 22, 0.2);
+    }
+
+    .product-image {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+    }
+
+    .product-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: var(--accent-yellow);
+        color: var(--primary-green);
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 0.85rem;
+    }
+
+    .product-body {
+        padding: 20px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .product-title {
+        font-size: 1.3rem;
+        font-weight: bold;
+        color: var(--primary-green);
+        margin-bottom: 10px;
+    }
+
+    .product-description {
+        color: #666;
+        font-size: 0.95rem;
+        margin-bottom: 15px;
+        flex-grow: 1;
+    }
+
+    .product-price {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: var(--primary-green);
+        margin-bottom: 15px;
+    }
+
+    .product-price small {
+        font-size: 0.6em;
+        color: #666;
+        font-weight: normal;
+    }
+
+    .payment-options {
+        background: #f8f9fa;
+        padding: 10px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        font-size: 0.9rem;
+    }
+
+    .btn-buy {
+        background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%);
+        color: white;
+        border: none;
+        padding: 12px;
+        border-radius: 8px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+    .btn-buy:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(45, 80, 22, 0.3);
+        color: white;
+    }
+
+    .btn-video {
+        background: #ff0000;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    .btn-video:hover {
+        background: #cc0000;
+        color: white;
+    }
+
+    /* Category Pills */
+    .category-pill {
+        background: white;
+        border: 2px solid var(--primary-green);
+        color: var(--primary-green);
+        padding: 8px 20px;
+        border-radius: 25px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin: 5px;
+        display: inline-block;
+    }
+
+    .category-pill:hover,
+    .category-pill.active {
+        background: var(--primary-green);
+        color: white;
+    }
+
+    /* Stats Section */
+    .stats-box {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    .stats-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: var(--primary-green);
+    }
+
+    .stats-label {
+        color: #666;
+        font-size: 0.95rem;
+    }
+
+    /* Video Modal */
+    .video-container {
+        position: relative;
+        padding-bottom: 56.25%;
+        height: 0;
+        overflow: hidden;
+    }
+
+    .video-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="marketplace-hero">
+    <div class="container">
+        <div class="text-center">
+            <h1><i class="fas fa-shopping-cart"></i> Marketplace Agricole</h1>
+            <p class="lead">
+                Achetez vos outils et équipements agricoles avec des paiements échelonnés
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Search & Filter Bar -->
+<section class="container mb-5">
+    <div class="search-filter-bar">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-3 mb-lg-0">
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text bg-white">
+                        <i class="fas fa-search text-success"></i>
+                    </span>
+                    <input type="text" id="productSearch" class="form-control" placeholder="Rechercher un produit...">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="d-flex flex-wrap justify-content-lg-end">
+                    <span class="category-pill active" data-category="all">
+                        <i class="fas fa-th"></i> Tous
+                    </span>
+                    {% for category in categories %}
+                    <span class="category-pill" data-category="{{ category|slugify }}">
+                        {% if 'Outils' in category %}
+                        <i class="fas fa-tools"></i>
+                        {% elif 'Irrigation' in category %}
+                        <i class="fas fa-tint"></i>
+                        {% elif 'Coupe' in category %}
+                        <i class="fas fa-cut"></i>
+                        {% elif 'Semis' in category %}
+                        <i class="fas fa-seedling"></i>
+                        {% elif 'Traitement' in category %}
+                        <i class="fas fa-spray-can"></i>
+                        {% elif 'Transport' in category %}
+                        <i class="fas fa-truck"></i>
+                        {% elif 'Protection' in category %}
+                        <i class="fas fa-shield-alt"></i>
+                        {% else %}
+                        <i class="fas fa-box"></i>
+                        {% endif %}
+                        {{ category }}
+                    </span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="container mb-5">
+    <div class="row">
+        <div class="col-md-3 mb-3">
+            <div class="stats-box">
+                <div class="stats-number">500+</div>
+                <div class="stats-label">Produits Disponibles</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="stats-box">
+                <div class="stats-number">98%</div>
+                <div class="stats-label">Satisfaction Client</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="stats-box">
+                <div class="stats-number">24/7</div>
+                <div class="stats-label">Support Disponible</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="stats-box">
+                <div class="stats-number">14</div>
+                <div class="stats-label">Régions Livrées</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Products Grid -->
+<section class="container mb-5">
+    <div class="row" id="productsGrid">
+        {% for product in products %}
+        <div class="col-lg-4 col-md-6 mb-4" data-category="{{ product.category|slugify }}">
+            <div class="product-card">
+                <div class="position-relative">
+                    {% if product.image %}
+                    <img src="{{ product.image.url }}"
+                         alt="{{ product.name }}"
+                         class="product-image"
+                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=600&h=400&fit=crop';">
+                    {% else %}
+                    <img src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=600&h=400&fit=crop"
+                         alt="{{ product.name }}"
+                         class="product-image">
+                    {% endif %}
+                    {% if forloop.counter <= 3 %}
+                    <span class="product-badge">Nouveau</span>
+                    {% endif %}
+                </div>
+                <div class="product-body">
+                    <h3 class="product-title">{{ product.name }}</h3>
+                    <p class="product-description">
+                        {{ product.description|truncatewords:25 }}
+                    </p>
+                    <div class="product-price">
+                        {{ product.price|floatformat:0 }} <small>FCFA</small>
+                    </div>
+                    <div class="payment-options">
+                        <i class="fas fa-credit-card text-success"></i>
+                        <strong>Paiement échelonné:</strong>
+                        {% widthratio product.price 3 1 as installment %}
+                        3x {{ installment }} FCFA
+                    </div>
+                    <div class="mb-2">
+                        <small class="text-muted">
+                            <i class="fas fa-box"></i> {{ product.quantity_available }} en stock
+                        </small>
+                        <span class="badge bg-success ms-2">{{ product.category }}</span>
+                    </div>
+                    <button class="btn btn-buy" data-product-name="{{ product.name }}" data-product-price="{{ product.price }}">
+                        <i class="fas fa-shopping-cart"></i> Acheter Maintenant
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <i class="fas fa-shopping-basket fa-4x text-muted mb-3"></i>
+            <h3>Aucun produit disponible</h3>
+            <p class="text-muted">Les produits seront bientôt ajoutés au marketplace.</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Video Modal -->
+<div class="modal fade" id="videoModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Vidéo Démonstration</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="video-container" id="videoContainer">
+                    <!-- Video will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Category filtering
+document.querySelectorAll('.category-pill').forEach(pill => {
+    pill.addEventListener('click', function() {
+        // Update active state
+        document.querySelectorAll('.category-pill').forEach(p => p.classList.remove('active'));
+        this.classList.add('active');
+
+        const category = this.dataset.category;
+        const products = document.querySelectorAll('#productsGrid > div');
+
+        products.forEach(product => {
+            if (category === 'all' || product.dataset.category === category) {
+                product.style.display = 'block';
+            } else {
+                product.style.display = 'none';
+            }
+        });
+    });
+});
+
+// Search functionality
+document.getElementById('productSearch').addEventListener('input', function() {
+    const query = this.value.toLowerCase();
+    const products = document.querySelectorAll('.product-card');
+
+    products.forEach(product => {
+        const title = product.querySelector('.product-title').textContent.toLowerCase();
+        const description = product.querySelector('.product-description').textContent.toLowerCase();
+
+        if (title.includes(query) || description.includes(query)) {
+            product.closest('[data-category]').style.display = 'block';
+        } else {
+            product.closest('[data-category]').style.display = 'none';
+        }
+    });
+});
+
+// Buy product function with event delegation
+document.querySelectorAll('.btn-buy').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const productName = this.dataset.productName;
+        const price = parseFloat(this.dataset.productPrice);
+
+        if (confirm(`Voulez-vous acheter "${productName}" pour ${price.toLocaleString()} FCFA?\n\nOptions de paiement échelonné disponibles!`)) {
+            alert(`Commande confirmée!\n\nProduit: ${productName}\nPrix: ${price.toLocaleString()} FCFA\n\nUn agent vous contactera sous 24h pour finaliser votre commande et choisir votre plan de paiement.`);
+
+            // TODO: Send to backend
+            console.log('Product ordered:', productName, price);
+        }
+    });
+});
+
+// Show video function
+function showVideo(videoUrl) {
+    const videoContainer = document.getElementById('videoContainer');
+    videoContainer.innerHTML = `<iframe src="${videoUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+
+    const modal = new bootstrap.Modal(document.getElementById('videoModal'));
+    modal.show();
+
+    // Clear video when modal closes
+    document.getElementById('videoModal').addEventListener('hidden.bs.modal', function() {
+        videoContainer.innerHTML = '';
+    });
+}
+
+console.log('[Marketplace] Page loaded with', document.querySelectorAll('.product-card').length, 'products');
+</script>
+{% endblock %}

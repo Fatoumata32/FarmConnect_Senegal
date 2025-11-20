@@ -1,0 +1,267 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Commander un Outil - FarmConnect Senegal{% endblock %}
+
+{% block extra_css %}
+<style>
+    .order-hero {
+        background: linear-gradient(135deg, #1a3a0f 0%, #2d5016 100%);
+        color: white;
+        padding: 40px 0;
+        margin-bottom: 30px;
+    }
+
+    .order-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        overflow: hidden;
+    }
+
+    .order-card-header {
+        background: linear-gradient(135deg, #2d5016 0%, #4a7c59 100%);
+        color: white;
+        padding: 20px;
+        font-weight: bold;
+    }
+
+    .order-card-body {
+        padding: 25px;
+    }
+
+    .tool-summary {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-left: 4px solid #2d5016;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #2d5016;
+    }
+
+    .btn-order {
+        background: linear-gradient(135deg, #2d5016 0%, #4a7c59 100%);
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 8px;
+        font-weight: bold;
+    }
+
+    .btn-order:hover {
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(45, 80, 22, 0.3);
+    }
+
+    .payment-option {
+        border: 2px solid #dee2e6;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .payment-option:hover {
+        border-color: #2d5016;
+        background: #f8f9fa;
+    }
+
+    .payment-option.selected {
+        border-color: #2d5016;
+        background: #e8f5e9;
+    }
+
+    .payment-option input[type="radio"] {
+        margin-right: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Order Hero -->
+<section class="order-hero">
+    <div class="container">
+        <h1><i class="fas fa-shopping-cart"></i> Commander un Outil</h1>
+        <p class="mb-0">Remplissez le formulaire ci-dessous pour passer votre commande</p>
+    </div>
+</section>
+
+<div class="container mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="order-card">
+                <div class="order-card-header">
+                    <i class="fas fa-clipboard-list"></i> Détails de la Commande
+                </div>
+                <div class="order-card-body">
+                    <!-- Tool Summary -->
+                    {% if tool_name %}
+                    <div class="tool-summary">
+                        <h5 class="mb-2"><i class="fas fa-tools"></i> Outil Sélectionné</h5>
+                        <p class="mb-1"><strong>{{ tool_name }}</strong></p>
+                        {% if tool_price %}
+                        <p class="mb-0 text-success"><strong>{{ tool_price }} FCFA</strong></p>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <!-- Tool Info (hidden or editable) -->
+                        <div class="row mb-3">
+                            <div class="col-md-8">
+                                <label class="form-label">Nom de l'outil *</label>
+                                <input type="text" name="tool_name" class="form-control"
+                                       value="{{ tool_name }}" required
+                                       {% if tool_name %}readonly{% endif %}>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Prix (FCFA) *</label>
+                                <input type="number" name="tool_price" class="form-control"
+                                       value="{{ tool_price }}" required
+                                       {% if tool_price %}readonly{% endif %}>
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <h5 class="mb-3"><i class="fas fa-user"></i> Vos Informations</h5>
+
+                        <!-- Buyer Info -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Nom Complet *</label>
+                                <input type="text" name="buyer_name" class="form-control"
+                                       value="{{ user.first_name }} {{ user.last_name }}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Téléphone *</label>
+                                <input type="tel" name="buyer_phone" class="form-control"
+                                       value="{{ user.phone_number }}" required
+                                       placeholder="+221 XX XXX XX XX">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Email</label>
+                                <input type="email" name="buyer_email" class="form-control"
+                                       value="{{ user.email }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Région *</label>
+                                <select name="buyer_region" class="form-select" required>
+                                    <option value="">-- Sélectionner --</option>
+                                    <option value="dakar" {% if user.region == 'dakar' %}selected{% endif %}>Dakar</option>
+                                    <option value="thies" {% if user.region == 'thies' %}selected{% endif %}>Thiès</option>
+                                    <option value="kaolack" {% if user.region == 'kaolack' %}selected{% endif %}>Kaolack</option>
+                                    <option value="saint-louis" {% if user.region == 'saint-louis' %}selected{% endif %}>Saint-Louis</option>
+                                    <option value="ziguinchor" {% if user.region == 'ziguinchor' %}selected{% endif %}>Ziguinchor</option>
+                                    <option value="tambacounda" {% if user.region == 'tambacounda' %}selected{% endif %}>Tambacounda</option>
+                                    <option value="kolda" {% if user.region == 'kolda' %}selected{% endif %}>Kolda</option>
+                                    <option value="matam" {% if user.region == 'matam' %}selected{% endif %}>Matam</option>
+                                    <option value="louga" {% if user.region == 'louga' %}selected{% endif %}>Louga</option>
+                                    <option value="fatick" {% if user.region == 'fatick' %}selected{% endif %}>Fatick</option>
+                                    <option value="diourbel" {% if user.region == 'diourbel' %}selected{% endif %}>Diourbel</option>
+                                    <option value="kaffrine" {% if user.region == 'kaffrine' %}selected{% endif %}>Kaffrine</option>
+                                    <option value="kedougou" {% if user.region == 'kedougou' %}selected{% endif %}>Kédougou</option>
+                                    <option value="sedhiou" {% if user.region == 'sedhiou' %}selected{% endif %}>Sédhiou</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Village/Quartier</label>
+                            <input type="text" name="buyer_village" class="form-control"
+                                   value="{{ user.village }}">
+                        </div>
+
+                        <hr class="my-4">
+
+                        <h5 class="mb-3"><i class="fas fa-credit-card"></i> Plan de Paiement</h5>
+
+                        <div class="mb-4">
+                            <div class="payment-option" onclick="selectPayment(this, 'full')">
+                                <input type="radio" name="payment_plan" value="full" checked>
+                                <strong>Paiement Unique</strong>
+                                <span class="text-muted">- Payez le montant total</span>
+                            </div>
+                            <div class="payment-option" onclick="selectPayment(this, '2_installments')">
+                                <input type="radio" name="payment_plan" value="2_installments">
+                                <strong>2 Tranches</strong>
+                                <span class="text-muted">- Payez en 2 versements</span>
+                            </div>
+                            <div class="payment-option" onclick="selectPayment(this, '3_installments')">
+                                <input type="radio" name="payment_plan" value="3_installments">
+                                <strong>3 Tranches</strong>
+                                <span class="text-muted">- Payez en 3 versements</span>
+                            </div>
+                            <div class="payment-option" onclick="selectPayment(this, '4_installments')">
+                                <input type="radio" name="payment_plan" value="4_installments">
+                                <strong>4 Tranches</strong>
+                                <span class="text-muted">- Payez en 4 versements</span>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Quantité</label>
+                                <input type="number" name="quantity" class="form-control" value="1" min="1">
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Message / Notes</label>
+                            <textarea name="message" class="form-control" rows="3"
+                                      placeholder="Questions ou informations supplémentaires..."></textarea>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i>
+                            <strong>Comment ça marche ?</strong><br>
+                            Après avoir soumis votre commande, un administrateur vous contactera par téléphone pour finaliser les détails et organiser le paiement.
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'farmconnect_app:tools' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left"></i> Retour
+                            </a>
+                            <button type="submit" class="btn btn-order">
+                                <i class="fas fa-paper-plane"></i> Envoyer la Commande
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function selectPayment(element, value) {
+    // Remove selected class from all
+    document.querySelectorAll('.payment-option').forEach(opt => {
+        opt.classList.remove('selected');
+    });
+    // Add selected class to clicked
+    element.classList.add('selected');
+    // Check the radio
+    element.querySelector('input[type="radio"]').checked = true;
+}
+
+// Initialize selected state
+document.addEventListener('DOMContentLoaded', function() {
+    const checked = document.querySelector('input[name="payment_plan"]:checked');
+    if (checked) {
+        checked.closest('.payment-option').classList.add('selected');
+    }
+});
+</script>
+{% endblock %}

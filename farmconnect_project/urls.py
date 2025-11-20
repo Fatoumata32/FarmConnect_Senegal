@@ -6,6 +6,9 @@ from django.conf.urls.i18n import i18n_patterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # APIs REST (sans i18n pour éviter les conflits avec les clients JavaScript)
+    path('api/', include('crops.api_urls')),
+    path('', include('advice.urls')),  # Advice API endpoints
 ]
 
 urlpatterns += i18n_patterns(

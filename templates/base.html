@@ -6,13 +6,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Plateforme agricole intelligente pour les agriculteurs sénégalais. Conseils personnalisés, météo, et recommandations hors-ligne.">
+    <meta name="theme-color" content="#2d5016">
     <title>{% block title %}FarmConnect Senegal{% endblock %}</title>
-    
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{% static 'img/FarmConnect_square.png' %}">
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/FarmConnect_square.png' %}">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="{% static 'manifest.json' %}">
+
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="{% static 'img/FarmConnect_square.png' %}">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="FarmConnect">
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- FontAwesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    
+
     {% block extra_css %}{% endblock %}
     
     <style>
@@ -24,14 +39,28 @@
             --pure-white: #ffffff;
         }
 
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%);
+            margin: 0;
+            padding: 0;
+            padding-top: 76px; /* Compensation for fixed navbar */
         }
 
         .navbar {
             background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%);
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin: 0;
+            padding: 0.5rem 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1030;
         }
 
         .navbar-brand {
@@ -63,7 +92,14 @@
 
         .main-content {
             min-height: calc(100vh - 200px);
-            padding: 2rem 0;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Remove spaces between sections */
+        section {
+            margin: 0;
+            padding: 0;
         }
 
         .alert {
@@ -96,7 +132,240 @@
             background: var(--primary-green);
             color: var(--pure-white);
             padding: 2rem 0;
-            margin-top: 3rem;
+            margin: 0;
+            margin-top: 0 !important;
+        }
+
+        footer h5 {
+            color: var(--accent-yellow);
+            font-size: 1.2rem;
+        }
+
+        .footer-text {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: var(--pure-white);
+            text-decoration: none;
+            opacity: 0.85;
+            transition: all 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+            color: var(--accent-yellow);
+            padding-left: 5px;
+        }
+
+        .footer-contact a {
+            color: var(--pure-white);
+            text-decoration: none;
+            opacity: 0.9;
+        }
+
+        .footer-contact a:hover {
+            color: var(--accent-yellow);
+        }
+
+        /* Ensure no gap between last section and footer */
+        .main-content > section:last-of-type,
+        main > section:last-of-type {
+            margin-bottom: 0 !important;
+            padding-bottom: 0 !important;
+        }
+
+        /* ========================================
+           MODERN SCROLL EFFECTS
+           ======================================== */
+
+        /* Base animation classes */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .scroll-animate.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Fade variations */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(60px);
+            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .fade-down {
+            opacity: 0;
+            transform: translateY(-60px);
+            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .fade-left {
+            opacity: 0;
+            transform: translateX(-60px);
+            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .fade-right {
+            opacity: 0;
+            transform: translateX(60px);
+            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .fade-in {
+            opacity: 0;
+            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .scale-up {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .rotate-in {
+            opacity: 0;
+            transform: rotate(-10deg) scale(0.9);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Animated state */
+        .fade-up.animate-in,
+        .fade-down.animate-in,
+        .fade-left.animate-in,
+        .fade-right.animate-in,
+        .fade-in.animate-in,
+        .scale-up.animate-in,
+        .rotate-in.animate-in {
+            opacity: 1;
+            transform: translateY(0) translateX(0) scale(1) rotate(0);
+        }
+
+        /* Stagger delays for children */
+        .stagger-children > *:nth-child(1) { transition-delay: 0.1s; }
+        .stagger-children > *:nth-child(2) { transition-delay: 0.2s; }
+        .stagger-children > *:nth-child(3) { transition-delay: 0.3s; }
+        .stagger-children > *:nth-child(4) { transition-delay: 0.4s; }
+        .stagger-children > *:nth-child(5) { transition-delay: 0.5s; }
+        .stagger-children > *:nth-child(6) { transition-delay: 0.6s; }
+        .stagger-children > *:nth-child(7) { transition-delay: 0.7s; }
+        .stagger-children > *:nth-child(8) { transition-delay: 0.8s; }
+
+        /* Parallax effect */
+        .parallax-bg {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        /* Smooth reveal for cards - OPT-IN with .scroll-reveal class */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .scroll-reveal.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Floating animation for hero elements */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .float-animate {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Pulse animation for CTAs */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .pulse-animate {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* Smooth navbar on scroll */
+        .navbar.scrolled {
+            background: var(--primary-green) !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Progress bar for scroll - DISABLED */
+        .scroll-progress {
+            display: none;
+        }
+
+        /* Counter animation */
+        .counter {
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .counter.animate-in {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Image reveal effect */
+        .img-reveal {
+            overflow: hidden;
+        }
+
+        .img-reveal img {
+            transform: scale(1.2);
+            transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .img-reveal.animate-in img {
+            transform: scale(1);
+        }
+
+        /* Text highlight on scroll */
+        .highlight-text {
+            background: linear-gradient(120deg, var(--accent-yellow) 0%, var(--accent-yellow) 100%);
+            background-repeat: no-repeat;
+            background-size: 0% 100%;
+            background-position: 0 88%;
+            transition: background-size 0.5s ease;
+        }
+
+        .highlight-text.animate-in {
+            background-size: 100% 100%;
+        }
+
+        /* Reduce motion for accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            .scroll-animate,
+            .scroll-reveal,
+            .fade-up, .fade-down, .fade-left, .fade-right,
+            .fade-in, .scale-up, .rotate-in,
+            .counter, .img-reveal, .highlight-text {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+
+            .float-animate, .pulse-animate {
+                animation: none;
+            }
         }
     </style>
 </head>
@@ -105,7 +374,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="{% url 'farmconnect_app:home' %}">
-                <i class="fas fa-seedling"></i> FarmConnect Senegal
+                FarmConnect Senegal
             </a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -114,95 +383,117 @@
             
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
+                    <!-- Accueil - visible pour tous -->
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'farmconnect_app:home' %}" data-translate="nav_home">
                             {{ _("Accueil") }}
                         </a>
                     </li>
+
+                    <!-- Conseils - visible pour tous -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'advice:crop-guide' %}" data-translate="nav_advice">
+                            {{ _("Conseils") }}
+                        </a>
+                    </li>
+
+                    <!-- Communauté - visible pour tous -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'farmconnect_app:community' %}" data-translate="nav_community">
+                            {{ _("Communauté") }}
+                        </a>
+                    </li>
+
+                    <!-- Marketplace (ancien Outils) - visible pour tous -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'farmconnect_app:tools' %}" data-translate="nav_marketplace">
+                            {{ _("Marketplace") }}
+                        </a>
+                    </li>
+
+                                        <!-- Investisseurs - visible pour tous -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'farmconnect_app:investors' %}" data-translate="nav_investors">
+                            {{ _("Investisseurs") }}
+                        </a>
+                    </li>
+
                     {% if user.is_authenticated %}
+                        {% if not user.is_superuser and user.role != 'admin' %}
+                        <!-- Tableau de Bord - visible uniquement pour agriculteurs -->
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'farmconnect_app:dashboard' %}" data-translate="nav_dashboard">
-                                <i class="fas fa-tachometer-alt"></i> {{ _("Tableau de Bord") }}
+                                {{ _("Tableau de Bord") }}
                             </a>
                         </li>
-                        
-                        <!-- Vérification de l'existence des URLs avant de les utiliser -->
-                        {% url 'crops:list' as crops_url %}
-                        {% if crops_url %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ crops_url }}" data-translate="nav_tips">
-                                    {{ _("Conseils") }}
-                                </a>
-                            </li>
-                        {% else %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="#" onclick="alert('Fonctionnalité en développement')" data-translate="nav_tips">
-                                    {{ _("Conseils") }}
-                                </a>
-                            </li>
                         {% endif %}
-                        
-                        {% url 'chat:interface' as chat_url %}
-                        {% if chat_url %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ chat_url }}" data-translate="nav_chat">
-                                    {{ _("Assistant") }}
-                                </a>
-                            </li>
-                        {% else %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="#" onclick="alert('Assistant IA en développement')" data-translate="nav_chat">
-                                    {{ _("Assistant") }}
-                                </a>
-                            </li>
-                        {% endif %}
-                        
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'farmconnect_app:community' %}" data-translate="nav_community">
-                                {{ _("Communauté") }}
-                            </a>
-                        </li>
-                        
+
+                        <!-- Menu utilisateur -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                                <i class="fas fa-user"></i> {{ user.get_full_name|default:user.username }}
+                                {{ user.get_full_name|default:user.username }}
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{% url 'farmconnect_app:profile' %}">
-                                    <i class="fas fa-user-edit"></i> {{ _("Mon Profil") }}
+                                {% if user.is_superuser or user.role == 'admin' %}
+                                <li><a class="dropdown-item" href="{% url 'farmconnect_app:admin_dashboard' %}">
+                                    <i class="fas fa-tachometer-alt"></i> {{ _("Dashboard Admin") }}
                                 </a></li>
+                                <li><a class="dropdown-item" href="{% url 'farmconnect_app:admin_prices' %}">
+                                    <i class="fas fa-coins"></i> {{ _("Gérer les Prix") }}
+                                </a></li>
+                                <li><a class="dropdown-item" href="{% url 'farmconnect_app:admin_events' %}">
+                                    <i class="fas fa-calendar-alt"></i> {{ _("Gérer les Événements") }}
+                                </a></li>
+                                <li><a class="dropdown-item" href="{% url 'farmconnect_app:admin_products' %}">
+                                    <i class="fas fa-tools"></i> {{ _("Gérer les Produits") }}
+                                </a></li>
+                                <li><a class="dropdown-item" href="{% url 'farmconnect_app:admin_advice' %}">
+                                    <i class="fas fa-lightbulb"></i> {{ _("Gérer les Conseils") }}
+                                </a></li>
+                                <li><a class="dropdown-item" href="{% url 'farmconnect_app:admin_orders' %}">
+                                    <i class="fas fa-shopping-bag"></i> {{ _("Gérer les Commandes") }}
+                                </a></li>
+                                {% else %}
+                                <li><a class="dropdown-item" href="{% url 'farmconnect_app:profile' %}">
+                                    {{ _("Mon Profil") }}
+                                </a></li>
+                                <li><a class="dropdown-item" href="{% url 'farmconnect_app:my_orders' %}">
+                                    <i class="fas fa-shopping-bag"></i> {{ _("Mes Commandes") }}
+                                </a></li>
+                                {% endif %}
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{% url 'logout' %}">
-                                    <i class="fas fa-sign-out-alt"></i> {{ _("Déconnexion") }}
+                                    {{ _("Déconnexion") }}
                                 </a></li>
                             </ul>
-                        </li>
-                    {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'farmconnect_app:community' %}" data-translate="nav_community">
-                                {{ _("Communauté") }}
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'farmconnect_app:about' %}" data-translate="nav_about">
-                                {{ _("À propos") }}
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'farmconnect_app:investors' %}" data-translate="nav_community">
-                                {{ _("Investisseurs") }}
-                            </a>
                         </li>
                     {% endif %}
                 </ul>
                 
+                <!-- Language Selector -->
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <span id="current-lang">FR</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="changeLanguage('fr'); return false;">
+                                <span id="check-fr" style="display:none;">✓ </span>Français
+                            </a></li>
+                            <li><a class="dropdown-item" href="#" onclick="changeLanguage('wo'); return false;">
+                                <span id="check-wo" style="display:none;">✓ </span>Wolof
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+
                 <!-- Authentication Links -->
                 {% if not user.is_authenticated %}
                     <div class="d-flex gap-2">
-                        <a href="{% url 'login' %}" class="btn btn-outline-light">
+                        <a href="{% url 'login' %}" class="btn btn-outline-light" data-translate="nav_login">
                             {{ _("Connexion") }}
                         </a>
-                        <a href="{% url 'farmconnect_app:register' %}" class="btn btn-outline-light">
+                        <a href="{% url 'farmconnect_app:register' %}" class="btn btn-outline-light" data-translate="nav_register">
                             {{ _("Inscription") }}
                         </a>
                     </div>
@@ -224,15 +515,103 @@
     {% endif %}
 
     <!-- Main Content -->
- 
+    <div class="main-content">
+        {% block content %}{% endblock %}
+    </div>
 
     <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row py-4">
+                <!-- Column 1: About -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5 class="fw-bold mb-3" data-translate="footer_title">FarmConnect Senegal</h5>
+                    <p class="footer-text" data-translate="footer_description">
+                        FarmConnect Senegal est dédié à l'autonomisation des agriculteurs sénégalais grâce à une plateforme
+                        communautaire qui favorise l'échange, l'apprentissage et l'innovation pour une agriculture durable et prospère.
+                    </p>
+                    <div class="mt-3">
+                        <p class="mb-1"><strong data-translate="footer_farmers">7 agriculteurs connectés</strong></p>
+                        <p class="mb-1"><strong data-translate="footer_workshops">100 ateliers organisés</strong></p>
+                        <p class="mb-1"><strong data-translate="footer_coverage">Présent dans tout le Sénégal</strong></p>
+                    </div>
+                </div>
+
+                <!-- Column 2: Services -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5 class="fw-bold mb-3" data-translate="footer_services">Services</h5>
+                    <ul class="list-unstyled footer-links">
+                        <li><a href="{% url 'farmconnect_app:community' %}" data-translate="footer_network">Réseau d'Agriculteurs</a></li>
+                        <li><a href="{% url 'advice:crop-guide' %}" data-translate="footer_conservation">Conservation des Récoltes</a></li>
+                        <li><a href="{% url 'farmconnect_app:tools' %}" data-translate="footer_market_price">Prix du Marché</a></li>
+                        <li><a href="{% url 'farmconnect_app:community' %}" data-translate="footer_forum">Forum d'Échange</a></li>
+                        <li><a href="{% url 'farmconnect_app:home' %}" data-translate="footer_mobile_app">Application Mobile</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 3: Formations -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5 class="fw-bold mb-3" data-translate="footer_training">Formations</h5>
+                    <ul class="list-unstyled footer-links">
+                        <li><a href="{% url 'advice:crop-guide' %}" data-translate="footer_sustainable_ag">Agriculture Durable</a></li>
+                        <li><a href="{% url 'advice:crop-guide' %}" data-translate="footer_modern_tech">Technologies Modernes</a></li>
+                        <li><a href="{% url 'advice:crop-guide' %}" data-translate="footer_farm_management">Gestion d'Exploitation</a></li>
+                        <li><a href="{% url 'farmconnect_app:community' %}" data-translate="footer_training_calendar">Calendrier des Formations</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 4: Contact -->
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5 class="fw-bold mb-3" data-translate="footer_contact">Contact</h5>
+                    <div class="footer-contact">
+                        <p class="mb-2">
+                            <strong>Email:</strong><br>
+                            <a href="mailto:info@farmconnect.sn">info@farmconnect.sn</a>
+                        </p>
+                        <p class="mb-2">
+                            <strong data-translate="footer_phone">Téléphone:</strong><br>
+                            <a href="tel:+221771234567">+221 77 123 4567</a>
+                        </p>
+                        <p class="mb-2">
+                            <strong>Support:</strong><br>
+                            <a href="mailto:support@farmconnect.sn">support@farmconnect.sn</a>
+                        </p>
+                        <p class="mb-2">
+                            <strong data-translate="footer_address">Adresse:</strong><br>
+                            Dakar, Sénégal
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="row">
+                <div class="col-12">
+                    <hr style="border-color: rgba(255,255,255,0.2);">
+                    <p class="text-center mb-0" data-translate="footer_copyright">
+                        &copy; 2025 FarmConnect Senegal. Tous droits réservés.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
     
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+
+    <!-- Translation System -->
+    <script src="{% static 'js/translations.js' %}"></script>
+
+    <!-- PWA Scripts -->
+    <script src="{% static 'js/offline-db.js' %}"></script>
+    <script src="{% static 'js/data-sync.js' %}"></script>
+    <script src="{% static 'js/pwa-init.js' %}"></script>
+
+    <!-- Crop Modals -->
+    <script src="{% static 'js/crop-modals.js' %}"></script>
+
     {% block extra_js %}{% endblock %}
-    
+
     <script>
         // Auto-hide messages after 5 seconds
         setTimeout(function() {
@@ -246,6 +625,189 @@
                 }
             });
         }, 5000);
+
+        // PWA Install button (hidden by default)
+        document.addEventListener('DOMContentLoaded', function() {
+            const installBtn = document.createElement('button');
+            installBtn.id = 'install-app-button';
+            installBtn.className = 'btn btn-success btn-sm position-fixed';
+            installBtn.style.cssText = 'display: none; bottom: 80px; right: 20px; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.3);';
+            installBtn.innerHTML = 'Installer l\'app';
+            document.body.appendChild(installBtn);
+        });
+
+        // ========================================
+        // MODERN SCROLL EFFECTS - JavaScript
+        // ========================================
+
+        (function() {
+            'use strict';
+
+            // Create scroll progress bar
+            const progressBar = document.createElement('div');
+            progressBar.className = 'scroll-progress';
+            document.body.appendChild(progressBar);
+
+            // Intersection Observer for scroll animations
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px 0px -50px 0px',
+                threshold: 0.1
+            };
+
+            const animationObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-in');
+
+                        // Animate children with stagger if parent has stagger-children class
+                        if (entry.target.classList.contains('stagger-children')) {
+                            const children = entry.target.children;
+                            Array.from(children).forEach((child, index) => {
+                                setTimeout(() => {
+                                    child.classList.add('animate-in');
+                                }, index * 100);
+                            });
+                        }
+                    }
+                });
+            }, observerOptions);
+
+            // Elements to animate on scroll - Only explicit scroll animation classes
+            const animatedElements = [
+                '.scroll-animate',
+                '.scroll-reveal',
+                '.fade-up',
+                '.fade-down',
+                '.fade-left',
+                '.fade-right',
+                '.fade-in',
+                '.scale-up',
+                '.rotate-in',
+                '.counter',
+                '.img-reveal',
+                '.highlight-text'
+            ];
+
+            // Observe all animated elements
+            function initScrollAnimations() {
+                animatedElements.forEach(selector => {
+                    document.querySelectorAll(selector).forEach(element => {
+                        // Skip if already has animate-in (prevents re-animation)
+                        if (!element.classList.contains('animate-in')) {
+                            animationObserver.observe(element);
+                        }
+                    });
+                });
+            }
+
+            // Navbar scroll effect
+            function handleNavbarScroll() {
+                const navbar = document.querySelector('.navbar');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            }
+
+            // Update scroll progress bar
+            function updateScrollProgress() {
+                const scrollTop = window.scrollY;
+                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const scrollPercent = (scrollTop / docHeight) * 100;
+                progressBar.style.width = scrollPercent + '%';
+            }
+
+            // Counter animation
+            function animateCounters() {
+                document.querySelectorAll('.counter[data-target]').forEach(counter => {
+                    const target = parseInt(counter.getAttribute('data-target'));
+                    const duration = 2000;
+                    const step = target / (duration / 16);
+                    let current = 0;
+
+                    const updateCounter = () => {
+                        current += step;
+                        if (current < target) {
+                            counter.textContent = Math.floor(current);
+                            requestAnimationFrame(updateCounter);
+                        } else {
+                            counter.textContent = target;
+                        }
+                    };
+
+                    // Only animate when visible
+                    const counterObserver = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                updateCounter();
+                                counterObserver.unobserve(entry.target);
+                            }
+                        });
+                    }, { threshold: 0.5 });
+
+                    counterObserver.observe(counter);
+                });
+            }
+
+            // Parallax effect for hero sections
+            function handleParallax() {
+                const parallaxElements = document.querySelectorAll('.parallax-bg, .hero-section, .hero');
+                parallaxElements.forEach(element => {
+                    const scrolled = window.scrollY;
+                    const rate = scrolled * 0.3;
+                    element.style.backgroundPositionY = rate + 'px';
+                });
+            }
+
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Initialize on DOM ready
+            document.addEventListener('DOMContentLoaded', function() {
+                // Initialize scroll animations
+                initScrollAnimations();
+
+                // Initialize counters
+                animateCounters();
+
+                // Initial check for elements in view
+                setTimeout(() => {
+                    window.dispatchEvent(new Event('scroll'));
+                }, 100);
+            });
+
+            // Scroll event listeners (throttled for performance)
+            let ticking = false;
+            window.addEventListener('scroll', function() {
+                if (!ticking) {
+                    window.requestAnimationFrame(function() {
+                        handleNavbarScroll();
+                        updateScrollProgress();
+                        handleParallax();
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+
+            // Re-initialize animations when content is dynamically loaded
+            window.reinitScrollAnimations = initScrollAnimations;
+
+            console.log('[Scroll Effects] Initialized');
+        })();
     </script>
 </body>
 </html>

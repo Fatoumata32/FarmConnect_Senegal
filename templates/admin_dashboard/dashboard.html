@@ -1,0 +1,395 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard Admin - FarmConnect Senegal{% endblock %}
+
+{% block extra_css %}
+<style>
+    .admin-hero {
+        background: linear-gradient(135deg, #1a3a0f 0%, #2d5016 100%);
+        color: white;
+        padding: 40px 0;
+        margin-bottom: 30px;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        transition: transform 0.3s ease;
+        height: 100%;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #2d5016;
+    }
+
+    .stat-label {
+        color: #666;
+        font-size: 0.95rem;
+    }
+
+    .admin-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        overflow: hidden;
+    }
+
+    .admin-card-header {
+        background: linear-gradient(135deg, #2d5016 0%, #4a7c59 100%);
+        color: white;
+        padding: 20px;
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+
+    .admin-card-body {
+        padding: 20px;
+    }
+
+    .quick-action {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        text-decoration: none;
+        color: #333;
+        transition: all 0.3s ease;
+    }
+
+    .quick-action:hover {
+        background: #e9f5e9;
+        transform: translateX(5px);
+        color: #2d5016;
+    }
+
+    .quick-action i {
+        font-size: 1.5rem;
+        margin-right: 15px;
+        color: #2d5016;
+    }
+
+    .activity-item {
+        padding: 15px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .activity-item:last-child {
+        border-bottom: none;
+    }
+
+    .activity-time {
+        font-size: 0.85rem;
+        color: #999;
+    }
+
+    .table-admin {
+        margin-bottom: 0;
+    }
+
+    .table-admin th {
+        background: #f8f9fa;
+        border-top: none;
+        font-weight: 600;
+        color: #2d5016;
+    }
+
+    .btn-admin {
+        background: linear-gradient(135deg, #2d5016 0%, #4a7c59 100%);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+    }
+
+    .btn-admin:hover {
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(45, 80, 22, 0.3);
+    }
+
+    .trend-up { color: #28a745; }
+    .trend-down { color: #dc3545; }
+    .trend-stable { color: #6c757d; }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Admin Hero -->
+<section class="admin-hero">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h1><i class="fas fa-tachometer-alt"></i> Dashboard Administrateur</h1>
+                <p class="mb-0">Bienvenue, {{ user.first_name }} {{ user.last_name }}</p>
+            </div>
+            <div>
+                <a href="{% url 'farmconnect_app:home' %}" class="btn btn-outline-light">
+                    <i class="fas fa-home"></i> Retour au site
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Cards -->
+<section class="container mb-4">
+    <div class="row">
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #e8f5e9; color: #2d5016;">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-number">{{ total_farmers }}</div>
+                <div class="stat-label">Agriculteurs</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #fff3e0; color: #e67e22;">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div class="stat-number">{{ total_products }}</div>
+                <div class="stat-label">Produits</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #e3f2fd; color: #2196f3;">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <div class="stat-number">{{ total_events }}</div>
+                <div class="stat-label">Événements</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #fce4ec; color: #e91e63;">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="stat-number">{{ total_prices }}</div>
+                <div class="stat-label">Prix du Marché</div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #fff8e1; color: #ff8f00;">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <div class="stat-number">{{ total_advice }}</div>
+                <div class="stat-label">Conseils de Culture</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #e8eaf6; color: #3f51b5;">
+                    <i class="fas fa-shopping-bag"></i>
+                </div>
+                <div class="stat-number">{{ total_orders }}</div>
+                <div class="stat-label">Commandes</div>
+                {% if pending_orders > 0 %}
+                <small class="text-warning"><i class="fas fa-clock"></i> {{ pending_orders }} en attente</small>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Actions & Recent Activity -->
+<section class="container mb-4">
+    <div class="row">
+        <!-- Quick Actions -->
+        <div class="col-lg-4 mb-4">
+            <div class="admin-card h-100">
+                <div class="admin-card-header">
+                    <i class="fas fa-bolt"></i> Actions Rapides
+                </div>
+                <div class="admin-card-body">
+                    <a href="{% url 'farmconnect_app:admin_prices' %}" class="quick-action">
+                        <i class="fas fa-coins"></i>
+                        <div>
+                            <strong>Gérer les Prix</strong>
+                            <div class="text-muted small">Modifier les prix du marché</div>
+                        </div>
+                    </a>
+                    <a href="{% url 'farmconnect_app:admin_events' %}" class="quick-action">
+                        <i class="fas fa-calendar-plus"></i>
+                        <div>
+                            <strong>Gérer les Événements</strong>
+                            <div class="text-muted small">Ajouter/modifier les workshops</div>
+                        </div>
+                    </a>
+                    <a href="{% url 'farmconnect_app:admin_products' %}" class="quick-action">
+                        <i class="fas fa-tools"></i>
+                        <div>
+                            <strong>Gérer les Produits</strong>
+                            <div class="text-muted small">Outils du marketplace</div>
+                        </div>
+                    </a>
+                    <a href="{% url 'farmconnect_app:admin_advice' %}" class="quick-action">
+                        <i class="fas fa-lightbulb"></i>
+                        <div>
+                            <strong>Gérer les Conseils</strong>
+                            <div class="text-muted small">Conseils agricoles par culture</div>
+                        </div>
+                    </a>
+                    <a href="{% url 'farmconnect_app:admin_orders' %}" class="quick-action">
+                        <i class="fas fa-shopping-bag"></i>
+                        <div>
+                            <strong>Gérer les Commandes</strong>
+                            <div class="text-muted small">
+                                Commandes d'outils
+                                {% if pending_orders > 0 %}
+                                <span class="badge bg-warning text-dark">{{ pending_orders }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </a>
+                    <a href="{% url 'admin:index' %}" class="quick-action">
+                        <i class="fas fa-cog"></i>
+                        <div>
+                            <strong>Django Admin</strong>
+                            <div class="text-muted small">Administration avancée</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Market Prices -->
+        <div class="col-lg-8 mb-4">
+            <div class="admin-card h-100">
+                <div class="admin-card-header d-flex justify-content-between align-items-center">
+                    <span><i class="fas fa-chart-line"></i> Prix du Marché Récents</span>
+                    <a href="{% url 'farmconnect_app:admin_prices' %}" class="btn btn-sm btn-light">Voir tout</a>
+                </div>
+                <div class="admin-card-body p-0">
+                    <table class="table table-admin">
+                        <thead>
+                            <tr>
+                                <th>Culture</th>
+                                <th>Région</th>
+                                <th>Prix/kg</th>
+                                <th>Tendance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for price in recent_prices %}
+                            <tr>
+                                <td><strong>{{ price.crop_name }}</strong></td>
+                                <td>{{ price.get_region_display }}</td>
+                                <td>{{ price.price_per_kg }} FCFA</td>
+                                <td>
+                                    {% if price.trend == 'up' %}
+                                    <span class="trend-up"><i class="fas fa-arrow-up"></i> +{{ price.percentage_change }}%</span>
+                                    {% elif price.trend == 'down' %}
+                                    <span class="trend-down"><i class="fas fa-arrow-down"></i> {{ price.percentage_change }}%</span>
+                                    {% else %}
+                                    <span class="trend-stable"><i class="fas fa-minus"></i> Stable</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center text-muted py-4">Aucun prix enregistré</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Upcoming Events & Products -->
+<section class="container mb-5">
+    <div class="row">
+        <!-- Upcoming Events -->
+        <div class="col-lg-6 mb-4">
+            <div class="admin-card h-100">
+                <div class="admin-card-header d-flex justify-content-between align-items-center">
+                    <span><i class="fas fa-calendar-alt"></i> Événements à Venir</span>
+                    <a href="{% url 'farmconnect_app:admin_events' %}" class="btn btn-sm btn-light">Gérer</a>
+                </div>
+                <div class="admin-card-body">
+                    {% for event in upcoming_events %}
+                    <div class="activity-item">
+                        <div class="d-flex justify-content-between">
+                            <strong>{{ event.title }}</strong>
+                            <span class="badge" style="background-color: {{ event.get_event_type_color }}; color: white;">
+                                {{ event.get_event_type_display }}
+                            </span>
+                        </div>
+                        <div class="activity-time">
+                            <i class="fas fa-calendar"></i> {{ event.date|date:"d M Y" }} à {{ event.start_time|time:"H:i" }}
+                            <br>
+                            <i class="fas fa-map-marker-alt"></i> {{ event.get_region_display }}
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-center text-muted py-4">Aucun événement à venir</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Products -->
+        <div class="col-lg-6 mb-4">
+            <div class="admin-card h-100">
+                <div class="admin-card-header d-flex justify-content-between align-items-center">
+                    <span><i class="fas fa-box"></i> Produits Récents</span>
+                    <a href="{% url 'farmconnect_app:admin_products' %}" class="btn btn-sm btn-light">Gérer</a>
+                </div>
+                <div class="admin-card-body">
+                    {% for product in recent_products %}
+                    <div class="activity-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>{{ product.name }}</strong>
+                                <div class="text-muted small">{{ product.category }}</div>
+                            </div>
+                            <div class="text-end">
+                                <strong class="text-success">{{ product.price|floatformat:0 }} FCFA</strong>
+                                <div class="small">
+                                    {% if product.is_available %}
+                                    <span class="text-success"><i class="fas fa-check"></i> Disponible</span>
+                                    {% else %}
+                                    <span class="text-danger"><i class="fas fa-times"></i> Indisponible</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-center text-muted py-4">Aucun produit</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

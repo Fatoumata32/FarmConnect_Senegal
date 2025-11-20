@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmConnect Senegal - SRS Corrections</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            color: #333;
+        }
+        h1 {
+            color: #2c5530;
+            text-align: center;
+            border-bottom: 3px solid #2c5530;
+            padding-bottom: 15px;
+        }
+        h2 {
+            color: #c0392b;
+            margin-top: 30px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 8px;
+        }
+        h3 {
+            color: #2c5530;
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9em;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #2c5530;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .highlight {
+            background-color: #fff3cd;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        .old-text {
+            background-color: #f8d7da;
+            padding: 10px;
+            border-left: 4px solid #dc3545;
+            margin: 10px 0;
+        }
+        .new-text {
+            background-color: #d4edda;
+            padding: 10px;
+            border-left: 4px solid #28a745;
+            margin: 10px 0;
+        }
+        ul {
+            padding-left: 25px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .section-note {
+            background-color: #e7f3ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #0066cc;
+        }
+        strong {
+            color: #2c5530;
+        }
+        .page-break {
+            page-break-before: always;
+        }
+        @media print {
+            body {
+                padding: 20px;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>FarmConnect Senegal<br>SRS Document Corrections</h1>
+
+    <div class="section-note">
+        <strong>Purpose:</strong> This document outlines the specific corrections needed to align the Software Requirements Specification (SRS) with the actual implementation. Make these targeted changes to your PDF document.
+    </div>
+
+    <hr>
+
+    <h2>REVISION HISTORY UPDATE</h2>
+    <p>Add a new entry to the Revision History table:</p>
+
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Reason For Changes</th>
+            <th>Version</th>
+        </tr>
+        <tr>
+            <td>Fatoumata Ndiaye</td>
+            <td>20 Sept. 2025</td>
+            <td>Initial Draft</td>
+            <td>1.0</td>
+        </tr>
+        <tr>
+            <td>Fatoumata Ndiaye</td>
+            <td>16 oct.2025</td>
+            <td>Added Diagrams</td>
+            <td>2.0</td>
+        </tr>
+        <tr style="background-color: #d4edda;">
+            <td><strong>Fatoumata Ndiaye</strong></td>
+            <td><strong>20 Nov. 2025</strong></td>
+            <td><strong>Updated to match implementation</strong></td>
+            <td><strong>3.0</strong></td>
+        </tr>
+    </table>
+
+    <hr>
+
+    <h2>PAGE 8 - Section 2.2 Product Functions</h2>
+    <p><strong>REPLACE the entire section with:</strong></p>
+
+    <h3>2.2 Product Functions</h3>
+    <p>FarmConnect Senegal will provide the following key functions to its users:</p>
+
+    <ul>
+        <li><strong>Weather Forecast Access</strong><br>
+        Display localized 3-day weather forecasts for all 14 regions of Senegal using the OpenWeatherMap API.</li>
+
+        <li><strong>Crop Advice Guide</strong><br>
+        Provide detailed agricultural advice for 15+ popular Senegalese crops including planting guides, care tips, and seasonal recommendations.</li>
+
+        <li><strong>Market Prices</strong><br>
+        Display real-time market price information for agricultural products to help farmers make informed selling decisions.</li>
+
+        <li><strong>Community Forum</strong><br>
+        Enable farmers to connect, share experiences, ask questions, and participate in discussions with other community members.</li>
+
+        <li><strong>Investor Portal</strong><br>
+        Provide information and resources for potential investors interested in agricultural projects in Senegal.</li>
+
+        <li><strong>Tools Marketplace</strong><br>
+        Allow farmers to browse and access information about farming tools and resources.</li>
+
+        <li><strong>Offline Mode Support</strong><br>
+        Allow farmers to access essential farming tips and cached data even without an internet connection through PWA (Progressive Web App) technology.</li>
+
+        <li><strong>Language Support</strong><br>
+        Provide content in French and Wolof to ensure wide accessibility.</li>
+
+        <li><strong>User Dashboard</strong><br>
+        Personalized dashboard for registered users showing relevant weather, crops, and recommendations based on their region.</li>
+
+        <li><strong>Admin Dashboard</strong><br>
+        Administrative interface for managing users, content, and system settings.</li>
+    </ul>
+
+    <hr>
+
+    <h2>PAGE 8 - Section 2.3 User Classes and Characteristics</h2>
+    <p><strong>REPLACE the entire section with:</strong></p>
+
+    <h3>2.3 User Classes and Characteristics</h3>
+    <p>There are five main user groups for the FarmConnect Senegal web application:</p>
+
+    <ul>
+        <li><strong>Farmers (Primary Users)</strong><br>
+        These are the main beneficiaries of the app. They typically have basic mobile or computer experience and use the system to access localized weather forecasts, crop-specific advice, and market prices. Since many farmers may have limited literacy or digital skills, the app must be simple, intuitive, and available in local languages such as Wolof and French.</li>
+
+        <li><strong>Agricultural Extension Agents</strong><br>
+        Extension agents generally have more technical knowledge and may use the app as a tool in their training activities. They often require access to more detailed agricultural content and may also demonstrate the app's features to farmers in the field.</li>
+
+        <li><strong>Agricultural Experts</strong><br>
+        Users with specialized agricultural knowledge who can provide expert advice and validate crop recommendations within the platform.</li>
+
+        <li><strong>Investors</strong><br>
+        Potential investors interested in agricultural opportunities in Senegal who use the investor portal to learn about investment opportunities and connect with farming projects.</li>
+
+        <li><strong>Suppliers</strong><br>
+        Agricultural input suppliers who can list their products and services in the marketplace, connecting with farmers who need tools, seeds, and other supplies.</li>
+
+        <li><strong>Administrators</strong><br>
+        System administrators who manage the platform, including user management, content moderation, database maintenance, and system configurations.</li>
+    </ul>
+
+    <div class="page-break"></div>
+
+    <h2>PAGE 11 - Section 3.3 Software Interfaces</h2>
+    <p><strong>REPLACE the database bullet point:</strong></p>
+
+    <div class="old-text">
+        <strong>OLD:</strong><br>
+        Crop Tips Database: A lightweight database (SQLite) storing agricultural advice, updated.
+    </div>
+
+    <div class="new-text">
+        <strong>NEW:</strong><br>
+        <strong>Database:</strong> SQLite for development environment, with PostgreSQL support for production deployment. The database stores user profiles, crop advice, weather data cache, market prices, community posts, and system configurations.
+    </div>
+
+    <hr>
+
+    <h2>PAGE 12-13 - Section 4. Functional Requirements</h2>
+    <p><strong>REPLACE the Functional Requirements table with:</strong></p>
+
+    <h3>Functional Requirements</h3>
+
+    <table>
+        <tr>
+            <th>Req ID</th>
+            <th>Requirements</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>FR 1</td>
+            <td>Weather Forecast</td>
+            <td>Provide farmers with up-to-date weather forecasts for all 14 regions of Senegal</td>
+        </tr>
+        <tr>
+            <td>FR 1.1</td>
+            <td>Fetch Weather Data</td>
+            <td>Retrieve weather information from the OpenWeatherMap API for the user's selected region</td>
+        </tr>
+        <tr>
+            <td>FR 1.2</td>
+            <td>3-Day Forecast</td>
+            <td>Display 3-day weather predictions including temperature, humidity, wind, and conditions</td>
+        </tr>
+        <tr>
+            <td>FR 2</td>
+            <td>Crop Advice</td>
+            <td>Deliver crop management tips relevant to the farmer's region and selected crops</td>
+        </tr>
+        <tr>
+            <td>FR 2.1</td>
+            <td>Display Crop Tips</td>
+            <td>Show detailed crop advice based on selected crop, including planting, care, and harvesting</td>
+        </tr>
+        <tr>
+            <td>FR 2.2</td>
+            <td>Crop Recommendations</td>
+            <td>Provide crop recommendations based on soil type, season, and region</td>
+        </tr>
+        <tr>
+            <td>FR 3</td>
+            <td>User Profile Management</td>
+            <td>Allow farmers to create, update, and manage their profiles</td>
+        </tr>
+        <tr>
+            <td>FR 3.1</td>
+            <td>Language Preference</td>
+            <td>Enable users to select their preferred language (French/Wolof)</td>
+        </tr>
+        <tr>
+            <td>FR 3.2</td>
+            <td>Region Selection</td>
+            <td>Allow users to set their region for localized weather and recommendations</td>
+        </tr>
+        <tr>
+            <td>FR 4</td>
+            <td>Extension Agent Access</td>
+            <td>Enable agricultural extension agents to update crop tips and provide consultations</td>
+        </tr>
+        <tr>
+            <td>FR 4.1</td>
+            <td>Content Management</td>
+            <td>Allow agents to manage agricultural advice database and user support</td>
+        </tr>
+        <tr>
+            <td>FR 5</td>
+            <td>Community Forum</td>
+            <td>Enable farmers to participate in community discussions</td>
+        </tr>
+        <tr>
+            <td>FR 5.1</td>
+            <td>Post Creation</td>
+            <td>Allow users to create posts and share experiences</td>
+        </tr>
+        <tr>
+            <td>FR 5.2</td>
+            <td>Comments & Replies</td>
+            <td>Enable users to comment and reply to community posts</td>
+        </tr>
+        <tr>
+            <td>FR 6</td>
+            <td>Market Prices</td>
+            <td>Display current market prices for agricultural products</td>
+        </tr>
+        <tr>
+            <td>FR 6.1</td>
+            <td>Price Updates</td>
+            <td>Show regularly updated market price information</td>
+        </tr>
+        <tr>
+            <td>FR 7</td>
+            <td>Investor Portal</td>
+            <td>Provide information for potential agricultural investors</td>
+        </tr>
+        <tr>
+            <td>FR 7.1</td>
+            <td>Investment Information</td>
+            <td>Display investment opportunities and project information</td>
+        </tr>
+        <tr>
+            <td>FR 8</td>
+            <td>Tools Marketplace</td>
+            <td>Allow farmers to browse farming tools and resources</td>
+        </tr>
+        <tr>
+            <td>FR 8.1</td>
+            <td>Browse Tools</td>
+            <td>Display available farming tools with descriptions and pricing</td>
+        </tr>
+        <tr>
+            <td>FR 9</td>
+            <td>Admin Dashboard</td>
+            <td>Provide administrative interface for system management</td>
+        </tr>
+        <tr>
+            <td>FR 9.1</td>
+            <td>User Management</td>
+            <td>Allow admins to manage user accounts and permissions</td>
+        </tr>
+        <tr>
+            <td>FR 9.2</td>
+            <td>Content Moderation</td>
+            <td>Enable admins to moderate community content and crop advice</td>
+        </tr>
+    </table>
+
+    <div class="page-break"></div>
+
+    <h2>PAGE 13-14 - Section 5. Non-Functional Requirements</h2>
+    <p><strong>REPLACE the Non-Functional Requirements table with:</strong></p>
+
+    <h3>Non-Functional Requirements</h3>
+
+    <table>
+        <tr>
+            <th>Requirement Type</th>
+            <th>Req ID</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>Security</td>
+            <td>NFR 1</td>
+            <td>Authenticate users with secure password hashing and session management</td>
+        </tr>
+        <tr>
+            <td>Security</td>
+            <td>NFR 1.1</td>
+            <td>Implement CSRF protection on all forms</td>
+        </tr>
+        <tr>
+            <td>Security</td>
+            <td>NFR 1.2</td>
+            <td>Implement rate limiting on login (5 attempts/minute) and API endpoints (30 requests/minute)</td>
+        </tr>
+        <tr>
+            <td>Security</td>
+            <td>NFR 1.3</td>
+            <td>Implement XSS protection through input sanitization and output escaping</td>
+        </tr>
+        <tr>
+            <td>Security</td>
+            <td>NFR 1.4</td>
+            <td>Store API keys in environment variables, not in source code</td>
+        </tr>
+        <tr>
+            <td>Security</td>
+            <td>NFR 1.5</td>
+            <td>Enforce minimum password length of 8 characters</td>
+        </tr>
+        <tr>
+            <td>Performance</td>
+            <td>NFR 2</td>
+            <td>The system must support up to 100 concurrent users accessing data</td>
+        </tr>
+        <tr>
+            <td>Usability</td>
+            <td>NFR 3</td>
+            <td>The interface must be simple and accessible for users with basic phone skills</td>
+        </tr>
+        <tr>
+            <td>Language Support</td>
+            <td>NFR 4</td>
+            <td>Provide content in French and Wolof</td>
+        </tr>
+        <tr>
+            <td>Reliability</td>
+            <td>NFR 5</td>
+            <td>System uptime of 99.5% with regular data backups</td>
+        </tr>
+        <tr>
+            <td>Accessibility</td>
+            <td>NFR 6</td>
+            <td>Support basic accessibility features including screen reader compatibility</td>
+        </tr>
+        <tr>
+            <td>Platform Support</td>
+            <td>NFR 7</td>
+            <td>Web app compatible with smartphones, tablets, laptops via modern browsers</td>
+        </tr>
+        <tr>
+            <td>Offline Support</td>
+            <td>NFR 8</td>
+            <td>Progressive Web App (PWA) with service worker for offline caching</td>
+        </tr>
+    </table>
+
+    <hr>
+
+    <h2>PAGE 14 - Additional Security Measures</h2>
+    <p><strong>ADD after the existing Security Requirements content:</strong></p>
+
+    <h3>Additional Implemented Security Measures</h3>
+
+    <ul>
+        <li><strong>Rate Limiting:</strong> Custom rate limiting decorator protects login endpoints (5 requests/minute) and API endpoints (30 requests/minute) to prevent brute force attacks.</li>
+
+        <li><strong>Input Sanitization:</strong> All user inputs are sanitized to prevent injection attacks and XSS vulnerabilities.</li>
+
+        <li><strong>Security Headers:</strong> Implementation includes:
+            <ul>
+                <li>X-Frame-Options: DENY (prevents clickjacking)</li>
+                <li>X-Content-Type-Options: nosniff</li>
+                <li>Strict Referrer Policy</li>
+                <li>Cross-Origin Opener Policy</li>
+            </ul>
+        </li>
+
+        <li><strong>Environment Variables:</strong> All sensitive data (API keys, secret keys, database credentials) stored in environment variables using python-decouple.</li>
+
+        <li><strong>Session Security:</strong> Secure session cookies with HTTPOnly flag, configurable secure flag for HTTPS in production.</li>
+    </ul>
+
+    <div class="page-break"></div>
+
+    <h2>PAGE 15 - Section 6. Appendix - Database Requirements</h2>
+    <p><strong>REPLACE the entire Database Requirements section with:</strong></p>
+
+    <h3>Database Requirements</h3>
+
+    <ul>
+        <li>The system uses <strong>SQLite</strong> relational database for development, with <strong>PostgreSQL</strong> support for production deployment.</li>
+
+        <li>The database stores:
+            <ul>
+                <li>User profiles and authentication data</li>
+                <li>Crop advice and agricultural tips</li>
+                <li>Weather data cache</li>
+                <li>Market price information</li>
+                <li>Community forum posts and comments</li>
+                <li>System configurations</li>
+            </ul>
+        </li>
+
+        <li>The database supports multi-language content, enabling crop tips to be stored and retrieved in both French and Wolof.</li>
+
+        <li>Automated daily backups ensure data is not lost.</li>
+
+        <li>The database maintains data integrity through Django ORM with proper foreign key relationships and constraints.</li>
+    </ul>
+
+    <hr>
+
+    <h2>NEW SECTION - Technology Stack</h2>
+    <p><strong>ADD this section to document the actual technology stack used:</strong></p>
+
+    <h3>Technology Stack</h3>
+
+    <p><strong>Backend:</strong></p>
+    <ul>
+        <li>Django 4.2+ (Python web framework)</li>
+        <li>Django REST Framework (API development)</li>
+        <li>Celery (Task queue for background jobs)</li>
+        <li>Redis (Caching and message broker)</li>
+    </ul>
+
+    <p><strong>Frontend:</strong></p>
+    <ul>
+        <li>Bootstrap 5 (CSS framework)</li>
+        <li>JavaScript (Client-side functionality)</li>
+        <li>Service Worker (PWA offline support)</li>
+    </ul>
+
+    <p><strong>Database:</strong></p>
+    <ul>
+        <li>SQLite (Development)</li>
+        <li>PostgreSQL (Production)</li>
+    </ul>
+
+    <p><strong>External APIs:</strong></p>
+    <ul>
+        <li>OpenWeatherMap API (Weather data)</li>
+    </ul>
+
+    <p><strong>Security:</strong></p>
+    <ul>
+        <li>Django's built-in CSRF protection</li>
+        <li>Custom rate limiting system</li>
+        <li>Input sanitization</li>
+        <li>XSS prevention</li>
+    </ul>
+
+    <p><strong>Deployment:</strong></p>
+    <ul>
+        <li>Gunicorn (WSGI HTTP Server)</li>
+        <li>Django's deployment tools</li>
+    </ul>
+
+    <hr>
+
+    <h2>NEW SECTION - API Endpoints</h2>
+    <p><strong>ADD to Appendix:</strong></p>
+
+    <h3>API Endpoints</h3>
+
+    <table>
+        <tr>
+            <th>Endpoint</th>
+            <th>Method</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>/api/crops/</td>
+            <td>GET</td>
+            <td>List all crops</td>
+        </tr>
+        <tr>
+            <td>/api/soil-types/</td>
+            <td>GET</td>
+            <td>List soil types</td>
+        </tr>
+        <tr>
+            <td>/api/recommendations/</td>
+            <td>GET</td>
+            <td>Get crop recommendations</td>
+        </tr>
+        <tr>
+            <td>/api/weather/?region=&lt;region&gt;</td>
+            <td>GET</td>
+            <td>Get weather for a region</td>
+        </tr>
+        <tr>
+            <td>/api/crop-advice/crops_with_advice/</td>
+            <td>GET</td>
+            <td>Get crops with advice</td>
+        </tr>
+        <tr>
+            <td>/api/seasons/</td>
+            <td>GET</td>
+            <td>List growing seasons</td>
+        </tr>
+    </table>
+
+    <div class="page-break"></div>
+
+    <h2>SUMMARY OF KEY CORRECTIONS</h2>
+
+    <table>
+        <tr>
+            <th>#</th>
+            <th>Item</th>
+            <th>Original SRS</th>
+            <th>Corrected (Actual)</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>Database</td>
+            <td>MySQL</td>
+            <td>SQLite (dev) / PostgreSQL (prod)</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>User Roles</td>
+            <td>3 user groups</td>
+            <td>5 user roles (Farmers, Agents, Experts, Investors, Suppliers, Admins)</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Product Functions</td>
+            <td>5 functions</td>
+            <td>10 functions (added Market Prices, Community, Investors, Marketplace, Dashboards)</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>Security Requirements</td>
+            <td>Basic authentication</td>
+            <td>Comprehensive (rate limiting, CSRF, XSS, env vars, 8-char passwords)</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>Functional Requirements</td>
+            <td>4 main categories</td>
+            <td>9 main categories with detailed sub-requirements</td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td>Technology Stack</td>
+            <td>Not documented</td>
+            <td>Django, Bootstrap 5, Redis, Celery, etc.</td>
+        </tr>
+        <tr>
+            <td>7</td>
+            <td>API Endpoints</td>
+            <td>Not documented</td>
+            <td>6 RESTful API endpoints</td>
+        </tr>
+    </table>
+
+    <hr>
+
+    <div class="section-note">
+        <h3>Notes for PDF Update</h3>
+        <p>When updating your PDF document:</p>
+        <ol>
+            <li>Keep the same overall structure and formatting</li>
+            <li>Replace only the sections indicated above</li>
+            <li>Add new sections where specified</li>
+            <li>Update the revision history with version 3.0</li>
+            <li>The diagrams (Use Case, Class, Sequence, Component) can remain as they already show the marketplace and core functionality</li>
+        </ol>
+        <p><strong>These corrections ensure your SRS accurately reflects the implemented FarmConnect Senegal application while maintaining the document's professional format.</strong></p>
+    </div>
+
+</body>
+</html>
